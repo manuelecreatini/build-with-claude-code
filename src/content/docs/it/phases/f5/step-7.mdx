@@ -1,0 +1,31 @@
+---
+title: "Passo 7 — Handoff con /handoff"
+description: "/handoff [SKILL MATT POCOCK] comprime la conversazione in un documento di passaggio, perché un agente nuovo, con contesto pulito, possa continuare il…"
+lastVerified: 2026-11-12
+phase: F5
+---
+
+import Role from '~/components/Role.astro';
+
+`/handoff` <Role as="pocock" /> comprime la conversazione in un documento di passaggio, perché un agente nuovo, con contesto pulito, possa continuare il lavoro. Dalla documentazione della skill:
+
+- salva il documento nella **cartella temporanea del sistema** (su Windows `%TEMP%`), non nel repository;
+- include una sezione di *skill suggerite* per la sessione successiva;
+- non duplica ciò che è già in altri artefatti (spec, piani, ADR, issue, commit, diff): li cita per percorso o URL;
+- oscura le informazioni sensibili (chiavi, password, dati personali);
+- accetta un argomento opzionale: a cosa servirà la prossima sessione, e adatta il documento di conseguenza.
+
+**Quando usarlo**
+
+1. alla fine di una fase, se continui con la successiva in una nuova sessione;
+2. a metà fase, quando il contesto entra in zona rossa (vedi passo 8);
+3. prima di fermarti per la giornata o di cambiare computer;
+4. quando Claude inizia a ripetersi o a confondersi;
+5. prima di lasciare lavoro in autonomia a un'altra sessione;
+6. quando una conversazione è diventata un progetto: «hand off to /wayfinder» la trasforma in una mappa.
+
+**Come**: usa il template T11. In sintesi: (1) Claude fa commit del lavoro in corso e lo pubblica sul branch; (2) commenta lo stato sulla issue e aggiorna `STATUS.md`; (3) esegui `/handoff` con la descrizione della prossima sessione; (4) annoti il percorso del file creato; (5) `/clear`; (6) nella nuova conversazione incolli il prompt di ripresa con quel percorso.
+
+:::note[Il documento di handoff è un ponte, non un archivio]
+I file temporanei possono essere cancellati dal sistema. La memoria durevole resta nel repository e su GitHub: commit, commento sulla issue, `STATUS.md`, ADR. Per questo il playbook li aggiorna *prima* dell'handoff: se il file temporaneo sparisce, non perdi nulla di importante.
+:::

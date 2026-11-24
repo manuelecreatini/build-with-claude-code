@@ -1,0 +1,193 @@
+---
+title: "Phase 2 · Discovery and decisions with /wayfinder"
+description: "Turn the preliminary spec into a clearly defined project, making and recording every decision needed before building."
+lastVerified: 2026-11-12
+phase: F2
+---
+
+import Role from '~/components/Role.astro';
+
+| Item | Detail |
+|---|---|
+| **Goal** | Turn the preliminary spec into a clearly defined project, making and recording every decision needed before building. |
+| **Input** | `docs/01-preliminary-spec.md`; repository configured with `/setup-matt-pocock-skills` on GitHub. |
+| **Output** | A *map* (an issue with the `wayfinder:map` label) with all decision tickets closed; ADRs in `docs/adr/`; `GLOSSARY.md`; linked prototypes and research. |
+| **Tools** | `/wayfinder` <Role as="pocock" />, which in turn uses the `grilling`, `domain-modeling`, `prototype` and `research` skills; GitHub Issues. |
+| **Gate** | <Role as="gate" n={2} /> no open decisions, clear scope. |
+| **Typical time** | 3–15 short sessions, usually 1–5 calendar days. |
+
+## What /wayfinder is, in plain words
+
+`/wayfinder` is for planning a piece of work that is too big for one session and still shrouded in fog: you know where you want to get to, but you can't see the road yet. Instead of attempting a complete plan in one conversation, it draws a **shared map** on your issue tracker and resolves it one decision at a time. Matt Pocock presents it as the evolution of `/grill-me`, designed for projects where you can't decide everything at the start.
+
+**The key concepts**
+
+- **Destination**: where the map must lead (for us: an MVP spec ready for `/to-spec`). It is decided first, because it sets the scope.
+- **Map**: a single issue with the `wayfinder:map` label. It is an *index*, not an archive: it contains Destination, Notes, Decisions so far (one line per decision with a link), Not yet specified (the fog) and Out of scope.
+- **Decision ticket**: child issues of the map. Each one holds a *question* whose answer is a decision, never a piece of product to build.
+- **Fog** (*fog of war*): decisions you sense but can't yet phrase precisely. They stay in the *Not yet specified* section until an answer makes them phraseable; then they become tickets.
+- **Frontier**: the open tickets that are neither blocked nor assigned. It is the edge of what is known, visible directly in the GitHub interface thanks to the native *blocked by* links.
+- **Golden rule**: it plans, it doesn't build. When the fog is gone, it hands over to `/to-spec`.
+
+Every ticket has one of four types and is HITL or AFK[^19]; research tickets are resolved by a subagent[^20].
+
+| Ticket type | Mode | When it is used | How it is resolved |
+|---|---|---|---|
+| `grilling` | HITL | The default case: the question is closed by discussing it. | Conversation with you, using the `grilling` and `domain-modeling` skills. |
+| `prototype` | HITL | "How should it look" or "how should it behave": talking is not enough. | A quick, rough artefact (a sketch, an HTML file, interface variants) you react to; the choice is yours. |
+| `research` | AFK | A fact from outside the project is needed: documentation, third-party APIs, a service's limits. | A subagent works in parallel and saves the results with sources on a `research/<n>` branch, never merged into the code. |
+| `task` | HITL or AFK | Nothing to decide, but a manual action unblocks a decision (signing up to a service to evaluate its API, getting access). | The agent does it if it can; otherwise it gives you a precise checklist. |
+
+## When to use it (and when not to)
+
+Matt Pocock's criterion is the number of sessions, not the size of the project.
+
+| Situation | What to use |
+|---|---|
+| New product, unclear road, several planning sessions | `/wayfinder` (this playbook's default) |
+| A well-bounded feature you can close in one sitting | `/grill-with-docs` (with existing code) or `/grill-me` |
+| The decisions have already been made in the conversation | `/to-spec` directly |
+| Map completed | `/to-spec`, then `/to-tickets` (Phases 3 and 4) |
+| A conversation has grown too long | `/handoff` towards `/wayfinder` |
+
+For small projects (a landing page, an internal tool with two screens) skip the map: one `/grill-with-docs` session followed by `/to-spec` is faster.
+
+## Prerequisites
+
+- [ ] Repository on GitHub, `gh` authenticated, `/setup-matt-pocock-skills` run with GitHub as the tracker. The setup also writes the operating instructions `/wayfinder` uses to represent the map, child tickets and blockers on GitHub, and links them from `CLAUDE.md`.
+- [ ] `docs/01-preliminary-spec.md` in the repository.
+- [ ] Private repository: business decisions end up in the issues.
+
+**Why GitHub Issues as the tracker.** It is free, sits next to the code and the pull requests, is driven from `gh` and natively supports sub-issues and dependencies (*blocked by*): you can see the map's frontier without opening it. According to the skill's documentation it is the best-supported tracker. Pick an alternative only if there is a strong reason: Linear if the team already uses it; local Markdown files if you work alone without a remote (with the caveat that material in the repository tends to stay there forever).
+
+## Session 1 — Draw the map
+
+1. Start `claude` in the project folder and type `/wayfinder` followed by the text of template T3: destination and standing preferences (one question at a time, options with trade-offs, explanations in plain language).
+2. **Destination.** `/wayfinder` defines it with you through grilling. Don't move on until it is clear and bounded: "an MVP v1 spec", not "the whole product".
+3. **Frontier.** A second round of questions, broad rather than deep, brings out the open decisions and the first possible steps. If no fog emerges, the skill stops and tells you the map isn't needed: move on to `/to-spec`.
+4. **Creation.** It creates the map issue and the tickets that can already be phrased as child issues, then, in a second pass, the blocking links.
+5. **Parallel research.** For every `research` ticket it starts a subagent that works on its own.
+6. **Stop.** The first session only draws the map: it doesn't resolve tickets.
+
+Open the map in the browser (`gh issue view <number> --web`) and check that every ticket is phrased as a *question*.
+
+## Sessions 2…N — One ticket per session
+
+**Claude Code · discovery loop**
+```text
+/clear
+/wayfinder <map URL or number>
+```
+
+1. `/clear` opens a clean conversation: every ticket deserves a fresh context.
+2. `/wayfinder` loads the map at low resolution, picks the first ticket on the frontier (or the one you point to) and assigns it to itself, so other sessions don't take it.
+3. It resolves it according to its type: questions to you, a prototype to evaluate, research, a manual action.
+4. It records the resolution as a comment, closes the ticket, adds a line to *Decisions so far*.
+5. It turns the fog that has become phraseable into new tickets, moves what goes beyond the destination to *Out of scope*, and updates the tickets invalidated by the decision.
+6. Decisions that are hard to reverse become ADRs[^21] in `docs/adr/`; domain terms go into `GLOSSARY.md`.
+
+One session resolves only one ticket; the exception is research tickets, handled in parallel by subagents. Repeat until no tickets are left open and the *Not yet specified* section is empty.
+
+## How to answer the questions well
+
+- Answer with the *why*, not just the choice: Claude will use it for later decisions.
+- "I don't know" is a legitimate answer: ask for options, consequences and a recommendation.
+- For decisions that are hard to reverse, ask for a prototype or research before choosing.
+- If a question is too long or technical, use `/wait-what`: Claude rephrases it in plain words.
+- Don't accept defaults out of inertia: this is the cheapest moment to change your mind.
+
+## Decision tickets and build phases: two different things
+
+|  | Decision ticket (Phase 2) | Build phase (Phase 4) |
+|---|---|---|
+| Purpose | Resolve a question. | Build a working slice of the product. |
+| Example | "Which login methods do we support in the MVP?" | "BP-07 · The coach creates a training plan". |
+| Labels | `wayfinder:map` on the map; `wayfinder:grilling`, `prototype`, `research`, `task` on the tickets. Never triage labels. | `build-phase` and `ready-for-agent` (or `ready-for-human`). |
+| Created by | `/wayfinder` | `/to-tickets` |
+| Closed when | The decision is recorded (comment, ADR, glossary). | The pull request is merged and the Definition of Done is met. |
+| Output | A decision. | Working, tested software. |
+| Who works on it | Mostly you, with Claude (HITL). | Claude implements, you approve the plan and the result. |
+| Contains code | Never (at most a linked throwaway prototype). | Always, with tests. |
+
+If a map ticket says "build X", it is misclassified: it belongs to Phase 4.
+
+## The decisions every project must close
+
+Use this list to check that the map is complete before gate G2.
+
+- [ ] Users and roles (who uses it, who pays, who administers).
+- [ ] MVP scope: in, out, later.
+- [ ] Main user journeys.
+- [ ] Platforms: web, mobile, PWA.
+- [ ] Main data entities.
+- [ ] Authentication and permissions per role.
+- [ ] External integrations.
+- [ ] Payments and pricing model.
+- [ ] Tech stack and hosting (ADR).
+- [ ] Privacy, GDPR, where the data lives.
+- [ ] Success metrics and tracking.
+- [ ] Monthly running-cost ceiling.
+- [ ] Languages and content.
+- [ ] Visual direction (with a prototype).
+
+## Expected outputs
+
+**Example · map issue (label wayfinder:map)**
+```markdown
+Title: Map · MVP v1 of TeamPulse
+## Destination
+A product spec for TeamPulse MVP v1 (training planning for amateur sports clubs),
+ready for /to-spec. Web app only, Spain and Italy, launch in Q2.
+## Notes
+Owner is a non-engineer: one question at a time, options with trade-offs, plain English.
+Skills to consult: grilling, domain-modeling, prototype, research. Planning only.
+## Decisions so far
+- [Who pays?](link): the club pays per team per month; players use it free.
+- [Login methods for v1](link): email magic link + Google; no passwords. ADR-0003.
+## Not yet specified
+- Offline use on the pitch (depends on the "device used during training" decision).
+## Out of scope
+- Native iOS/Android apps: v1 is a responsive web app (budget and time).
+```
+
+**Example · resolved decision ticket (label wayfinder:grilling)**
+```markdown
+Title: Which login methods does v1 support?
+## Question
+Coaches are 35-60 years old and log in weekly. Which authentication methods do we offer
+at launch, given cost, support burden and GDPR?
+--- resolution comment ---
+Decision: email magic link + Google sign-in. No passwords in v1.
+Why: lowest support burden; Google covers most coaches; magic link covers the rest.
+Consequences: depends on reliable transactional email (see "Email provider" ticket).
+Recorded in docs/adr/0003-authentication.md
+```
+
+## Known limits and problems
+
+:::caution[What can go wrong with /wayfinder, and how to avoid it]
+- **Long, tiring questions.** It is the most frequent criticism of the skill. Add "max 120 words per question" to the map's Notes and, if needed, lower the effort with `/effort`.
+- **Code written during the map.** The default is "plan, don't build", but the Notes can override it and the agent writes them itself: reread them and keep implementation out of the map.
+- **Too many tickets planned up front.** With vague destinations the map becomes a waterfall that goes stale. Bound the destination (the MVP) and prefer quick prototypes to long discussions.
+- **Tickets in parallel.** Two simultaneous grilling sessions may ask you the same question: work one ticket at a time.
+- **The prototype chooses on its own.** The choice between variants is yours: if the agent closes the ticket by choosing, reopen it.
+- **A wrong decision discovered later.** Tell `/wayfinder` clearly what has changed: it updates the map and the tickets and comments on the closed ones.
+:::
+
+:::danger[GATE G2 · The road is clear]
+Approve when the map has no open tickets, *Not yet specified* is empty (or its content has been explicitly moved to *Out of scope*), the decisions in the list above are closed and the hard-to-reverse ones have an ADR.
+:::
+
+:::tip[Definition of Done · Phase 2]
+- [ ] Map with an approved destination and all decision tickets closed with a resolution comment.
+- [ ] ADRs for stack, hosting, authentication, main data model and payments (if any).
+- [ ] `GLOSSARY.md` with the main domain terms.
+- [ ] Prototypes and research linked to their tickets.
+- [ ] Not a single line of product code written.
+:::
+
+[^19]: **HITL** (*human in the loop*): work that can only be resolved with you present, answering in person. **AFK** (*away from keyboard*): work the agent carries on by itself.
+
+[^20]: **Subagent**: a separate instance of Claude with its own context window, to which Claude delegates a task. It works without filling the main conversation's context and returns only the result.
+
+[^21]: **ADR** (*Architecture Decision Record*): a short document that records an important decision: context, options considered, choice and consequences. It is never rewritten: if the decision changes, you write a new one that supersedes the previous one.

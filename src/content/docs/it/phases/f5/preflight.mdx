@@ -1,0 +1,22 @@
+---
+title: "Prima di ogni sessione: il preflight"
+description: "Dentro Claude Code: /context per vedere il punto di partenza, poi chiedi quale fase è pronta:"
+lastVerified: 2026-11-12
+phase: F5
+---
+
+**PowerShell · inizio sessione**
+```powershell
+cd C:\dev\<nome-progetto>
+git switch main
+git pull
+claude
+```
+
+Dentro Claude Code: `/context` per vedere il punto di partenza, poi chiedi quale fase è pronta:
+
+**Prompt (EN) · quale fase adesso**
+```text
+Read docs/STATUS.md and list the open build-phase issues whose blockers are all closed
+(gh issue list --label build-phase --state open). Recommend the next one and explain why, in Italian.
+```

@@ -1,0 +1,8 @@
+Write docs/03-architecture.md using the template below, based on docs/02-product-spec.md,
+docs/adr/ and GLOSSARY.md. Rules:
+- Every technology choice links to its ADR. If a choice has no ADR, stop and ask me.
+- Include Mermaid diagrams: system context, containers, entity-relationship, auth flow.
+- Prefer few, deep modules with small interfaces; name modules with GLOSSARY.md terms.
+- Environment variables: names only, never values.
+- State the monthly running cost estimate per environment, with assumptions.
+Then explain the architecture to me in Italian in 15 lines, as to a non-engineer.

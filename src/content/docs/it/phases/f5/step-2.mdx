@@ -1,0 +1,24 @@
+---
+title: "Passo 2 — Implementa (TDD dove conta)"
+description: "Dopo l'approvazione Claude:"
+lastVerified: 2026-11-12
+phase: F5
+---
+
+import Role from '~/components/Role.astro';
+
+Dopo l'approvazione Claude:
+
+- crea il branch `bp-07-<slug>` da un `main` aggiornato;
+- per logica di business, permessi, pagamenti e trasformazioni di dati usa `/tdd` <Role as="pocock" />, che segue il ciclo red-green-refactor[^29] una fetta verticale alla volta;
+- esegue spesso il controllo dei tipi e i singoli file di test, l'intera suite alla fine;
+- fa commit piccoli con messaggi in formato Conventional Commits[^30];
+- non tocca nulla fuori dallo scope: ciò che nota lo elenca come «fuori scope» e diventerà una nuova issue.
+
+È esattamente la disciplina della skill `/implement` <Role as="pocock" />, che il prompt T8 riprende. Per fasi piccole e chiarissime puoi saltare il plan mode e scrivere direttamente `/implement #<numero>` su un branch già creato.
+
+**Mentre Claude lavora** puoi osservare, interrompere con `Esc` e correggere la direzione, fare domande laterali con `/btw` senza sporcare la conversazione, oppure tornare indietro con `/rewind`.
+
+[^29]: **TDD** (*test-driven development*): prima si scrive un test che descrive il comportamento atteso e che fallisce (*red*), poi il codice minimo per farlo passare (*green*), infine si migliora il codice mantenendo i test verdi (*refactor*). Dà a Claude un segnale oggettivo di «funziona».
+
+[^30]: **Conventional Commits**: una convenzione per i messaggi di commit con un prefisso che dice il tipo di modifica: `feat:` (funzionalità), `fix:` (correzione), `docs:`, `test:`, `refactor:`, `chore:` (manutenzione). Rende la storia leggibile e permette di generare il changelog.

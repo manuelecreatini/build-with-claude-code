@@ -1,0 +1,18 @@
+/wayfinder
+Destination: a product spec for the MVP (v1) of <Product>, ready for /to-spec.
+Starting material: docs/01-preliminary-spec.md and docs/research/.
+
+Standing preferences for this map (write them into the map's Notes):
+- I am the product owner, not an engineer. Ask ONE question at a time, max ~120 words.
+- For each question: why it matters, 2-3 options with pros and cons, cost and reversibility
+  (one-way or two-way door), and your recommendation.
+- Explain technical terms in plain English the first time you use them.
+- Challenge my assumptions and flag any contradiction with the preliminary spec.
+- Prefer boring, well-documented technology. Evaluate (do not assume) this default stack:
+  Next.js + TypeScript, Supabase, Vercel.
+- Record hard-to-reverse decisions as ADRs in docs/adr/ and domain terms in GLOSSARY.md.
+- This map plans only: it never builds product code. Prototypes are throwaway.
+- The map must cover: users and roles, MVP scope, core journeys, platforms, core data,
+  authentication and permissions, integrations, payments and pricing, stack and hosting,
+  privacy/GDPR and data location, success metrics, monthly cost ceiling, languages,
+  visual direction.

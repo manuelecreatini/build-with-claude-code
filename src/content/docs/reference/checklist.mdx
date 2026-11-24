@@ -1,0 +1,101 @@
+---
+title: "Checklist · Master project checklist"
+description: "Print it or copy it into docs/STATUS.md at the start of every project. Each block matches a phase; the gates are in bold."
+lastVerified: 2026-11-12
+sidebar:
+  order: 1
+---
+
+Print it or copy it into `docs/STATUS.md` at the start of every project. Each block matches a phase; the gates are in bold.
+
+#### F0 · Setup (once per PC)
+
+- [ ] Claude Pro or Max active; GitHub account.
+- [ ] Git, GitHub CLI, Node.js LTS, VS Code, Claude Code installed and checked.
+- [ ] `gh auth login` completed.
+- [ ] `mattpocock-skills` plugin installed; `/skills` shows it.
+- [ ] Status line with context; `/autocompact 200k`.
+
+#### F0 · Setup (every project)
+
+- [ ] Folder outside OneDrive; `git init`.
+- [ ] Scaffolding: `CLAUDE.md` (T0), `docs/`, GitHub templates, `.gitignore`, `.env.example`, `.claude/settings.json`.
+- [ ] Private repository created and pushed.
+- [ ] `/setup-matt-pocock-skills`: GitHub, default labels, single-context.
+- [ ] `build-phase` and `tech-debt` labels.
+
+#### F1 · Preliminary spec
+
+- [ ] 10–20 minutes of dictation with script T1-A.
+- [ ] `docs/00-brain-dump.md` saved.
+- [ ] Prompt T1-B run; `docs/01-preliminary-spec.md` created.
+- [ ] Assumptions and contradictions reviewed; 5 main questions answered or postponed.
+- [ ] **G1** preliminary spec approved; commit.
+
+#### F2 · Discovery
+
+- [ ] Session 1: `/wayfinder` + T3; a clear, bounded destination.
+- [ ] Map and decision tickets checked on GitHub (they are questions, not tasks).
+- [ ] One ticket per session: `/clear` → `/wayfinder <map>`.
+- [ ] Choices between prototypes made by you.
+- [ ] ADRs for stack, hosting, authentication, data, payments; `GLOSSARY.md`.
+- [ ] Final check: "Map clear".
+- [ ] **G2** no open decisions.
+
+#### F3 · Final spec and architecture
+
+- [ ] `/to-spec <map>`; test seams confirmed.
+- [ ] T4: `docs/02-product-spec.md` with US/FR/NFR IDs and Given/When/Then criteria.
+- [ ] T5: `docs/03-architecture.md` with diagrams and costs.
+- [ ] Mockups or prototypes for uncertain screens.
+- [ ] Critical review with a subagent; critical problems fixed.
+- [ ] **G3** spec v1.0 approved; commit.
+
+#### F4 · Build phases
+
+- [ ] `/to-tickets` with the T6 constraints.
+- [ ] Proposal reviewed: size, order, dependencies, human actions.
+- [ ] US/FR → BP coverage table with no gaps.
+- [ ] **G4** approval; issues published.
+- [ ] `docs/04-build-plan.md` and `STATUS.md` updated.
+
+#### F5 · For every build phase
+
+- [ ] Preflight: `main` up to date, `/context`.
+- [ ] Plan mode + T8; **G5** plan approved.
+- [ ] Branch `bp-NN-slug`; TDD at the seams; small commits.
+- [ ] Human actions handled with T9; no secrets in the chat.
+- [ ] Types, lint, tests, E2E, build green; review done; `/security-review` if needed.
+- [ ] Preview tried by you; T10 filled in in the PR.
+- [ ] Documentation updated.
+- [ ] **G6** squash merge; issue closed with a summary.
+- [ ] Handoff (T11) and `/clear` before the next phase.
+
+#### F6 · Integration
+
+- [ ] Scope frozen; `main` green.
+- [ ] T13: traceability and integration review.
+- [ ] Security: `/security-review`, authorisation, RLS, `npm audit`.
+- [ ] `/code-review ultra` on the release PR (SaaS).
+- [ ] Acceptance testing with 2–3 real users; bug bash.
+- [ ] **G7** Go: zero S1, S2 closed or accepted.
+
+#### F7 · Deploy and launch
+
+- [ ] Production Vercel and Supabase (commercial plans); EU region.
+- [ ] Variables and secrets in the dashboards; `.env.example` complete.
+- [ ] Migrations applied; RLS; backup and restore tested.
+- [ ] CI and protection of `main`; automatic deploy.
+- [ ] Domain, HTTPS, DNS for email.
+- [ ] Sentry, PostHog, uptime monitor with alerts.
+- [ ] Rollback and incident runbooks; rollback rehearsed.
+- [ ] Legal pages; T14 checklist; `v1.0.0` tag.
+
+#### F8 · Post-launch (every week)
+
+- [ ] `/triage` of new issues; severity on bugs.
+- [ ] T15 ops review in `docs/ops/`.
+- [ ] RICE priorities; choice of path by size of change.
+- [ ] Every change goes through the build loop (G5, G6).
+- [ ] Tagged release, CHANGELOG and notes.
+- [ ] Every two weeks: `/improve-codebase-architecture`; every month: dependencies and security.

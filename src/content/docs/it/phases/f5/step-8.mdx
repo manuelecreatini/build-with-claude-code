@@ -1,0 +1,61 @@
+---
+title: "Passo 8 — Gestisci il contesto"
+description: "Claude lavora dentro una finestra di contesto: tutto ciò che legge e scrive la riempie, anche ciò che nel terminale vedi come una sola riga (il contenuto di…"
+lastVerified: 2026-11-12
+phase: F5
+---
+
+import Role from '~/components/Role.astro';
+
+## Il problema
+
+Claude lavora dentro una finestra di contesto[^35]: tutto ciò che legge e scrive la riempie, anche ciò che nel terminale vedi come una sola riga (il contenuto di un file letto, l'output dei test). Più si riempie di materiale vecchio o irrilevante, più aumenta il rumore. Alcuni modelli recenti hanno una finestra da 1 milione di token, altri da 200.000; il punto in cui scatta la compattazione automatica dipende da modello e configurazione. Per questo il playbook adotta un **budget prudente di 200.000 token per sessione**, qualunque sia il modello.
+
+## Come controllare il consumo
+
+- `/context` <Role as="builtin" />: griglia colorata del contesto per categoria (istruzioni, CLAUDE.md, memoria, skill, strumenti MCP, conversazione) con suggerimenti di ottimizzazione.
+- Riga di stato: la percentuale configurata in Fase 0. Attenzione: è relativa alla finestra del modello; con un modello da 1 milione, 200.000 token sono il 20%. Ragiona in token, che `/context` mostra.
+- `/usage` <Role as="builtin" /> mostra un'altra cosa: i consumi rispetto ai limiti del tuo piano.
+
+## Le zone (euristica del playbook)
+
+| Zona | Token usati | Cosa fare |
+|---|---|---|
+| Verde | meno di 100.000 | Lavora normalmente. Le sessioni migliori finiscono qui: Matt Pocock dimensiona i ticket di `/wayfinder` su una sessione da 100.000 token. |
+| Gialla | 100.000–150.000 | Completa il passo in corso e non iniziare lavori nuovi grandi. Se resti sulla stessa fase: `/compact` con un focus esplicito. |
+| Rossa | 150.000–200.000 | Al primo punto stabile: commit, `/handoff`, `/clear`. |
+| Oltre | più di 200.000 | Scatta la rete di sicurezza `/autocompact 200k`. Verifica che decisioni e stato siano nei file; meglio comunque handoff e conversazione nuova. |
+
+## Quale strumento usare
+
+| Strumento | Cosa fa | Cosa conservi | Quando |
+|---|---|---|---|
+| `/compact [focus]` <Role as="builtin" /> | Sostituisce la conversazione con un riassunto strutturato, nella stessa sessione. | Istruzioni e memoria; il riassunto; alcuni file recenti; le skill invocate. Si perdono output completi e ragionamenti intermedi. | Stessa fase, zona gialla. Esempio: `/compact focus on BP-07 plan, test results and open issues`. |
+| `/handoff [focus]` <Role as="pocock" /> | Scrive un documento per un agente nuovo nella cartella temporanea. | Ciò che serve alla prossima sessione, con rimandi a issue, commit, ADR; segreti oscurati. | Fine fase, zona rossa, cambio di focus, fine giornata. |
+| `/clear` <Role as="builtin" /> | Nuova conversazione vuota; la precedente resta disponibile con `/resume`. | `CLAUDE.md` e memoria di progetto si ricaricano. | Tra lavori non collegati; subito dopo un handoff. |
+| Nuova sessione (`/exit` e `claude`) | Riavvia anche il processo. | Come `/clear`. | Dopo aggiornamenti di Claude Code o dei plugin, o se la sessione si comporta in modo strano. |
+| `/rewind` <Role as="builtin" /> | Torna a un checkpoint di codice e conversazione, oppure riassume solo una parte della conversazione. | Scegli tu il punto. | Una direzione si è rivelata sbagliata. |
+| `/btw` <Role as="builtin" /> | Domanda laterale che non entra nella cronologia. | — | Chiarimenti rapidi durante il lavoro. |
+| Subagent | Delega letture e ricerche in un contesto separato; torna solo il risultato. | Il tuo contesto resta pulito. | «Use a subagent to research…» per ricerche ampie nel codice o sul web. |
+
+## Cosa sopravvive alla compattazione
+
+Secondo la documentazione di Claude Code, dopo una compattazione (manuale o automatica):
+
+- system prompt, `CLAUDE.md` alla radice, regole senza percorso e memoria automatica vengono ricaricati dal disco; anche il piano scritto in plan mode;
+- lo stato di Git viene riletto da zero;
+- vengono riletti fino a cinque file, i più recentemente modificati;
+- il testo delle skill invocate viene reinserito, fino a 5.000 token per skill e 25.000 in totale, sacrificando le più vecchie;
+- regole legate a percorsi e `CLAUDE.md` annidati tornano solo quando Claude rilegge file di quelle cartelle;
+- tutto il resto (output dei comandi, ragionamenti, dettagli della conversazione) diventa un riassunto.
+
+**La lezione**: ciò che deve sopravvivere va scritto in un file (`CLAUDE.md`, `STATUS.md`, issue, ADR), non lasciato nella conversazione.
+
+## Come consumare meno contesto
+
+- Una sessione, un obiettivo: una build phase, o un ticket della mappa.
+- Sii specifico su file e cartelle («fix the bug in the attendance module»), così Claude legge meno.
+- Delega le ricerche ampie a un subagent.
+- Incolla l'errore e le 20 righe intorno, non log interi.
+- Tieni `CLAUDE.md` sotto le 200 righe; sposta le procedure lunghe in skill.
+- Disattiva server MCP e skill che non usi (`/mcp`, `/skill-doctor`).

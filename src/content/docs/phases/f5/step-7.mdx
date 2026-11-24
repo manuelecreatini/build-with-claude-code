@@ -1,0 +1,31 @@
+---
+title: "Step 7 — Handoff with /handoff"
+description: "/handoff [MATT POCOCK SKILL] compresses the conversation into a handover document, so that a new agent, with a clean context, can continue the work. From…"
+lastVerified: 2026-11-12
+phase: F5
+---
+
+import Role from '~/components/Role.astro';
+
+`/handoff` <Role as="pocock" /> compresses the conversation into a handover document, so that a new agent, with a clean context, can continue the work. From the skill's documentation:
+
+- it saves the document in the **system's temporary folder** (on Windows `%TEMP%`), not in the repository;
+- it includes a *suggested skills* section for the next session;
+- it doesn't duplicate what is already in other artefacts (specs, plans, ADRs, issues, commits, diffs): it references them by path or URL;
+- it redacts sensitive information (keys, passwords, personal data);
+- it accepts an optional argument: what the next session will be for, and it adapts the document accordingly.
+
+**When to use it**
+
+1. at the end of a phase, if you carry on with the next one in a new session;
+2. mid-phase, when the context enters the red zone (see step 8);
+3. before stopping for the day or switching computers;
+4. when Claude starts repeating itself or getting confused;
+5. before leaving work to run on its own in another session;
+6. when a conversation has turned into a project: "hand off to /wayfinder" turns it into a map.
+
+**How**: use template T11. In short: (1) Claude commits the work in progress and pushes it to the branch; (2) it comments the status on the issue and updates `STATUS.md`; (3) you run `/handoff` with the description of the next session; (4) you note the path of the file created; (5) `/clear`; (6) in the new conversation you paste the resume prompt with that path.
+
+:::note[The handoff document is a bridge, not an archive]
+Temporary files can be deleted by the system. Durable memory stays in the repository and on GitHub: commits, the issue comment, `STATUS.md`, ADRs. That is why the playbook updates them *before* the handoff: if the temporary file disappears, you lose nothing important.
+:::

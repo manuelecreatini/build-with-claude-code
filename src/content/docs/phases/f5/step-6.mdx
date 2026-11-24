@@ -1,0 +1,26 @@
+---
+title: "Step 6 — Close the phase (gate G6)"
+description: "Build with Claude Code"
+lastVerified: 2026-11-12
+phase: F5
+---
+
+import Role from '~/components/Role.astro';
+
+**Claude Code (or PowerShell) · closing the phase**
+```powershell
+git push -u origin bp-07-<slug>
+gh pr create --fill          # Claude fills in the body with template B3
+gh pr checks --watch         # waits for CI
+gh pr merge --squash --delete-branch
+git switch main
+git pull
+```
+
+1. Claude opens the pull request with template B3: what changes and why, evidence (tests, screenshots), criteria table, merge "risk" (reversible or not, how much impact) and `Closes #<number>` to close the issue automatically.
+2. CI must be green; Vercel publishes a preview.
+3. <Role as="you" /> Read the summary (you don't need to read every line of code), try the preview, tick the issue's Definition of Done.
+4. Merge with *squash*[^34] and delete the branch.
+5. Claude comments on the issue with a final summary: what was done, tests run, link to the pull request, any new issues.
+
+[^34]: **Squash merge**: combines all the pull request's commits into a single commit on `main`. The main history stays clean: one commit per build phase.

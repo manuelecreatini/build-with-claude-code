@@ -1,0 +1,50 @@
+# Launch checklist — <Product> v1.0.0
+
+## Accounts and plans
+- [ ] Vercel plan suitable for commercial use (Pro); Supabase Pro on the production project
+- [ ] Billing alerts / spend limits set on every paid service
+
+## Environments
+- [ ] Separate development and production databases; production in an EU region
+- [ ] Preview deployments working for every PR
+
+## Domain and DNS
+- [ ] Domain added to Vercel; DNS records set; HTTPS active; www redirect
+- [ ] Email DNS (SPF, DKIM, DMARC) set if the app sends email; test email lands in inbox
+
+## Environment variables and secrets
+- [ ] All variables in .env.example exist in Vercel Production (and Preview)
+- [ ] No NEXT_PUBLIC_ variable contains a secret; service keys server-side only
+- [ ] CI secrets in GitHub Actions; no secret in the repository history
+
+## Database
+- [ ] Migrations applied to production via CLI; schema matches the repository
+- [ ] Row Level Security enabled on every table; advisors show no critical warnings
+- [ ] Backups active; one restore tested
+
+## CI/CD
+- [ ] main protected: PR required, CI must pass
+- [ ] Production deploy happens automatically from main
+
+## Security and compliance
+- [ ] Integration review: no open S1/S2; /security-review clean
+- [ ] Rate limits on login and public forms; security headers set
+- [ ] Privacy policy, terms of use, cookie consent where required; DPAs with vendors
+
+## Monitoring
+- [ ] Sentry receiving errors from frontend and backend; alert to owner
+- [ ] PostHog events for the core funnel; dashboards created
+- [ ] Uptime monitor on the home page and one API endpoint
+
+## Recovery
+- [ ] docs/runbooks/rollback.md written and rollback rehearsed once
+- [ ] docs/runbooks/incident.md written (who, how, where to look)
+
+## Launch day
+- [ ] Final merge to main; production deploy succeeded
+- [ ] Smoke test in production: sign-up, core journey, email, test payment (if any)
+- [ ] Watch Sentry and logs for 2 hours; then announce
+- [ ] Tag v1.0.0, GitHub release, CHANGELOG updated; STATUS.md says "Live"
+
+## Next 72 hours
+- [ ] Errors and key metrics checked twice a day; hotfixes through the build loop

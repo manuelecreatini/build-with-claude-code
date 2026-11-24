@@ -1,0 +1,193 @@
+---
+title: "Fase 2 · Discovery e decisioni con /wayfinder"
+description: "Trasformare la spec preliminare in un progetto definito con chiarezza, prendendo e registrando ogni decisione necessaria prima di costruire."
+lastVerified: 2026-11-12
+phase: F2
+---
+
+import Role from '~/components/Role.astro';
+
+| Voce | Dettaglio |
+|---|---|
+| **Obiettivo** | Trasformare la spec preliminare in un progetto definito con chiarezza, prendendo e registrando ogni decisione necessaria prima di costruire. |
+| **Input** | `docs/01-preliminary-spec.md`; repository configurato con `/setup-matt-pocock-skills` su GitHub. |
+| **Output** | Una *mappa* (issue con label `wayfinder:map`) con tutti i decision ticket chiusi; ADR in `docs/adr/`; `GLOSSARY.md`; prototipi e ricerche collegati. |
+| **Strumenti** | `/wayfinder` <Role as="pocock" />, che a sua volta usa le skill `grilling`, `domain-modeling`, `prototype` e `research`; GitHub Issues. |
+| **Gate** | <Role as="gate" n={2} /> nessuna decisione aperta, scope chiaro. |
+| **Tempo tipico** | 3–15 sessioni brevi, di solito 1–5 giorni di calendario. |
+
+## Cos'è /wayfinder, in parole semplici
+
+`/wayfinder` serve a pianificare un lavoro troppo grande per una sola sessione e ancora avvolto nella nebbia: sai dove vuoi arrivare, non vedi ancora la strada. Invece di tentare un piano completo in una conversazione, disegna una **mappa condivisa** sul tuo issue tracker e la risolve una decisione alla volta. Matt Pocock la presenta come l'evoluzione di `/grill-me`, pensata per i progetti in cui non si può decidere tutto all'inizio.
+
+**I concetti chiave**
+
+- **Destinazione**: dove deve portare la mappa (per noi: una spec dell'MVP pronta per `/to-spec`). Si decide per prima, perché fissa lo scope.
+- **Mappa**: una singola issue con label `wayfinder:map`. È un *indice*, non un archivio: contiene Destination, Notes, Decisions so far (una riga per decisione con link), Not yet specified (la nebbia) e Out of scope.
+- **Decision ticket**: issue figlie della mappa. Ognuna contiene una *domanda* la cui risposta è una decisione, mai una porzione di prodotto da costruire.
+- **Nebbia** (*fog of war*): decisioni che intuisci ma non sai ancora formulare con precisione. Restano nella sezione *Not yet specified* finché una risposta non le rende formulabili; allora diventano ticket.
+- **Frontiera**: i ticket aperti, non bloccati e non assegnati. È il confine del noto, visibile direttamente nell'interfaccia di GitHub grazie ai collegamenti nativi *blocked by*.
+- **Regola d'oro**: pianifica, non costruisce. Quando la nebbia è sparita, passa il testimone a `/to-spec`.
+
+Ogni ticket ha uno di quattro tipi ed è HITL o AFK[^19]; i ticket di ricerca li risolve un subagent[^20].
+
+| Tipo di ticket | Modalità | Quando si usa | Come si risolve |
+|---|---|---|---|
+| `grilling` | HITL | Il caso predefinito: la domanda si chiude discutendone. | Conversazione con te, con le skill `grilling` e `domain-modeling`. |
+| `prototype` | HITL | «Come deve apparire» o «come deve comportarsi»: parlarne non basta. | Un artefatto rapido e grezzo (una bozza, un HTML, varianti di interfaccia) su cui reagisci; la scelta è tua. |
+| `research` | AFK | Serve un fatto esterno al progetto: documentazione, API di terzi, limiti di un servizio. | Un subagent lavora in parallelo e salva i risultati con le fonti su un branch `research/<n>`, mai unito al codice. |
+| `task` | HITL o AFK | Nulla da decidere, ma un'azione manuale sblocca una decisione (iscriversi a un servizio per valutarne l'API, ottenere un accesso). | L'agente la esegue se può; altrimenti ti dà una checklist precisa. |
+
+## Quando usarla (e quando no)
+
+Il criterio di Matt Pocock è il numero di sessioni, non la dimensione del progetto.
+
+| Situazione | Cosa usare |
+|---|---|
+| Nuovo prodotto, strada poco chiara, più sessioni di pianificazione | `/wayfinder` (default di questo playbook) |
+| Funzionalità ben delimitata che chiudi in una seduta | `/grill-with-docs` (con codice esistente) o `/grill-me` |
+| Le decisioni sono già prese nella conversazione | `/to-spec` direttamente |
+| Mappa completata | `/to-spec`, poi `/to-tickets` (Fasi 3 e 4) |
+| Una conversazione è cresciuta troppo | `/handoff` verso `/wayfinder` |
+
+Per progetti piccoli (una landing page, uno strumento interno con due schermate) salta la mappa: una sessione di `/grill-with-docs` seguita da `/to-spec` è più rapida.
+
+## Prerequisiti
+
+- [ ] Repository su GitHub, `gh` autenticato, `/setup-matt-pocock-skills` eseguito con GitHub come tracker. La configurazione scrive anche le istruzioni operative che `/wayfinder` usa per rappresentare mappa, ticket figli e blocchi su GitHub, e le collega dal `CLAUDE.md`.
+- [ ] `docs/01-preliminary-spec.md` nel repository.
+- [ ] Repository privato: le decisioni di business finiscono nelle issue.
+
+**Perché GitHub Issues come tracker.** È gratuito, sta accanto al codice e alle pull request, si comanda da `gh` e supporta in modo nativo sotto-issue e dipendenze (*blocked by*): la frontiera della mappa si vede senza aprirla. Secondo la documentazione della skill è il tracker meglio supportato. Scegli un'alternativa solo se c'è una ragione forte: Linear se il team lo usa già; file Markdown locali se lavori da solo senza remote (con l'avvertenza che il materiale nel repository tende a restarci per sempre).
+
+## Sessione 1 — Traccia la mappa
+
+1. Avvia `claude` nella cartella del progetto e scrivi `/wayfinder` seguito dal testo del template T3: destinazione e preferenze permanenti (una domanda alla volta, opzioni con trade-off, spiegazioni in italiano semplice).
+2. **Destinazione.** `/wayfinder` la definisce con te attraverso il grilling. Fermati finché non è chiara e delimitata: «una spec dell'MVP v1», non «tutto il prodotto».
+3. **Frontiera.** Un secondo giro di domande, in ampiezza invece che in profondità, fa emergere le decisioni aperte e i primi passi possibili. Se non emerge nebbia, la skill si ferma e ti dice che la mappa non serve: passa a `/to-spec`.
+4. **Creazione.** Crea l'issue mappa e i ticket già formulabili come issue figlie, poi, in un secondo passaggio, i collegamenti di blocco.
+5. **Ricerche in parallelo.** Per ogni ticket `research` avvia un subagent che lavora da solo.
+6. **Stop.** La prima sessione traccia soltanto: non risolve ticket.
+
+Apri la mappa nel browser (`gh issue view <numero> --web`) e controlla che ogni ticket sia formulato come una *domanda*.
+
+## Sessioni 2…N — Un ticket per sessione
+
+**Claude Code · ciclo di discovery**
+```text
+/clear
+/wayfinder <URL o numero della mappa>
+```
+
+1. `/clear` apre una conversazione pulita: ogni ticket merita un contesto fresco.
+2. `/wayfinder` carica la mappa a bassa risoluzione, sceglie il primo ticket della frontiera (o quello che indichi) e se lo assegna, così altre sessioni non lo prendono.
+3. Lo risolve secondo il tipo: domande a te, prototipo da valutare, ricerca, azione manuale.
+4. Registra la risoluzione come commento, chiude il ticket, aggiunge una riga a *Decisions so far*.
+5. Trasforma in nuovi ticket la nebbia diventata formulabile, sposta in *Out of scope* ciò che va oltre la destinazione, aggiorna i ticket invalidati dalla decisione.
+6. Le decisioni difficili da invertire diventano ADR[^21] in `docs/adr/`; i termini di dominio entrano in `GLOSSARY.md`.
+
+Una sessione risolve un solo ticket; fanno eccezione i ticket di ricerca, gestiti in parallelo dai subagent. Ripeti finché non restano ticket aperti e la sezione *Not yet specified* è vuota.
+
+## Come rispondere bene alle domande
+
+- Rispondi con il *perché*, non solo con la scelta: Claude lo userà per le decisioni successive.
+- «Non lo so» è una risposta legittima: chiedi opzioni, conseguenze e una raccomandazione.
+- Per le decisioni difficili da invertire chiedi un prototipo o una ricerca prima di scegliere.
+- Se una domanda è troppo lunga o tecnica, usa `/wait-what`: Claude la riformula in parole semplici.
+- Non accettare i default per inerzia: è il momento più economico per cambiare idea.
+
+## Decision ticket e build phase: due cose diverse
+
+|  | Decision ticket (Fase 2) | Build phase (Fase 4) |
+|---|---|---|
+| Scopo | Risolvere una domanda. | Costruire una porzione funzionante del prodotto. |
+| Esempio | «Quali metodi di login supportiamo nell'MVP?» | «BP-07 · L'allenatore crea un piano di allenamento». |
+| Label | `wayfinder:map` sulla mappa; `wayfinder:grilling`, `prototype`, `research`, `task` sui ticket. Mai label di triage. | `build-phase` e `ready-for-agent` (o `ready-for-human`). |
+| Creato da | `/wayfinder` | `/to-tickets` |
+| Si chiude quando | La decisione è registrata (commento, ADR, glossario). | La pull request è unita e la Definition of Done è soddisfatta. |
+| Output | Una decisione. | Software funzionante e testato. |
+| Chi lo lavora | Soprattutto tu, con Claude (HITL). | Claude implementa, tu approvi piano e risultato. |
+| Contiene codice | Mai (al massimo un prototipo usa-e-getta collegato). | Sempre, con i test. |
+
+Se un ticket della mappa dice «costruisci X», è classificato male: appartiene alla Fase 4.
+
+## Le decisioni che ogni progetto deve chiudere
+
+Usa questo elenco per verificare che la mappa sia completa prima del gate G2.
+
+- [ ] Utenti e ruoli (chi usa, chi paga, chi amministra).
+- [ ] Scope dell'MVP: dentro, fuori, dopo.
+- [ ] Percorsi utente principali.
+- [ ] Piattaforme: web, mobile, PWA.
+- [ ] Entità principali dei dati.
+- [ ] Autenticazione e permessi per ruolo.
+- [ ] Integrazioni esterne.
+- [ ] Pagamenti e modello di prezzo.
+- [ ] Stack tecnologico e hosting (ADR).
+- [ ] Privacy, GDPR, dove risiedono i dati.
+- [ ] Metriche di successo e tracciamento.
+- [ ] Tetto di costo mensile di esercizio.
+- [ ] Lingue e contenuti.
+- [ ] Direzione visiva (con prototipo).
+
+## Output attesi
+
+**Esempio · issue mappa (label wayfinder:map)**
+```markdown
+Title: Map · MVP v1 of TeamPulse
+## Destination
+A product spec for TeamPulse MVP v1 (training planning for amateur sports clubs),
+ready for /to-spec. Web app only, Spain and Italy, launch in Q2.
+## Notes
+Owner is a non-engineer: one question at a time, options with trade-offs, plain Italian.
+Skills to consult: grilling, domain-modeling, prototype, research. Planning only.
+## Decisions so far
+- [Who pays?](link): the club pays per team per month; players use it free.
+- [Login methods for v1](link): email magic link + Google; no passwords. ADR-0003.
+## Not yet specified
+- Offline use on the pitch (depends on the "device used during training" decision).
+## Out of scope
+- Native iOS/Android apps: v1 is a responsive web app (budget and time).
+```
+
+**Esempio · decision ticket risolto (label wayfinder:grilling)**
+```markdown
+Title: Which login methods does v1 support?
+## Question
+Coaches are 35-60 years old and log in weekly. Which authentication methods do we offer
+at launch, given cost, support burden and GDPR?
+--- resolution comment ---
+Decision: email magic link + Google sign-in. No passwords in v1.
+Why: lowest support burden; Google covers most coaches; magic link covers the rest.
+Consequences: depends on reliable transactional email (see "Email provider" ticket).
+Recorded in docs/adr/0003-authentication.md
+```
+
+## Limiti e problemi noti
+
+:::caution[Cosa può andare storto con /wayfinder, e come evitarlo]
+- **Domande lunghe e faticose.** È la critica più frequente alla skill. Aggiungi nelle Notes della mappa «max 120 words per question» e, se serve, abbassa l'effort con `/effort`.
+- **Codice scritto durante la mappa.** Il default è «pianifica, non costruire», ma le Notes possono sovrascriverlo e le scrive l'agente stesso: rileggile e tieni l'implementazione fuori dalla mappa.
+- **Troppi ticket pianificati in anticipo.** Con destinazioni vaghe la mappa diventa una cascata che invecchia. Delimita la destinazione (l'MVP) e preferisci prototipi rapidi a lunghe discussioni.
+- **Ticket in parallelo.** Due sessioni di grilling simultanee possono farti la stessa domanda: lavora un ticket alla volta.
+- **Il prototipo sceglie da solo.** La scelta tra varianti è tua: se l'agente chiude il ticket scegliendo, riaprilo.
+- **Decisione sbagliata scoperta dopo.** Di' chiaramente a `/wayfinder` cosa è cambiato: aggiorna mappa e ticket e commenta quelli chiusi.
+:::
+
+:::danger[GATE G2 · La strada è chiara]
+Approva quando la mappa non ha ticket aperti, *Not yet specified* è vuota (o il contenuto è stato spostato esplicitamente in *Out of scope*), le decisioni dell'elenco qui sopra sono chiuse e quelle difficili da invertire hanno un ADR.
+:::
+
+:::tip[Definition of Done · Fase 2]
+- [ ] Mappa con destinazione approvata e tutti i decision ticket chiusi con commento di risoluzione.
+- [ ] ADR per stack, hosting, autenticazione, modello dati principale e pagamenti (se previsti).
+- [ ] `GLOSSARY.md` con i termini di dominio principali.
+- [ ] Prototipi e ricerche collegati ai rispettivi ticket.
+- [ ] Nessuna riga di codice di prodotto scritta.
+:::
+
+[^19]: **HITL** (*human in the loop*): lavoro che si risolve solo con te presente, che rispondi in prima persona. **AFK** (*away from keyboard*): lavoro che l'agente porta avanti da solo.
+
+[^20]: **Subagent**: un'istanza separata di Claude con una propria finestra di contesto, a cui Claude delega un compito. Lavora senza riempire il contesto della conversazione principale e restituisce solo il risultato.
+
+[^21]: **ADR** (*Architecture Decision Record*): un breve documento che registra una decisione importante: contesto, opzioni considerate, scelta e conseguenze. Non si riscrive: se la decisione cambia, se ne scrive uno nuovo che sostituisce il precedente.

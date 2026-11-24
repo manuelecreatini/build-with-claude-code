@@ -1,0 +1,52 @@
+---
+name: Build phase
+about: One vertical slice of the product, shippable in one pull request
+title: "BP-NN · <user-visible outcome>"
+labels: ["build-phase", "ready-for-agent"]
+---
+
+## Objective
+<What the user can do when this phase is done, in one or two sentences.>
+
+## Spec references
+- Spec: docs/02-product-spec.md — US-..., FR-..., J...
+- ADRs: docs/adr/...
+- Parent: #<spec issue>
+
+## Scope — features and components
+- ...
+## Out of scope for this phase
+- ...
+
+## Dependencies
+- Blocked by: BP-.. (set as native "blocked by" links)
+- External: <service, credential or decision this phase needs>
+
+## Implementation tasks
+- [ ] ...
+- [ ] ...
+
+## Expected modules / files (indicative — confirm in the plan)
+- ...
+
+## Acceptance criteria
+- [ ] Given <context>, when <action>, then <outcome>
+- [ ] ...
+
+## Testing requirements
+- Unit: ...
+- Integration: ...
+- E2E: <journey and steps>
+- Manual check by the owner: ...
+
+## Human actions
+- [ ] None | <action, why, by whom>
+
+## Definition of Done
+- [ ] All acceptance criteria verified, with evidence in the PR
+- [ ] Tests written first where required (/tdd); all tests green locally and in CI
+- [ ] Typecheck and lint clean; production build succeeds; no regressions
+- [ ] Review done (standards + spec); findings resolved; /security-review if sensitive
+- [ ] Preview deployment checked by the owner
+- [ ] Docs updated: STATUS.md, ADR, GLOSSARY, README, CHANGELOG, .env.example
+- [ ] PR merged into main, branch deleted, issue closed with a summary comment

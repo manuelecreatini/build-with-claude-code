@@ -1,0 +1,52 @@
+---
+title: "Capitolo 3 · Chi fa cosa: Claude, tu e i permessi"
+description: "La regola generale: Claude esegue, propone e verifica; tu decidi, autorizzi e collaudi. La tabella traduce la regola in attività concrete."
+lastVerified: 2026-11-12
+sidebar:
+  order: 3
+---
+
+import Role from '~/components/Role.astro';
+
+La regola generale: **Claude esegue, propone e verifica; tu decidi, autorizzi e collaudi**. La tabella traduce la regola in attività concrete.
+
+| Attività | Claude in autonomia | Serve il tuo ok | Solo tu |
+|---|---|---|---|
+| Leggere codice e documenti, cercare, analizzare | <Role as="claude" /> |  |  |
+| Proporre piani, opzioni e trade-off | <Role as="claude" /> |  |  |
+| Scrivere codice e test dentro lo scope della issue | <Role as="claude" /> dopo G5 | <Role as="gate" n={5} /> |  |
+| Eseguire test, controllo dei tipi, lint e build in locale | <Role as="claude" /> |  |  |
+| Fare commit sul branch della fase, aprire la pull request | <Role as="claude" /> |  |  |
+| Aggiornare documentazione, ADR, `STATUS.md`, commenti alle issue | <Role as="claude" /> |  |  |
+| Decisioni di prodotto: scope, UX, prezzi, testi importanti | propone |  | <Role as="you" /> decide |
+| Nuove dipendenze, nuovi servizi, qualsiasi costo | propone | <Role as="you" /> |  |
+| Migrazioni del database di produzione, cancellazione di dati | prepara | <Role as="you" /> |  |
+| Merge su `main` | prepara | <Role as="gate" n={6} /> |  |
+| Deploy e lancio in produzione | prepara | <Role as="gate" n={7} /> |  |
+| Creare account, inserire carte, chiavi API e segreti, configurare DNS | guida passo passo |  | <Role as="you" /> |
+| Collaudo finale e accettazione | aiuta |  | <Role as="you" /> |
+| Termini legali, privacy policy, cookie | bozza |  | <Role as="you" /> (con un legale se serve) |
+
+## Le modalità di permesso di Claude Code
+
+Claude Code chiede il permesso prima di agire in base alla *permission mode* attiva[^4]. Nel terminale `Shift+Tab` fa scorrere le modalità `default` → `acceptEdits` → `plan`; la modalità `auto` compare solo se il tuo account soddisfa i requisiti.
+
+| Modalità | Cosa fa | Quando usarla nel playbook |
+|---|---|---|
+| `default` (chiede prima) | Chiede conferma per modifiche ai file e comandi non di sola lettura. | Prime build phase, finché non conosci il comportamento di Claude. |
+| `plan` (plan mode) | Claude legge, esplora e scrive un piano senza modificare il codice. | Sempre all'inizio di ogni build phase (gate G5) e prima di modifiche ampie. |
+| `acceptEdits` | Approva in automatico modifiche ai file e comandi comuni sul filesystem. | Dopo 3–5 fasi andate bene; rivedi poi le modifiche nella pull request. |
+| `auto` | Sostituisce le richieste di conferma con un classificatore di sicurezza. | Solo quando hai esperienza e test solidi; non necessaria. |
+| `bypassPermissions` | Salta del tutto i controlli dei permessi. | Mai, in questo playbook. |
+
+## Cinque regole per non perdere il controllo
+
+1. **Nessun passaggio in produzione senza un gate.** Merge (G6) e lancio (G7) li autorizzi sempre tu.
+2. **I segreti li tocchi solo tu.** Chiavi API e password vanno nei file `.env.local` o nei pannelli dei servizi, mai incollate in chat. Il `.claude/settings.json` di progetto impedisce a Claude di leggere quei file (Fase 0).
+3. **Una build phase per branch e per sessione.** Mescolare due fasi è il modo più rapido per perdere controllo e contesto.
+4. **Se qualcosa va storto, torna indietro.** `/rewind` (oppure `Esc` premuto due volte) riporta conversazione e file a un checkpoint[^5]; per tutto il resto c'è Git.
+5. **Quando non capisci, chiedi di rispiegare.** Scrivi «spiegamelo come a un non tecnico» oppure usa la skill `/wait-what`: approvare ciò che non capisci annulla il valore dei gate.
+
+[^4]: **Permission mode**: l'impostazione che stabilisce cosa Claude può fare senza chiederti conferma (leggere, modificare file, eseguire comandi). Nel terminale si cambia con `Shift+Tab`, che fa scorrere `default`, `acceptEdits` e `plan`.
+
+[^5]: **Checkpoint**: un punto di ripristino che Claude Code crea automaticamente mentre lavora. I checkpoint coprono le modifiche fatte con gli strumenti di modifica file di Claude, non gli effetti dei comandi eseguiti nel terminale: per quelli la rete di sicurezza è Git.

@@ -1,0 +1,11 @@
+# Project status — <Product>
+Last updated: YYYY-MM-DD by <Claude | owner>
+
+Phase of the playbook: F<n> — <name>
+Milestone: <MVP v1> — <done>/<total> build phases closed
+Active build phase: BP-NN · <title> (#<issue>) — planning | in progress | in review | blocked
+Last completed: BP-NN (PR #<n>) — <one line>
+Waiting on human: <action or "none">
+Next on the frontier: BP-.., BP-..
+Environments: preview <URL> · production <URL or "not live">
+Known issues / tech debt: <links>

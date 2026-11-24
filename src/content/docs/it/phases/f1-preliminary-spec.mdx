@@ -1,0 +1,69 @@
+---
+title: "Fase 1 · Spec preliminare dalla dettatura"
+description: "Catturare l'idea in modo completo e senza filtri tecnici, poi trasformarla in una prima bozza strutturata."
+lastVerified: 2026-11-12
+phase: F1
+---
+
+import Role from '~/components/Role.astro';
+
+| Voce | Dettaglio |
+|---|---|
+| **Obiettivo** | Catturare l'idea in modo completo e senza filtri tecnici, poi trasformarla in una prima bozza strutturata. |
+| **Input** | La tua voce: 10–20 minuti di dettatura libera. |
+| **Output** | `docs/00-brain-dump.md` (trascrizione grezza) e `docs/01-preliminary-spec.md` (bozza strutturata con assunzioni e domande aperte). |
+| **Strumenti** | Wispr Flow, dettatura di Windows o `/voice`; Claude Code; template T1 e T2. |
+| **Gate** | <Role as="gate" n={1} /> approvi la spec preliminare. |
+| **Tempo tipico** | 30–90 minuti. |
+
+## Perché partire dalla voce
+
+Parlando racconti contesto, motivazioni ed esempi che scrivendo tagli. In questa fase non serve alcun termine tecnico: architettura, framework e database li decideremo dopo. Il tuo compito è descrivere il *problema*, le *persone* e l'*esperienza*; il compito di Claude è dare struttura e segnalare ciò che manca.
+
+## Passo 1 — Prepara la dettatura
+
+- **Wispr Flow** <Role as="integration" />: si attiva con un tasto e scrive in qualsiasi applicazione, ripulendo intercalari e ripetizioni. Il piano gratuito (2.000 parole a settimana su Windows e Mac) basta per una o due sessioni di 10–15 minuti.
+- **Dettatura di Windows**: `Win+H`, gratuita e già installata.
+- **`/voice`** <Role as="builtin" />: dettatura dentro Claude Code (richiede l'account claude.ai).
+
+Apri `docs/00-brain-dump.md` in VS Code, posiziona il cursore e detta. Puoi parlare in italiano: Claude gestisce la traduzione nei passi successivi.
+
+## Passo 2 — Detta seguendo il copione
+
+Segui il copione del template T1 (parte A): tredici spunti, dal «cosa voglio costruire» ai «dubbi che ho». Non serve l'ordine. Racconta storie concrete («un martedì sera l'allenatore apre l'app e…»), di' cosa *non* vuoi, cita prodotti che ammiri e perché. Ripetizioni e contraddizioni vanno benissimo: Claude le farà emergere.
+
+## Passo 3 — Trasforma la trascrizione in spec preliminare
+
+Salva il file, apri Claude Code nella cartella del progetto e incolla il prompt del template T1 (parte B). Claude:
+
+1. legge `docs/00-brain-dump.md`;
+2. scrive `docs/01-preliminary-spec.md` con la struttura del template T2;
+3. marca `[ASSUMPTION]` ciò che deduce e `[SUGGESTION]` ciò che propone, separandolo da ciò che hai detto;
+4. elenca contraddizioni e domande aperte, ordinate per impatto;
+5. ti restituisce in italiano un riassunto di dieci righe e le cinque domande più importanti.
+
+## Passo 4 — Rivedi, rispondi, approva
+
+Leggi la bozza (15 minuti). Rispondi alle domande aperte direttamente in chat, anche a voce; chiedi a Claude di aggiornare il documento. Due o tre giri bastano: non cercare la perfezione, la Fase 2 interrogherà a fondo ogni punto. Poi fai il commit: `docs: preliminary spec v0.1`.
+
+:::note[Quando usare Claude Chat in questa fase]
+Per ricerca di mercato, analisi dei competitor, naming o una prima esplorazione dell'idea, usa un Project su claude.ai dedicato al prodotto. Salva le conclusioni utili in `docs/research/` (un file per tema) così entrano nel repository e Claude Code può usarle in Fase 2.
+:::
+
+:::danger[GATE G1 · Approvi la spec preliminare]
+Approva quando, rileggendo la bozza, riconosci la tua idea: problema, utenti, esperienza e differenziazione sono descritti con parole tue e ogni assunzione di Claude è marcata. Non serve che sia completa.
+:::
+
+:::tip[Definition of Done · Fase 1]
+- [ ] `docs/00-brain-dump.md` contiene la trascrizione grezza.
+- [ ] `docs/01-preliminary-spec.md` segue il template T2, con sezioni *Assumptions*, *Contradictions* e *Open questions* compilate.
+- [ ] Le cinque domande aperte più importanti hanno una risposta o sono esplicitamente rimandate alla Fase 2.
+- [ ] Commit eseguito e gate G1 superato.
+:::
+
+### Errori comuni
+
+- Descrivere soluzioni tecniche («serve un database Postgres») invece di problemi e comportamenti.
+- Dettare due minuti: senza storie e dettagli, la bozza sarà generica.
+- Accettare in silenzio le assunzioni marcate `[ASSUMPTION]`: sono proprio i punti da verificare.
+- Cercare di chiudere qui ogni decisione: è il lavoro della Fase 2.

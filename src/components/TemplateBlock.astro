@@ -1,0 +1,21 @@
+---
+/**
+ * Renders a template extracted by scripts/split-playbook.mjs.
+ * The raw text lives in src/data/templates/<locale>/<id>.txt so the template
+ * builder island can reuse exactly the same source.
+ */
+import { Code } from '@astrojs/starlight/components';
+
+interface Props {
+  id: string;
+  code: string;
+  lang?: string;
+  title?: string;
+}
+
+const { id, code, lang = 'text', title } = Astro.props;
+---
+
+<div class="bcc-template" data-template-id={id}>
+  <Code code={code.replace(/\n$/, '')} lang={lang} title={title} />
+</div>

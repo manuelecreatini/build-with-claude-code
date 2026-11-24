@@ -1,0 +1,25 @@
+---
+title: "T5 · Technical architecture document"
+description: "Phase 3, right after T4; updated when an ADR changes the architecture."
+lastVerified: 2026-11-12
+sidebar:
+  order: 6
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt5_1 from '~/data/templates/en/t5-1.txt?raw';
+import tplt5_2 from '~/data/templates/en/t5-2.txt?raw';
+
+| Item | Detail |
+|---|---|
+| **When** | Phase 3, right after T4; updated when an ADR changes the architecture. |
+| **What you provide** | Nothing beyond the existing documents; your answers if Claude finds missing decisions. |
+| **Output and location** | `docs/03-architecture.md`, with Mermaid diagrams. |
+
+## Prompt
+
+<TemplateBlock id="t5-1" code={tplt5_1} lang="text" title="Prompt · write the architecture" />
+
+## Template
+
+<TemplateBlock id="t5-2" code={tplt5_2} lang="markdown" title="docs/03-architecture.md" />

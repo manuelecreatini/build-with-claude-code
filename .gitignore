@@ -1,0 +1,27 @@
+# build output
+dist/
+.astro/
+.vercel/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+
+# environment / secrets
+.env
+.env.*
+!.env.example
+
+# test output
+test-results/
+playwright-report/
+coverage/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.claude/settings.local.json

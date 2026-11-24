@@ -1,0 +1,52 @@
+---
+title: "Chapter 3 · Who does what: Claude, you and permissions"
+description: "The general rule: Claude executes, proposes and checks; you decide, authorise and accept. The table turns the rule into concrete activities."
+lastVerified: 2026-11-12
+sidebar:
+  order: 3
+---
+
+import Role from '~/components/Role.astro';
+
+The general rule: **Claude executes, proposes and checks; you decide, authorise and accept**. The table turns the rule into concrete activities.
+
+| Activity | Claude on its own | Needs your OK | Only you |
+|---|---|---|---|
+| Read code and documents, search, analyse | <Role as="claude" /> |  |  |
+| Propose plans, options and trade-offs | <Role as="claude" /> |  |  |
+| Write code and tests within the scope of the issue | <Role as="claude" /> after G5 | <Role as="gate" n={5} /> |  |
+| Run tests, type checks, lint and build locally | <Role as="claude" /> |  |  |
+| Commit on the phase branch, open the pull request | <Role as="claude" /> |  |  |
+| Update documentation, ADRs, `STATUS.md`, issue comments | <Role as="claude" /> |  |  |
+| Product decisions: scope, UX, pricing, key copy | proposes |  | <Role as="you" /> decide |
+| New dependencies, new services, any cost | proposes | <Role as="you" /> |  |
+| Production database migrations, deleting data | prepares | <Role as="you" /> |  |
+| Merge into `main` | prepares | <Role as="gate" n={6} /> |  |
+| Production deploy and launch | prepares | <Role as="gate" n={7} /> |  |
+| Create accounts, enter cards, API keys and secrets, configure DNS | guides you step by step |  | <Role as="you" /> |
+| Final testing and acceptance | helps |  | <Role as="you" /> |
+| Legal terms, privacy policy, cookies | drafts |  | <Role as="you" /> (with a lawyer if needed) |
+
+## Claude Code's permission modes
+
+Claude Code asks for permission before acting, based on the active *permission mode*[^4]. In the terminal, `Shift+Tab` cycles through the modes `default` → `acceptEdits` → `plan`; the `auto` mode appears only if your account meets the requirements.
+
+| Mode | What it does | When to use it in the playbook |
+|---|---|---|
+| `default` (asks first) | Asks for confirmation for file edits and commands that are not read-only. | First build phases, until you know how Claude behaves. |
+| `plan` (plan mode) | Claude reads, explores and writes a plan without changing the code. | Always at the start of every build phase (gate G5) and before wide-ranging changes. |
+| `acceptEdits` | Automatically approves file edits and common filesystem commands. | After 3–5 phases that went well; then review the changes in the pull request. |
+| `auto` | Replaces confirmation prompts with a safety classifier. | Only once you have experience and solid tests; not required. |
+| `bypassPermissions` | Skips permission checks entirely. | Never, in this playbook. |
+
+## Five rules for staying in control
+
+1. **Nothing reaches production without a gate.** You always authorise merges (G6) and the launch (G7).
+2. **Only you touch secrets.** API keys and passwords go in `.env.local` files or in the services' dashboards, never pasted into the chat. The project `.claude/settings.json` stops Claude from reading those files (Phase 0).
+3. **One build phase per branch and per session.** Mixing two phases is the fastest way to lose control and context.
+4. **If something goes wrong, go back.** `/rewind` (or pressing `Esc` twice) takes the conversation and the files back to a checkpoint[^5]; for everything else there is Git.
+5. **When you don't understand, ask for it again.** Write "explain it to me as you would to a non-technical person" or use the `/wait-what` skill: approving what you don't understand cancels out the value of the gates.
+
+[^4]: **Permission mode**: the setting that decides what Claude can do without asking you (read, edit files, run commands). In the terminal you change it with `Shift+Tab`, which cycles through `default`, `acceptEdits` and `plan`.
+
+[^5]: **Checkpoint**: a restore point that Claude Code creates automatically while it works. Checkpoints cover changes made with Claude's file-editing tools, not the effects of commands run in the terminal: for those, the safety net is Git.

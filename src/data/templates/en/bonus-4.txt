@@ -1,0 +1,16 @@
+---
+name: Bug report
+about: Something does not work as expected
+title: "Bug: <short description>"
+labels: ["bug", "needs-triage"]
+---
+## What happened
+## What you expected
+## Steps to reproduce
+1. ...
+## Where
+URL / screen: ...   Device and browser: ...   Account role: ...
+## Evidence
+Screenshot, Sentry link or error message (no personal data, no secrets).
+## Severity (owner fills in)
+S1 critical | S2 major | S3 minor | S4 cosmetic

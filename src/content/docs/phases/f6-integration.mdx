@@ -1,0 +1,123 @@
+---
+title: "Phase 6 · Integration and end-to-end validation"
+description: "Check that the product works as a coherent whole and meets the spec: complete journeys, integrations, security, quality."
+lastVerified: 2026-11-12
+phase: F6
+---
+
+import Role from '~/components/Role.astro';
+
+| Item | Detail |
+|---|---|
+| **Goal** | Check that the product works as a coherent whole and meets the spec: complete journeys, integrations, security, quality. |
+| **Input** | All the milestone's build phases closed; `main` green; spec and architecture. |
+| **Output** | `docs/testing/traceability.md`, `docs/testing/integration-review.md`, an issue for every serious problem, a Go/No-Go decision. |
+| **Tools** | Prompt T13, E2E tests, `/security-review`, `/code-review`, Supabase advisors, acceptance testing with real users. |
+| **Gate** | <Role as="gate" n={7} /> Go/No-Go for launch. |
+| **Typical time** | Half a day to two days. |
+
+## What you check and why
+
+Every build phase was tested on its own. Integration looks for the problems that only appear when the pieces come together: a journey that crosses five phases, data created by one role and read by another, an external service that responds slowly, a migration that works on your database but not on an empty one.
+
+## Step 1 — Freeze the scope
+
+No new features until gate G7 is passed. `main` must be green in CI. New ideas become issues with the `needs-triage` label for after launch.
+
+## Step 2 — Integration review with Claude
+
+**Claude Code**
+```text
+/clear
+<paste the T13 prompt>
+```
+
+Claude works in plan mode first and shows you the verification plan; then it produces:
+
+- a **traceability matrix**[^37] in `docs/testing/traceability.md`;
+- the missing E2E tests for every user journey in the spec;
+- the `docs/testing/integration-review.md` report with problems ranked by severity S1–S4 and a Go/No-Go recommendation;
+- an issue for every S1 and S2 problem (labels `bug` and `ready-for-agent`). No fixes before your approval: fixes go through the build loop.
+
+| Severity | Definition | Example | Effect on launch |
+|---|---|---|---|
+| S1 | Blocks a critical journey, loses data or exposes data. | A user sees another club's data. | Blocks. Fix immediately. |
+| S2 | An important feature is broken, with no reasonable workaround. | Resetting the training plan doesn't save. | Blocks, unless explicitly accepted. |
+| S3 | A real problem with a workaround or limited impact. | Wrong sort order in a list. | Next release. |
+| S4 | Cosmetic. | Uneven spacing on a button. | Backlog. |
+
+## Step 3 — Security
+
+- [ ] `/security-review` on the release branch (an `origin` remote is needed).
+- [ ] Authorisation tests with two users and different roles: nobody sees or changes other people's data.
+- [ ] If you use Supabase: Row Level Security[^38] on for every table; check the security and performance warnings (*advisors*) from the dashboard or through the MCP connector.
+- [ ] `npm audit` for known vulnerabilities in dependencies; no secrets in the code or the Git history.
+- [ ] The ten OWASP Top 10[^39] risk categories reviewed with Claude.
+- [ ] Server-side input validation, rate limits on login and public forms.
+
+## Step 4 — Deep review (recommended for SaaS)
+
+`/code-review ultra` <Role as="bundled" /> starts a multi-agent review in a cloud environment, on a pull request or a branch. With Pro and Max it includes 3 free runs, then it requires usage credits: use it once before launch, on the release pull request.
+
+## Step 5 — User acceptance testing (UAT)
+
+1. Prepare realistic demo data on the preview (never real personal data).
+2. <Role as="you" /> Walk through every journey in the spec yourself, on desktop and smartphone.
+3. Have 2–3 people from the target audience try the product, each with one task and no instructions ("organise Thursday's training session"). Watch where they get stuck.
+4. An hour-long *bug bash*: everyone hunts for problems, Claude turns them into issues with a severity.
+
+## Final test and validation checklist
+
+Every item must be ticked before gate G7. For accessibility the reference is WCAG 2.2 level AA[^40].
+
+#### Functional
+
+- [ ] Every *Must* requirement in the spec is implemented and tested.
+- [ ] All user journeys pass in E2E.
+- [ ] Empty, error and loading states handled.
+- [ ] Emails and notifications arrive and are correct.
+
+#### Data and integrations
+
+- [ ] Migrations apply from an empty database; sample data works.
+- [ ] External APIs: errors, timeouts and limits handled.
+- [ ] Webhooks verified, even when received twice.
+
+#### Security
+
+- [ ] `/security-review` with no open findings.
+- [ ] Authorisation tested with two roles.
+- [ ] RLS on; secrets only in dashboards.
+
+#### Quality
+
+- [ ] Accessibility: keyboard, contrast, labels (WCAG 2.2 AA).
+- [ ] Performance: Lighthouse on the key pages; LCP under 2.5 seconds.
+- [ ] Mobile layouts checked on real devices.
+- [ ] Copy reviewed; no "lorem ipsum".
+
+#### Regressions and process
+
+- [ ] Full suite green from a clean install.
+- [ ] Acceptance criteria of closed phases still valid.
+- [ ] No S1 or S2 problems open without explicit acceptance.
+- [ ] Traceability matrix with no gaps.
+
+:::danger[GATE G7 · Go/No-Go]
+**Go** if: zero S1; zero open S2 (or accepted in writing with a plan); all *Must* requirements verified; E2E green; clean security review; monitoring and rollback plan ready (Phase 7, steps 7 and 8). Otherwise **No-Go**: the problems are fixed in the build loop and this phase is repeated in a reduced form.
+:::
+
+:::tip[Definition of Done · Phase 6]
+- [ ] Traceability matrix and integration review in the repository.
+- [ ] All S1/S2 issues closed or explicitly accepted.
+- [ ] User acceptance testing done and problems recorded.
+- [ ] Gate G7 passed and the decision noted in `STATUS.md`.
+:::
+
+[^37]: **Traceability matrix**: a table that links every requirement (US-xxx, FR-xxx) to the code that implements it, the test that verifies it and its status. It shows at once what is missing.
+
+[^38]: **Row Level Security (RLS)**: rules in the database that determine which rows of a table each user can read or change. In Supabase it is the main protection for data: a table without RLS may be readable by anyone who has the app's public key.
+
+[^39]: **OWASP Top 10**: the list, maintained by the OWASP foundation, of the ten most common categories of vulnerability in web applications (access control, injection, insecure configuration and others). It is the reference checklist for a first security review.
+
+[^40]: **WCAG**: the international guidelines for the accessibility of web content. Level AA is the reference standard required by many regulations.

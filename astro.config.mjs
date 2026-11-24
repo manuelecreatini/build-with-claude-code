@@ -1,0 +1,77 @@
+// @ts-check
+import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
+import react from '@astrojs/react';
+import mermaid from 'astro-mermaid';
+import starlightLinksValidator from 'starlight-links-validator';
+
+/**
+ * Sidebar groups: same structure in both locales, labels translated.
+ * @param {string} label English label
+ * @param {string} it Italian label
+ * @param {string} directory content directory to autogenerate from
+ */
+const group = (label, it, directory) => ({
+  label,
+  translations: { it },
+  items: [{ autogenerate: { directory } }],
+});
+
+export default defineConfig({
+  site: 'https://build-with-claude-code.vercel.app',
+  integrations: [
+    // Must come before Starlight so ```mermaid fences are handled first.
+    mermaid({ theme: 'default', autoTheme: true }),
+    starlight({
+      title: 'Build with Claude Code',
+      description:
+        'An open-source, interactive playbook: build any digital product with Claude Code, and understand what is happening at every step.',
+      defaultLocale: 'root',
+      locales: {
+        root: { label: 'English', lang: 'en' },
+        it: { label: 'Italiano', lang: 'it' },
+      },
+      customCss: ['./src/styles/custom.css'],
+      components: {
+        Footer: './src/components/overrides/Footer.astro',
+      },
+      plugins: [starlightLinksValidator({ errorOnLocalLinks: false })],
+      sidebar: [
+        group('Start here', 'Inizia qui', 'start'),
+        group('The method', 'Il metodo', 'method'),
+        {
+          label: 'The nine phases',
+          translations: { it: 'Le nove fasi' },
+          items: [
+            'phases/f0-setup',
+            'phases/f1-preliminary-spec',
+            'phases/f2-discovery',
+            'phases/f3-spec-architecture',
+            'phases/f4-build-phases',
+            {
+              label: 'F5 · The build loop',
+              translations: { it: 'F5 · Il build loop' },
+              collapsed: true,
+              items: [
+                'phases/f5-build-loop',
+                'phases/f5/preflight',
+                ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => `phases/f5/step-${n}`),
+                'phases/f5/after-the-loop',
+              ],
+            },
+            'phases/f6-integration',
+            'phases/f7-deploy',
+            'phases/f8-post-launch',
+          ],
+        },
+        group('Concepts', 'Concetti', 'concepts'),
+        group('Templates', 'Template', 'templates'),
+        group('Toolkit', 'Toolkit', 'toolkit'),
+        group('Reference', 'Riferimento', 'reference'),
+      ],
+      lastUpdated: false,
+      pagination: true,
+    }),
+    react(),
+  ],
+});

@@ -1,0 +1,38 @@
+---
+title: "Appendice B · Fonti e data di verifica"
+description: "Tutte le fonti sono state consultate l'11–12 novembre 2026. Le pagine prezzi e la documentazione cambiano spesso: ricontrolla prima di acquistare o se un…"
+lastVerified: 2026-11-12
+sidebar:
+  order: 4
+---
+
+Tutte le fonti sono state consultate l'11–12 novembre 2026. Le pagine prezzi e la documentazione cambiano spesso: ricontrolla prima di acquistare o se un comando non risponde come descritto.
+
+| Fonte | Usata per |
+|---|---|
+| **Skill di Matt Pocock** |  |
+| README di `mattpocock/skills`<br />[https://github.com/mattpocock/skills](https://github.com/mattpocock/skills) | Elenco e classificazione delle 27 skill, installazione (plugin e skills.sh), `/setup-matt-pocock-skills`, motivazioni. |
+| `skills/engineering/wayfinder/SKILL.md` (stesso repository) | Mappa, decision ticket, tipi, nebbia, frontiera, regole di sessione. |
+| `skills/productivity/handoff/SKILL.md` | Contenuto e posizione del documento di handoff. |
+| `skills/engineering/to-spec/SKILL.md`, `to-tickets/SKILL.md`, `implement/SKILL.md`, `setup-matt-pocock-skills/SKILL.md` | Sezioni della spec, fette verticali, approvazione prima della pubblicazione, disciplina di implementazione, label di triage. |
+| AI Hero, pagina «The /wayfinder Skill»<br />[https://www.aihero.dev/skills-wayfinder](https://www.aihero.dev/skills-wayfinder) | Quando usare `/wayfinder` rispetto a `/grill-with-docs`; problemi noti e mitigazioni. |
+| AI Hero, indice e changelog delle skill<br />[https://www.aihero.dev/skills.md](https://www.aihero.dev/skills.md) | Versioni 1.1 (luglio 2026), 1.2 (agosto 2026), 1.3 (ottobre 2026) e rinomine. |
+| **Claude Code (documentazione ufficiale)** |  |
+| Quickstart<br />[https://code.claude.com/docs/en/quickstart](https://code.claude.com/docs/en/quickstart) | Installazione per Windows, macOS e Linux; account; comandi essenziali. |
+| Commands<br />[https://code.claude.com/docs/en/commands](https://code.claude.com/docs/en/commands) | Comandi nativi e skill incluse, alias, requisiti. |
+| Context window<br />[https://code.claude.com/docs/en/context-window](https://code.claude.com/docs/en/context-window) | Cosa sopravvive alla compattazione; `/context`; `/autocompact`; finestre da 1 milione di token. |
+| Skills<br />[https://code.claude.com/docs/en/skills](https://code.claude.com/docs/en/skills) | Posizione e nomi delle skill, prefisso dei plugin, conflitti di nome, `disable-model-invocation`. |
+| Permission modes<br />[https://code.claude.com/docs/en/permission-modes](https://code.claude.com/docs/en/permission-modes) | Modalità di permesso, plan mode, `Shift+Tab`, approvazione del piano. |
+| Mappa della documentazione<br />[https://code.claude.com/docs/en/claude_code_docs_map.md](https://code.claude.com/docs/en/claude_code_docs_map.md) | Struttura generale: GitHub Actions, MCP, memoria, sessioni. |
+| **Prezzi e limiti dei servizi** |  |
+| Claude [https://claude.com/pricing](https://claude.com/pricing) | Pro 20 USD al mese (17 annuale), Max da 100 USD; Claude Code incluso. |
+| GitHub [https://docs.github.com/en/get-started/learning-about-github/githubs-plans](https://docs.github.com/en/get-started/learning-about-github/githubs-plans) | 2.000 minuti al mese di Actions sui repository privati (Free). |
+| Wispr Flow [https://wisprflow.ai/pricing](https://wisprflow.ai/pricing) e pagina di supporto sul piano gratuito | 2.000 parole a settimana su desktop gratis; Pro 15 USD al mese (12 annuale, da fonti terze concordanti). |
+| Vercel [https://vercel.com/pricing](https://vercel.com/pricing) | Hobby solo uso personale non commerciale; Pro 20 USD per utente al mese. |
+| Supabase [https://supabase.com/pricing](https://supabase.com/pricing) | Free: 2 progetti attivi, pausa dopo una settimana di inattività; Pro da 25 USD con backup giornalieri (7 giorni). |
+| PostHog [https://posthog.com/pricing](https://posthog.com/pricing) | Quote gratuite mensili; nessuna carta di credito. |
+| Sentry, tramite Activepieces, «Sentry Pricing 2026» (dati controllati il 3/11/2026) | Piano Developer: 1 utente, 5.000 errori al mese. Fonte terza: verifica su sentry.io. |
+
+:::note[Come mantenere aggiornato il playbook]
+Una volta al trimestre: (1) confronta l'elenco delle skill con il README di `mattpocock/skills` e leggi il changelog su aihero.dev; (2) scorri `/release-notes` in Claude Code; (3) ricontrolla le pagine prezzi; (4) aggiorna template e quick reference. Puoi chiedere a Claude di farlo per te con un'attività pianificata.
+:::

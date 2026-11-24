@@ -1,0 +1,362 @@
+[
+  {
+    "id": "t0-1",
+    "page": "templates/t0",
+    "file": "t0-1.txt",
+    "title": "CLAUDE.md",
+    "lang": "markdown",
+    "importName": "tplt0_1",
+    "placeholders": [
+      "<Product name>",
+      "<outcome>",
+      "<issue>",
+      "<one line>",
+      "<what is blocked and why only I can do it>",
+      "<exact clicks or commands>",
+      "<command or check>",
+      "<amount or none>",
+      "<safe parallel work or \"nothing, blocked\">"
+    ]
+  },
+  {
+    "id": "t1-1",
+    "page": "templates/t1",
+    "file": "t1-1.txt",
+    "title": "Dictation script · talk for 10–20 minutes, in any order",
+    "lang": "text",
+    "importName": "tplt1_1",
+    "placeholders": []
+  },
+  {
+    "id": "t1-2",
+    "page": "templates/t1",
+    "file": "t1-2.txt",
+    "title": "Prompt · from transcript to preliminary spec",
+    "lang": "text",
+    "importName": "tplt1_2",
+    "placeholders": [
+      "<persona>",
+      "<action>",
+      "<paste template T2 here>"
+    ]
+  },
+  {
+    "id": "t2-1",
+    "page": "templates/t2",
+    "file": "t2-1.txt",
+    "title": "docs/01-preliminary-spec.md",
+    "lang": "markdown",
+    "importName": "tplt2_1",
+    "placeholders": [
+      "<Product name>",
+      "<persona>",
+      "<action>",
+      "<benefit>"
+    ]
+  },
+  {
+    "id": "t3-1",
+    "page": "templates/t3",
+    "file": "t3-1.txt",
+    "title": "Claude Code · text to paste after /wayfinder",
+    "lang": "text",
+    "importName": "tplt3_1",
+    "placeholders": [
+      "<Product>"
+    ]
+  },
+  {
+    "id": "t3-2",
+    "page": "templates/t3",
+    "file": "t3-2.txt",
+    "title": "Claude Code",
+    "lang": "text",
+    "importName": "tplt3_2",
+    "placeholders": [
+      "<map URL or number>",
+      "<map URL>",
+      "<ticket title>"
+    ]
+  },
+  {
+    "id": "t3-3",
+    "page": "templates/t3",
+    "file": "t3-3.txt",
+    "title": "Prompt · is the map complete?",
+    "lang": "text",
+    "importName": "tplt3_3",
+    "placeholders": [
+      "<map URL>"
+    ]
+  },
+  {
+    "id": "t4-1",
+    "page": "templates/t4",
+    "file": "t4-1.txt",
+    "title": "Prompt · write the final spec",
+    "lang": "text",
+    "importName": "tplt4_1",
+    "placeholders": [
+      "<URL>"
+    ]
+  },
+  {
+    "id": "t4-2",
+    "page": "templates/t4",
+    "file": "t4-2.txt",
+    "title": "docs/02-product-spec.md",
+    "lang": "markdown",
+    "importName": "tplt4_2",
+    "placeholders": [
+      "<Product>",
+      "<owner>",
+      "<URL>",
+      "<persona>",
+      "<capability>",
+      "<benefit>",
+      "<context>",
+      "<action>",
+      "<outcome>",
+      "<name>"
+    ]
+  },
+  {
+    "id": "t5-1",
+    "page": "templates/t5",
+    "file": "t5-1.txt",
+    "title": "Prompt · write the architecture",
+    "lang": "text",
+    "importName": "tplt5_1",
+    "placeholders": []
+  },
+  {
+    "id": "t5-2",
+    "page": "templates/t5",
+    "file": "t5-2.txt",
+    "title": "docs/03-architecture.md",
+    "lang": "markdown",
+    "importName": "tplt5_2",
+    "placeholders": [
+      "<Product>"
+    ]
+  },
+  {
+    "id": "t6-1",
+    "page": "templates/t6",
+    "file": "t6-1.txt",
+    "title": "Claude Code · /to-tickets with constraints",
+    "lang": "text",
+    "importName": "tplt6_1",
+    "placeholders": [
+      "<user-visible outcome>"
+    ]
+  },
+  {
+    "id": "t7-1",
+    "page": "templates/t7",
+    "file": "t7-1.txt",
+    "title": ".github/ISSUE\\_TEMPLATE/build-phase.md",
+    "lang": "markdown",
+    "importName": "tplt7_1",
+    "placeholders": [
+      "<user-visible outcome>",
+      "<What the user can do when this phase is done, in one or two sentences.>",
+      "<spec issue>",
+      "<service, credential or decision this phase needs>",
+      "<context>",
+      "<action>",
+      "<outcome>",
+      "<journey and steps>",
+      "<action, why, by whom>"
+    ]
+  },
+  {
+    "id": "t8-1",
+    "page": "templates/t8",
+    "file": "t8-1.txt",
+    "title": "Prompt · Proceed with Build Phase NN",
+    "lang": "text",
+    "importName": "tplt8_1",
+    "placeholders": [
+      "<NN>",
+      "<slug>"
+    ]
+  },
+  {
+    "id": "t9-1",
+    "page": "templates/t9",
+    "file": "t9-1.txt",
+    "title": "Format · HUMAN ACTION REQUIRED",
+    "lang": "text",
+    "importName": "tplt9_1",
+    "placeholders": [
+      "<one line: e.g. \"Create a Stripe test account and add the test keys\">",
+      "<what is blocked and why only you can do it>",
+      "<option>",
+      "<A or B, one-line reason>",
+      "<URL>",
+      "<menu>",
+      "<button>",
+      "<next exact step>",
+      "<command or check that proves it worked, e.g. \"npm run dev, then open /billing\">",
+      "<amount per month, or \"none\">",
+      "<safe parallel work, or \"nothing: this phase is blocked\">"
+    ]
+  },
+  {
+    "id": "t10-1",
+    "page": "templates/t10",
+    "file": "t10-1.txt",
+    "title": "QA checklist · to paste into the pull request",
+    "lang": "markdown",
+    "importName": "tplt10_1",
+    "placeholders": []
+  },
+  {
+    "id": "t11-1",
+    "page": "templates/t11",
+    "file": "t11-1.txt",
+    "title": "Prompt · secure the state",
+    "lang": "text",
+    "importName": "tplt11_1",
+    "placeholders": []
+  },
+  {
+    "id": "t11-2",
+    "page": "templates/t11",
+    "file": "t11-2.txt",
+    "title": "Claude Code · /handoff with the argument",
+    "lang": "text",
+    "importName": "tplt11_2",
+    "placeholders": [
+      "<NN>",
+      "<where we are>"
+    ]
+  },
+  {
+    "id": "t11-3",
+    "page": "templates/t11",
+    "file": "t11-3.txt",
+    "title": "Claude Code · new conversation",
+    "lang": "text",
+    "importName": "tplt11_3",
+    "placeholders": [
+      "<path>"
+    ]
+  },
+  {
+    "id": "t13-1",
+    "page": "templates/t13",
+    "file": "t13-1.txt",
+    "title": "Prompt · integration review",
+    "lang": "text",
+    "importName": "tplt13_1",
+    "placeholders": [
+      "<MVP v1>"
+    ]
+  },
+  {
+    "id": "t14-1",
+    "page": "templates/t14",
+    "file": "t14-1.txt",
+    "title": "docs/runbooks/launch-checklist.md",
+    "lang": "markdown",
+    "importName": "tplt14_1",
+    "placeholders": [
+      "<Product>"
+    ]
+  },
+  {
+    "id": "t15-1",
+    "page": "templates/t15",
+    "file": "t15-1.txt",
+    "title": "Prompt · weekly ops review",
+    "lang": "text",
+    "importName": "tplt15_1",
+    "placeholders": [
+      "<YYYY-WW>"
+    ]
+  },
+  {
+    "id": "t15-2",
+    "page": "templates/t15",
+    "file": "t15-2.txt",
+    "title": "docs/ops/YYYY-WW.md",
+    "lang": "markdown",
+    "importName": "tplt15_2",
+    "placeholders": [
+      "<Product>",
+      "<YYYY-WW>"
+    ]
+  },
+  {
+    "id": "bonus-1",
+    "page": "templates/bonus",
+    "file": "bonus-1.txt",
+    "title": "docs/adr/NNNN-\\<title>.md",
+    "lang": "markdown",
+    "importName": "tplbonus_1",
+    "placeholders": [
+      "<Decision title>",
+      "<decision ticket or PR link>",
+      "<What forces the decision: requirements, constraints, facts from research.>",
+      "<Option A>",
+      "<Option B>",
+      "<What we chose, in one or two sentences.>"
+    ]
+  },
+  {
+    "id": "bonus-2",
+    "page": "templates/bonus",
+    "file": "bonus-2.txt",
+    "title": "docs/STATUS.md",
+    "lang": "markdown",
+    "importName": "tplbonus_2",
+    "placeholders": [
+      "<Product>",
+      "<Claude | owner>",
+      "<name>",
+      "<MVP v1>",
+      "<done>",
+      "<total>",
+      "<title>",
+      "<issue>",
+      "<one line>",
+      "<action or \"none\">",
+      "<URL>",
+      "<URL or \"not live\">",
+      "<links>"
+    ]
+  },
+  {
+    "id": "bonus-3",
+    "page": "templates/bonus",
+    "file": "bonus-3.txt",
+    "title": ".github/pull\\_request\\_template.md",
+    "lang": "markdown",
+    "importName": "tplbonus_3",
+    "placeholders": [
+      "<title>",
+      "<issue>",
+      "<Smallest visual that makes the change clear: screenshot, diagram, or 3 bullets.>",
+      "<screenshots or recording>",
+      "<list>",
+      "<status>",
+      "<criterion>",
+      "<evidence>",
+      "<who or what is affected if this is wrong>",
+      "<items, each with a new issue link>"
+    ]
+  },
+  {
+    "id": "bonus-4",
+    "page": "templates/bonus",
+    "file": "bonus-4.txt",
+    "title": ".github/ISSUE\\_TEMPLATE/bug-report.md",
+    "lang": "markdown",
+    "importName": "tplbonus_4",
+    "placeholders": [
+      "<short description>"
+    ]
+  }
+]

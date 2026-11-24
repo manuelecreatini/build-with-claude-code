@@ -1,0 +1,25 @@
+---
+title: "T1 · Copione di dettatura e prompt di conversione"
+description: "Fase 1, una volta per progetto (ripetibile per funzionalità grandi dopo il lancio)."
+lastVerified: 2026-11-12
+sidebar:
+  order: 2
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt1_1 from '~/data/templates/it/t1-1.txt?raw';
+import tplt1_2 from '~/data/templates/it/t1-2.txt?raw';
+
+| Voce | Dettaglio |
+|---|---|
+| **Quando** | Fase 1, una volta per progetto (ripetibile per funzionalità grandi dopo il lancio). |
+| **Cosa fornisci** | 10–20 minuti di dettatura libera seguendo il copione (parte A). |
+| **Output e posizione** | `docs/00-brain-dump.md` (trascrizione) e `docs/01-preliminary-spec.md` (prodotto dal prompt della parte B). |
+
+## Parte A — Copione di dettatura (in italiano)
+
+<TemplateBlock id="t1-1" code={tplt1_1} lang="text" title="Copione di dettatura · parla 10–20 minuti, in qualsiasi ordine" />
+
+## Parte B — Prompt di conversione
+
+<TemplateBlock id="t1-2" code={tplt1_2} lang="text" title="Prompt (EN) · da trascrizione a spec preliminare" />

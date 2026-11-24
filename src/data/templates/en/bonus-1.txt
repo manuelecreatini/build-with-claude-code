@@ -1,0 +1,13 @@
+# ADR-NNNN: <Decision title>
+Date: YYYY-MM-DD · Status: Accepted | Superseded by ADR-XXXX
+Source: <decision ticket or PR link>
+
+## Context
+<What forces the decision: requirements, constraints, facts from research.>
+## Options considered
+1. <Option A> — pros / cons / cost / reversibility
+2. <Option B> — pros / cons / cost / reversibility
+## Decision
+<What we chose, in one or two sentences.>
+## Consequences
+Positive: ...   Negative: ...   What would make us revisit it: ...

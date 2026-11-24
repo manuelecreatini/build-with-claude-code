@@ -1,0 +1,16 @@
+All build phases of milestone <MVP v1> are closed. Run a full integration review before launch.
+Start in plan mode and show me the review plan first. Then:
+1. Spec compliance: build docs/testing/traceability.md mapping every US/FR/NFR -> implementation
+   -> test -> status. Flag anything missing or partial.
+2. User journeys: run every journey J1..Jn end to end; add the missing E2E tests.
+3. Full checks from a clean install: typecheck, lint, full test suite, production build.
+4. Integration points: frontend <-> backend, migrations from an empty database + seed,
+   Row Level Security with two users of different roles, external APIs (errors, timeouts,
+   rate limits), webhooks (including duplicates), emails.
+5. Security: /security-review; authorisation per role; secrets; npm audit; OWASP Top 10.
+6. Quality: accessibility (keyboard, contrast, labels), performance (Lighthouse on key pages),
+   mobile layouts, empty/error/loading states, copy.
+7. Regressions: re-check the acceptance criteria of all closed build phases.
+Output: docs/testing/integration-review.md with findings ranked S1-S4 and a Go/No-Go
+recommendation; one GitHub issue per S1/S2 finding (labels: bug, ready-for-agent).
+Do not fix anything until I approve the list. Summarise the result for me in Italian.

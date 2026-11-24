@@ -1,0 +1,55 @@
+/* Role and gate badges used throughout the playbook. */
+:root {
+  --bcc-claude: #c2410c;
+  --bcc-you: #1d4ed8;
+  --bcc-gate: #b91c1c;
+  --bcc-tool: #4b5563;
+}
+:root[data-theme='dark'] {
+  --bcc-claude: #fb923c;
+  --bcc-you: #60a5fa;
+  --bcc-gate: #f87171;
+  --bcc-tool: #9ca3af;
+}
+
+.bcc-badge {
+  display: inline-block;
+  padding: 0.05em 0.5em;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.75em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  vertical-align: 0.1em;
+}
+.bcc-badge[data-role='claude'] { color: var(--bcc-claude); }
+.bcc-badge[data-role='you'] { color: var(--bcc-you); }
+.bcc-badge[data-role='gate'] { color: var(--bcc-gate); }
+.bcc-badge[data-role='tool'] { color: var(--bcc-tool); }
+
+.bcc-gate {
+  border-inline-start: 4px solid var(--bcc-gate);
+  padding: 0.75rem 1rem;
+  margin-block: 1rem;
+  background: color-mix(in srgb, var(--bcc-gate) 8%, transparent);
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.bcc-hood {
+  border: 1px dashed var(--sl-color-gray-4);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  margin-block: 1rem;
+}
+.bcc-hood > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.bcc-why {
+  font-style: italic;
+  color: var(--sl-color-gray-2);
+  border-inline-start: 3px solid var(--sl-color-accent);
+  padding-inline-start: 0.75rem;
+}

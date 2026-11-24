@@ -1,0 +1,14 @@
+Write docs/02-product-spec.md using the template below.
+Inputs: the spec issue created by /to-spec (<URL>), the wayfinder map (<URL>) and its closed
+tickets with their resolution comments, docs/adr/, GLOSSARY.md, docs/01-preliminary-spec.md,
+and any prototype or research linked from the tickets.
+Rules:
+- Do not invent. Every statement must trace to a decision, an ADR or my own words.
+  Mark anything else [OPEN QUESTION] and list it in section 22.
+- Stable IDs: US-001 (user stories), FR-001 (functional), NFR-001 (non-functional),
+  J1 (journeys). Every FR references the US it serves.
+- Acceptance criteria in Given/When/Then form for every user story.
+- Use GLOSSARY.md terms exactly. No file paths and no code.
+- Status line: DRAFT v0.9. Link the spec issue and the map at the top.
+Then reply in plain English: open questions, assumptions you had to make, and the 5 points
+I should read most carefully.

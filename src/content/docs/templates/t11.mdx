@@ -1,0 +1,40 @@
+---
+title: "T11 · Handoff: prompt and checklist"
+description: "End of a phase if you continue in a new session; context in the red zone; end of the day; change of focus; Claude confused."
+lastVerified: 2026-11-12
+sidebar:
+  order: 12
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt11_1 from '~/data/templates/en/t11-1.txt?raw';
+import tplt11_2 from '~/data/templates/en/t11-2.txt?raw';
+import tplt11_3 from '~/data/templates/en/t11-3.txt?raw';
+
+| Item | Detail |
+|---|---|
+| **When** | End of a phase if you continue in a new session; context in the red zone; end of the day; change of focus; Claude confused. |
+| **What you provide** | One sentence on what the next session will do. |
+| **Output and location** | A Markdown file in the temporary folder (`%TEMP%` on Windows), plus commits, the issue comment and `STATUS.md` updated beforehand. |
+
+## 1. Before the handoff
+
+<TemplateBlock id="t11-1" code={tplt11_1} lang="text" title="Prompt · secure the state" />
+
+## 2. The handoff
+
+<TemplateBlock id="t11-2" code={tplt11_2} lang="text" title="Claude Code · /handoff with the argument" />
+
+Note the path of the file Claude prints at the end.
+
+## 3. Resuming
+
+<TemplateBlock id="t11-3" code={tplt11_3} lang="text" title="Claude Code · new conversation" />
+
+## Handoff quality checklist
+
+- [ ] The work is committed and pushed to the branch; the issue has a progress comment.
+- [ ] The document references issues, pull requests, commits and ADRs instead of copying them.
+- [ ] It contains the exact next steps and the suggested skills.
+- [ ] It contains no secrets.
+- [ ] Claude's resume summary matches what you know: if not, correct it straight away.

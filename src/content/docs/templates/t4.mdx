@@ -1,0 +1,25 @@
+---
+title: "T4 · Final product spec"
+description: "Phase 3, after /to-spec. Again, in a reduced form, for every new milestone after launch."
+lastVerified: 2026-11-12
+sidebar:
+  order: 5
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt4_1 from '~/data/templates/en/t4-1.txt?raw';
+import tplt4_2 from '~/data/templates/en/t4-2.txt?raw';
+
+| Item | Detail |
+|---|---|
+| **When** | Phase 3, after `/to-spec`. Again, in a reduced form, for every new milestone after launch. |
+| **What you provide** | The URLs of the spec issue and the map. |
+| **Output and location** | `docs/02-product-spec.md`: the source of truth, changed only through pull requests. |
+
+## Prompt
+
+<TemplateBlock id="t4-1" code={tplt4_1} lang="text" title="Prompt · write the final spec" />
+
+## Template
+
+<TemplateBlock id="t4-2" code={tplt4_2} lang="markdown" title="docs/02-product-spec.md" />

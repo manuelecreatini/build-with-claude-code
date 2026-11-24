@@ -1,0 +1,14 @@
+---
+import { localeFrom, t } from '~/lib/i18n';
+
+interface Props {
+  n: number;
+  title?: string;
+}
+const { n, title } = Astro.props;
+const locale = localeFrom(Astro.currentLocale);
+---
+<aside class="bcc-gate" aria-label={`${t(locale, 'gate.heading')} G${n}`}>
+  <strong>{t(locale, 'gate.heading')} G{n}{title ? ` · ${title}` : ''}</strong>
+  <slot />
+</aside>

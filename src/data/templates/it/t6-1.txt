@@ -1,0 +1,22 @@
+/to-tickets docs/02-product-spec.md
+
+Constraints for this breakdown:
+- Produce between 10 and 50 build phases (BP), sized to this project. Explain the number.
+- Each BP is a tracer-bullet vertical slice: a narrow but complete path through data,
+  logic/API, UI and tests; demoable or verifiable on its own; doable in ONE fresh agent
+  session (well under 100k tokens of work) and ONE pull request reviewable in 15 minutes.
+- Order: BP-01 walking skeleton (scaffold, typecheck, lint, test tooling, CI, hello-world
+  deployed to a preview URL); then authentication and roles; then the thinnest end-to-end
+  slice of the core journey; then thicken it; then secondary journeys; admin and emails;
+  payments; hardening (accessibility, performance, security, analytics, monitoring);
+  launch readiness (legal pages, SEO, onboarding, demo data).
+- Prefactoring first; wide refactors as expand-contract.
+- Title: "BP-NN · <user-visible outcome>"; labels: build-phase + ready-for-agent. Body: every
+  section of .github/ISSUE_TEMPLATE/build-phase.md (expected modules/files are indicative).
+- Blocking edges: only true blockers, as native GitHub "blocked by" links.
+- Phases needing a human action (accounts, keys, payments, DNS, legal) list it under
+  "Human actions" and get the label ready-for-human instead of ready-for-agent.
+- BEFORE publishing: show me the numbered list (title, blocked by, what it delivers,
+  human actions) and a coverage table US/FR -> BP. Wait for my explicit approval.
+- AFTER publishing: write docs/04-build-plan.md (ordered table, issue links, Mermaid
+  dependency graph) and update docs/STATUS.md.

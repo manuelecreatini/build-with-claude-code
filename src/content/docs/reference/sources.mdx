@@ -1,0 +1,38 @@
+---
+title: "Appendix B · Sources and verification date"
+description: "All sources were consulted on 11–12 November 2026. Pricing pages and documentation change often: check again before buying, or if a command doesn't behave…"
+lastVerified: 2026-11-12
+sidebar:
+  order: 4
+---
+
+All sources were consulted on 11–12 November 2026. Pricing pages and documentation change often: check again before buying, or if a command doesn't behave as described.
+
+| Source | Used for |
+|---|---|
+| **Matt Pocock's skills** |  |
+| `mattpocock/skills` README<br />[https://github.com/mattpocock/skills](https://github.com/mattpocock/skills) | List and classification of the 27 skills, installation (plugin and skills.sh), `/setup-matt-pocock-skills`, rationale. |
+| `skills/engineering/wayfinder/SKILL.md` (same repository) | Map, decision tickets, types, fog, frontier, session rules. |
+| `skills/productivity/handoff/SKILL.md` | Content and location of the handoff document. |
+| `skills/engineering/to-spec/SKILL.md`, `to-tickets/SKILL.md`, `implement/SKILL.md`, `setup-matt-pocock-skills/SKILL.md` | Spec sections, vertical slices, approval before publishing, implementation discipline, triage labels. |
+| AI Hero, "The /wayfinder Skill" page<br />[https://www.aihero.dev/skills-wayfinder](https://www.aihero.dev/skills-wayfinder) | When to use `/wayfinder` rather than `/grill-with-docs`; known problems and mitigations. |
+| AI Hero, skills index and changelog<br />[https://www.aihero.dev/skills.md](https://www.aihero.dev/skills.md) | Versions 1.1 (July 2026), 1.2 (August 2026), 1.3 (October 2026) and renames. |
+| **Claude Code (official documentation)** |  |
+| Quickstart<br />[https://code.claude.com/docs/en/quickstart](https://code.claude.com/docs/en/quickstart) | Installation on Windows, macOS and Linux; accounts; essential commands. |
+| Commands<br />[https://code.claude.com/docs/en/commands](https://code.claude.com/docs/en/commands) | Built-in commands and bundled skills, aliases, requirements. |
+| Context window<br />[https://code.claude.com/docs/en/context-window](https://code.claude.com/docs/en/context-window) | What survives compaction; `/context`; `/autocompact`; 1-million-token windows. |
+| Skills<br />[https://code.claude.com/docs/en/skills](https://code.claude.com/docs/en/skills) | Skill locations and names, plugin prefix, name conflicts, `disable-model-invocation`. |
+| Permission modes<br />[https://code.claude.com/docs/en/permission-modes](https://code.claude.com/docs/en/permission-modes) | Permission modes, plan mode, `Shift+Tab`, plan approval. |
+| Documentation map<br />[https://code.claude.com/docs/en/claude_code_docs_map.md](https://code.claude.com/docs/en/claude_code_docs_map.md) | Overall structure: GitHub Actions, MCP, memory, sessions. |
+| **Service pricing and limits** |  |
+| Claude [https://claude.com/pricing](https://claude.com/pricing) | Pro 20 USD a month (17 billed annually), Max from 100 USD; Claude Code included. |
+| GitHub [https://docs.github.com/en/get-started/learning-about-github/githubs-plans](https://docs.github.com/en/get-started/learning-about-github/githubs-plans) | 2,000 Actions minutes a month on private repositories (Free). |
+| Wispr Flow [https://wisprflow.ai/pricing](https://wisprflow.ai/pricing) and the support page on the free plan | 2,000 words a week free on desktop; Pro 15 USD a month (12 billed annually, from consistent third-party sources). |
+| Vercel [https://vercel.com/pricing](https://vercel.com/pricing) | Hobby for personal, non-commercial use only; Pro 20 USD per user a month. |
+| Supabase [https://supabase.com/pricing](https://supabase.com/pricing) | Free: 2 active projects, paused after a week of inactivity; Pro from 25 USD with daily backups (7 days). |
+| PostHog [https://posthog.com/pricing](https://posthog.com/pricing) | Monthly free quotas; no credit card. |
+| Sentry, via Activepieces, "Sentry Pricing 2026" (data checked on 3 November 2026) | Developer plan: 1 user, 5,000 errors a month. Third-party source: check on sentry.io. |
+
+:::note[How to keep the playbook up to date]
+Once a quarter: (1) compare the skills list with the `mattpocock/skills` README and read the changelog on aihero.dev; (2) skim `/release-notes` in Claude Code; (3) check the pricing pages again; (4) update the templates and the quick reference. You can ask Claude to do it for you with a scheduled task.
+:::

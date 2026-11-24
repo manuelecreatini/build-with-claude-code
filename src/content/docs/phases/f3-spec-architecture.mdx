@@ -1,0 +1,128 @@
+---
+title: "Phase 3 · Final spec and technical architecture"
+description: "Turn decisions and the preliminary spec into a single source of truth: what we build, how, within which limits and what stays out."
+lastVerified: 2026-11-12
+phase: F3
+---
+
+import Role from '~/components/Role.astro';
+
+| Item | Detail |
+|---|---|
+| **Goal** | Turn decisions and the preliminary spec into a single source of truth: what we build, how, within which limits and what stays out. |
+| **Input** | Closed `/wayfinder` map, ADRs, `GLOSSARY.md`, `docs/01-preliminary-spec.md`, prototypes and research. |
+| **Output** | `docs/02-product-spec.md` (v1.0), `docs/03-architecture.md`, complete ADRs, spec issue on GitHub, updated `README.md`. |
+| **Tools** | `/to-spec` <Role as="pocock" />, templates T4 and T5, a subagent for the critical review, Claude Design or `/prototype` for the interface. |
+| **Gate** | <Role as="gate" n={3} /> you approve spec and architecture. |
+| **Typical time** | 2–4 hours, plus reading time. |
+
+## The documents of this phase and where they live
+
+| Document | Path | Content | Created with |
+|---|---|---|---|
+| Spec issue (epic) | GitHub issue with the `ready-for-agent` label | Synthesis of the decisions in the `/to-spec` format; it becomes the parent issue of the build phases. | `/to-spec` |
+| Product spec | `docs/02-product-spec.md` | Complete spec (template T4). **Source of truth.** | Prompt T4 |
+| Architecture | `docs/03-architecture.md` | Technical architecture (template T5). | Prompt T5 |
+| ADR | `docs/adr/NNNN-title.md` | One hard-to-reverse decision per file. | Grilling skills, template B1 |
+| Glossary | `GLOSSARY.md` | Domain terms and their meaning. | `domain-modeling` |
+| README | `README.md` | What the project is and how to run it. | Claude |
+
+**Why the source of truth is a file and not the issue.** A file in the repository is versioned together with the code, Claude reads it without calling GitHub, every change goes through a pull request with its history, and it survives any change of tool. The spec issue created by `/to-spec` stays useful as the parent issue and points to the file.
+
+## Step 1 — Synthesise the decisions with /to-spec
+
+**Claude Code**
+```text
+/clear
+/to-spec <wayfinder map URL>
+```
+
+`/to-spec` <Role as="pocock" /> doesn't interview: it synthesises what has already been decided (the map and the linked tickets). In order:
+
+1. it explores the repository and uses the vocabulary of `GLOSSARY.md`, respecting the ADRs;
+2. it identifies the *seams* where features will be tested[^22] and asks you to confirm them;
+3. it writes the spec with fixed sections: *Problem Statement*, *Solution*, *User Stories* (a long, numbered list), *Implementation Decisions* (without file paths, which go stale quickly), *Testing Decisions*, *Out of Scope*, *Further Notes*;
+4. it publishes it as an issue with the `ready-for-agent` label.
+
+## Step 2 — Expand into the complete spec
+
+The `/to-spec` format is excellent for agents but doesn't cover everything a product needs: goals, non-functional requirements, interface, security, success criteria. Paste the prompt from template T4: Claude writes `docs/02-product-spec.md` by combining the spec issue, the map, the ADRs and the preliminary spec, with stable identifiers (`US-001` for user stories[^23], `FR-001` for functional requirements) that we will use for traceability all the way to the tests.
+
+## Step 3 — Write the technical architecture
+
+Paste the prompt from template T5. Claude writes `docs/03-architecture.md` with Mermaid text diagrams[^24], the list of technologies with a pointer to each one's ADR, the data model, the authentication flows, the environments, the testing strategy and the cost limits.
+
+### This playbook's default stack
+
+If you are not an engineer, a boring, widespread stack that Claude knows well is the best choice. It is a starting point to confirm (or overturn) with an ADR in Phase 2, not an obligation. The two pillars are Next.js[^25] for the application and Supabase[^26] for data and access.
+
+| Need | Default | Alternative | When to choose the alternative |
+|---|---|---|---|
+| Web app or SaaS | Next.js + TypeScript + Tailwind CSS + shadcn/ui | Astro | Content site or showcase with few interactive parts. |
+| Backend | Next.js server functions + Supabase | FastAPI (Python) | Heavy data or AI logic written in Python. |
+| Database, login, files | Supabase (Postgres, Auth, Storage) | Neon + a dedicated authentication service | A database that scales to zero when idle, or enterprise authentication requirements. |
+| Hosting | Vercel | Netlify, Cloudflare, Railway, Render, Fly.io | Always-on processes, containers, Python backends. |
+| Mobile app | Expo (React Native) + Supabase | Flutter | A team that already knows Flutter. |
+| Payments | Stripe | *Merchant of record* platforms | You want to hand off international VAT handling. |
+| Transactional email | Resend | Postmark | — |
+| AI features | Anthropic SDK or Vercel AI SDK | — | — |
+| Tests | Vitest + Playwright | Jest | An existing project already on Jest. |
+| Monitoring | Sentry + PostHog + Vercel Analytics | — | — |
+
+## Step 4 — Interface: mockups and prototypes (when needed)
+
+If the look or behaviour of the interface is still uncertain, settle it before gate G3:
+
+- **Visual mockups**: `/design <brief>` <Role as="bundled" /> in Claude Code (or the Design feature in the Claude app) creates screens and flows as editable boards, exportable to PNG or PDF. It requires a session where artifacts are available.
+- **Behaviour prototypes**: `/prototype` <Role as="pocock" /> builds a throwaway prototype, either a single HTML file for state and logic questions or very different interface variants you can switch between from one page (this last mode requires the app's code to exist already).
+
+Attach the results to the spec (UI/UX section) or to the relevant issue.
+
+## Step 5 — Independent critical review
+
+Before approving, have the spec criticised by a reviewer who hasn't followed the conversations: a subagent with a clean context sees what the author takes for granted.
+
+**Prompt · spec red team**
+```text
+Use a fresh subagent that has not seen our conversation to review docs/02-product-spec.md and
+docs/03-architecture.md. It must answer, in three separate sections:
+1. As a skeptical senior engineer: what is infeasible, underspecified, risky or missing
+   (non-functional requirements, security, data migration, failure modes, costs)?
+2. As the target user (<persona>): what is confusing, missing or not worth paying for?
+3. As an early-stage investor: is the MVP scope the smallest that tests the core hypothesis?
+Return a ranked list of issues (critical / important / minor) with a proposed fix for each.
+Then, in plain English, summarise for me the 5 most important changes and wait for my decision.
+```
+
+## Step 6 — Approve and freeze version 1.0
+
+Apply the fixes you accept, then ask Claude to set the spec status to `APPROVED` with the date, commit (`docs: product spec v1.0`) and update `docs/STATUS.md`. From here on the spec changes only through pull requests, with a line in its *change log*.
+
+:::danger[GATE G3 · You approve spec and architecture]
+Approve when: every user story has testable criteria; non-functional requirements, security and privacy are explicit; the stack is justified by ADRs; the *Out of scope* section lists what you are knowingly not doing; the critical review left no critical problems open.
+:::
+
+:::tip[Definition of Done · Phase 3]
+- [ ] Spec issue published by `/to-spec`, with a link to the file.
+- [ ] `docs/02-product-spec.md` complete according to T4, status `APPROVED v1.0`.
+- [ ] `docs/03-architecture.md` complete according to T5, with Mermaid diagrams.
+- [ ] One ADR for every stack, hosting, authentication, data and payments choice.
+- [ ] Critical review done and critical problems resolved; commit done.
+:::
+
+### Common mistakes
+
+- Letting the spec "decide" things that were never discussed: if `/to-spec` makes things up, a decision ticket is missing.
+- A spec full of file paths and code: they go stale immediately. Modules and interfaces are enough.
+- No *Out of scope* section: it is the main defence against scope creep.
+- Approving without reading the non-functional requirements (performance, privacy, accessibility, costs).
+
+[^22]: **Seam**: a boundary in the code from which a feature can be tested from the outside, without looking at the internal details. A few well-chosen seams, as high up as possible, keep tests stable even when the code changes.
+
+[^23]: **User story**: a requirement written from the point of view of the person using the product, in the form "As a *role*, I want *capability*, so that *benefit*". The identifiers (US-001…) let you link every requirement to tests and build phases.
+
+[^24]: **Mermaid**: a language that describes diagrams (flows, components, database schemas) as text. GitHub draws them automatically in Markdown files, so they stay versioned with the code.
+
+[^25]: **Next.js** is a *framework* (a code scaffold with ready-made rules and tools) for building web apps with React. **TypeScript** is JavaScript with *types*: it declares the shape of the data and lets you catch many errors before running the code. **Tailwind CSS** and **shadcn/ui** provide ready-made styling and UI components.
+
+[^26]: **Database**: where the application stores data in a structured way. **Postgres** is the most widespread open-source relational database. **Supabase** offers managed Postgres plus authentication (*Auth*) and file storage (*Storage*).

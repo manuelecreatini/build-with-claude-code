@@ -1,0 +1,25 @@
+---
+title: "T1 · Dictation script and conversion prompt"
+description: "Phase 1, once per project (repeatable for large features after launch)."
+lastVerified: 2026-11-12
+sidebar:
+  order: 2
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt1_1 from '~/data/templates/en/t1-1.txt?raw';
+import tplt1_2 from '~/data/templates/en/t1-2.txt?raw';
+
+| Item | Detail |
+|---|---|
+| **When** | Phase 1, once per project (repeatable for large features after launch). |
+| **What you provide** | 10–20 minutes of free dictation following the script (part A). |
+| **Output and location** | `docs/00-brain-dump.md` (transcript) and `docs/01-preliminary-spec.md` (produced by the part B prompt). |
+
+## Part A — Dictation script (in your own language)
+
+<TemplateBlock id="t1-1" code={tplt1_1} lang="text" title="Dictation script · talk for 10–20 minutes, in any order" />
+
+## Part B — Conversion prompt
+
+<TemplateBlock id="t1-2" code={tplt1_2} lang="text" title="Prompt · from transcript to preliminary spec" />

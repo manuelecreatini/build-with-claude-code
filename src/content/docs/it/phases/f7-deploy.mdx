@@ -1,0 +1,153 @@
+---
+title: "Fase 7 · Deploy e lancio"
+description: "Portare il prodotto dall'ambiente locale alla produzione in modo sicuro, osservabile e reversibile."
+lastVerified: 2026-11-12
+phase: F7
+---
+
+import Role from '~/components/Role.astro';
+
+| Voce | Dettaglio |
+|---|---|
+| **Obiettivo** | Portare il prodotto dall'ambiente locale alla produzione in modo sicuro, osservabile e reversibile. |
+| **Input** | Gate G7 superato; repository su GitHub; account dei servizi. |
+| **Output** | Applicazione online sul dominio; database di produzione con backup; CI/CD attiva; monitoring e alert; runbook di deploy e rollback. |
+| **Strumenti** | Vercel, Supabase, GitHub Actions, registrar del dominio, Sentry, PostHog, template T14, skill `/wizard`. |
+| **Gate** | <Role as="gate" n={7} /> (già superato) più la tua conferma del passaggio in produzione. |
+| **Tempo tipico** | Da mezza giornata a una giornata. |
+
+## Gli ambienti
+
+| Ambiente | Dove | A cosa serve | Dati |
+|---|---|---|---|
+| Locale | Il tuo PC (`npm run dev`) | Sviluppo e test di Claude. | Finti o di esempio. |
+| Anteprima (*preview*) | Un URL Vercel per ogni pull request | Provare ogni build phase prima del merge. | Di esempio, database di sviluppo. |
+| Staging (opzionale) | Un ambiente fisso identico alla produzione | Prove finali con configurazione reale. | Copia anonimizzata. |
+| Produzione | Il dominio pubblico | Gli utenti veri. | Reali, con backup. |
+
+Per un MVP bastano locale, anteprima e produzione. Con Supabase usa **due progetti separati** (sviluppo e produzione): mai sviluppare sul database di produzione.
+
+## Scegliere l'hosting
+
+| Servizio | Ideale per | Piano gratuito | Attenzione |
+|---|---|---|---|
+| Vercel | App Next.js e funzioni serverless; anteprime automatiche per ogni pull request. | Hobby: gratis ma solo per uso personale e non commerciale. | Un prodotto commerciale richiede Pro: 20 USD per utente al mese. |
+| Supabase | Postgres gestito con Auth, Storage, RLS. | Free: 2 progetti attivi; il progetto si mette in pausa dopo una settimana di inattività. | Pro da 25 USD al mese: niente pausa, backup giornalieri con 7 giorni di conservazione. |
+| Netlify, Cloudflare | Siti statici e app web leggere. | Disponibili. | Verifica limiti e uso commerciale. |
+| Railway, Render, Fly.io | Server sempre attivi, container, backend Python, lavori in background. | Variabili. | Costi legati alle risorse sempre accese. |
+| Expo EAS | Build e pubblicazione delle app mobile negli store. | Disponibile. | Servono gli account sviluppatore Apple e Google. |
+
+**Regola del playbook**: in sviluppo, piani gratuiti; al lancio di un prodotto commerciale, Vercel Pro e Supabase Pro (circa 45 USD al mese di base, più l'uso). Prezzi verificati a novembre 2026.
+
+## Passo 1 — Account e progetti di produzione
+
+<Role as="you" /> Sono azioni umane: Claude ti guida con un blocco `HUMAN ACTION REQUIRED` o con `/wizard`.
+
+1. **Vercel**: crea l'account, importa il repository GitHub. Da quel momento ogni pull request ha un'anteprima e ogni merge su `main` va in produzione.
+2. **Supabase**: crea il progetto di produzione in una regione dell'Unione Europea (dati vicini agli utenti e semplificazione GDPR).
+3. **Sentry** e **PostHog**: crea i progetti e annota i nomi delle variabili da configurare.
+
+## Passo 2 — Variabili d'ambiente e segreti
+
+Le variabili d'ambiente[^41] separano la configurazione dal codice.
+
+| Dove | Cosa contiene | Chi la modifica |
+|---|---|---|
+| `.env.example` (nel repository) | Solo i nomi delle variabili, con un commento. | Claude. |
+| `.env.local` (solo sul tuo PC, escluso da Git) | I valori di sviluppo. | Tu. |
+| Vercel, Environment Variables | Valori separati per Development, Preview e Production. | Tu. |
+| GitHub, Settings, Secrets and variables, Actions | Segreti usati dalla CI. | Tu. |
+
+Regole: le variabili con prefisso `NEXT_PUBLIC_` finiscono nel browser, quindi mai segreti con quel prefisso; la chiave di servizio di Supabase (accesso completo al database) solo lato server; se un segreto finisce per errore in un commit o in chat, va ruotato subito, cioè revocato e sostituito.
+
+## Passo 3 — Database di produzione
+
+**PowerShell · migrazioni con la Supabase CLI (esempio)**
+```powershell
+npx supabase login
+npx supabase link --project-ref <id-progetto-produzione>
+npx supabase db push        # applica le migrazioni della cartella supabase/migrations
+```
+
+- Lo schema cambia solo tramite migrazioni[^42] versionate, mai a mano dal pannello.
+- Prima di ogni migrazione rischiosa (cancellare o rinominare colonne) verifica di avere un backup recente: è un'azione che approvi tu.
+- Il piano Pro di Supabase include backup giornalieri conservati 7 giorni; il ripristino a un istante preciso è un componente aggiuntivo. Prova almeno una volta un ripristino.
+
+## Passo 4 — CI/CD
+
+La CI[^43] creata in BP-01 esegue i controlli su ogni pull request; Vercel pubblica anteprime e produzione. Esempio di workflow:
+
+**.github/workflows/ci.yml**
+```yaml
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+```
+
+Chiedi a Claude di usare le versioni correnti delle action e di aggiungere i test E2E quando sono stabili. Poi <Role as="you" /> proteggi `main` da GitHub (Settings, Rules): merge solo tramite pull request e solo con CI verde. Il flusso diventa: pull request → CI e anteprima → tua revisione → merge → deploy in produzione automatico.
+
+## Passo 5 — Dominio e DNS
+
+1. <Role as="you" /> Compra il dominio da un registrar (per esempio Cloudflare Registrar o Namecheap) o direttamente da Vercel.
+2. Aggiungi il dominio al progetto Vercel e imposta i record DNS[^44] che Vercel indica; il certificato HTTPS è automatico.
+3. Reindirizza `www` sul dominio principale (o viceversa).
+4. Se l'app invia email, configura SPF, DKIM e DMARC con il provider di email: senza, i messaggi finiscono nello spam.
+
+## Passo 6 — Sicurezza e conformità prima del lancio
+
+- [ ] Tutti i punti di sicurezza della Fase 6 chiusi.
+- [ ] Intestazioni di sicurezza HTTP e CORS configurate; limiti di frequenza su login e form.
+- [ ] Conferma email e politiche di accesso del servizio di autenticazione attive.
+- [ ] Privacy policy, termini d'uso e, se usi cookie non essenziali o analytics che li richiedono, banner di consenso. Accordi sul trattamento dei dati (DPA) con i fornitori (Vercel, Supabase, Sentry, PostHog). Claude può preparare le bozze; per la versione finale rivolgiti a un legale.
+
+## Passo 7 — Monitoring, analytics e uptime
+
+| Strumento | Cosa fa | Piano gratuito | Imposta |
+|---|---|---|---|
+| Sentry | Cattura errori di frontend e backend con il contesto. | Developer: 1 utente, 5.000 errori al mese (verificato da fonte terza il 3/11/2026). | Alert email per ogni nuovo errore. |
+| PostHog | Analytics di prodotto, registrazioni di sessione, feature flag, tracciamento errori. | 1 milione di eventi, 5.000 registrazioni, 1 milione di richieste di feature flag, 100.000 eccezioni al mese; senza carta di credito. | Funnel del percorso principale. |
+| Vercel Analytics, Speed Insights | Traffico e prestazioni reali (Core Web Vitals). | Inclusi con limiti per piano. | Obiettivo LCP sotto 2,5 s. |
+| Uptime monitor | Controlla ogni pochi minuti che il sito risponda. | Disponibili (UptimeRobot, Better Stack). | Avviso su email e telefono. |
+
+## Passo 8 — Backup, rollback e incidenti
+
+- **Rollback dell'app**: Vercel permette di riportare in produzione un deploy precedente in pochi secondi. Scrivi la procedura in `docs/runbooks/rollback.md` e provala una volta prima del lancio.
+- **Rollback dei dati**: backup del database (passo 3) e migrazioni scritte in modo da poter essere annullate quando possibile.
+- **Incidenti**: `docs/runbooks/incident.md` con chi avvisare, come comunicare con gli utenti, come raccogliere le informazioni per Claude (errore Sentry, log Vercel, ora).
+
+## Passo 9 — Il giorno del lancio
+
+Segui la checklist T14. In sintesi: ultimo merge su `main`, deploy automatico, test di fumo in produzione (registrazione, percorso principale, email, pagamento di prova se previsto), due ore di osservazione di Sentry e log, poi l'annuncio. Nelle 24–72 ore successive controlla errori e metriche due volte al giorno.
+
+:::tip[Definition of Done · Fase 7]
+- [ ] App online sul dominio con HTTPS; anteprime e deploy automatici attivi.
+- [ ] Database di produzione separato, RLS attiva, backup verificati.
+- [ ] Segreti solo nei pannelli; `.env.example` completo.
+- [ ] Sentry, PostHog e uptime monitor attivi con alert.
+- [ ] Runbook di deploy, rollback e incidenti nel repository; rollback provato.
+- [ ] Pagine legali online; checklist T14 completata; versione `v1.0.0` taggata.
+:::
+
+[^41]: **Variabile d'ambiente**: un valore di configurazione (indirizzo del database, chiave di un servizio) fornito all'app dall'esterno invece che scritto nel codice. Il file `.env.local` le contiene sul tuo PC; i pannelli di Vercel o GitHub le contengono online. Un **segreto** è una variabile che non deve mai essere pubblica.
+
+[^42]: **Migrazione**: un file che descrive una modifica alla struttura del database (nuova tabella, nuova colonna). Applicate in ordine, le migrazioni ricostruiscono lo stesso database ovunque, dal PC alla produzione.
+
+[^43]: **CI/CD** (*continuous integration / continuous delivery*): controlli automatici eseguiti su ogni modifica (CI) e pubblicazione automatica quando i controlli passano (CD). Con GitHub Actions e Vercel ottieni entrambi.
+
+[^44]: **DNS**: il sistema che traduce un nome di dominio (`teampulse.app`) nell'indirizzo del server. I *record* A e CNAME indicano dove punta il dominio. Il certificato **SSL/TLS** abilita `https`: Vercel lo genera in automatico.

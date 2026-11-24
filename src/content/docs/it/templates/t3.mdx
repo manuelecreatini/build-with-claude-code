@@ -1,0 +1,40 @@
+---
+title: "T3 · Istruzioni per l'intervista con /wayfinder"
+description: "Fase 2: alla prima sessione (tracciare la mappa), a ogni sessione successiva (un ticket), alla verifica finale."
+lastVerified: 2026-11-12
+sidebar:
+  order: 4
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt3_1 from '~/data/templates/it/t3-1.txt?raw';
+import tplt3_2 from '~/data/templates/it/t3-2.txt?raw';
+import tplt3_3 from '~/data/templates/it/t3-3.txt?raw';
+
+| Voce | Dettaglio |
+|---|---|
+| **Quando** | Fase 2: alla prima sessione (tracciare la mappa), a ogni sessione successiva (un ticket), alla verifica finale. |
+| **Cosa fornisci** | L'URL o il numero della mappa dopo la prima sessione; le tue risposte, una alla volta. |
+| **Output e posizione** | Mappa `wayfinder:map` su GitHub, decision ticket chiusi, ADR in `docs/adr/`, `GLOSSARY.md`. |
+
+## Prima della sessione 1 (checklist)
+
+- [ ] `/setup-matt-pocock-skills` eseguito con GitHub come tracker; `gh auth status` ok.
+- [ ] `docs/01-preliminary-spec.md` approvata (gate G1) e nel repository.
+- [ ] Repository privato; 60–90 minuti liberi per la prima sessione.
+
+## Sessione 1 — tracciare la mappa
+
+<TemplateBlock id="t3-1" code={tplt3_1} lang="text" title="Claude Code · testo da incollare dopo /wayfinder" />
+
+## Sessioni 2…N — un ticket per sessione
+
+<TemplateBlock id="t3-2" code={tplt3_2} lang="text" title="Claude Code" />
+
+## Verifica finale della mappa (prima del gate G2)
+
+<TemplateBlock id="t3-3" code={tplt3_3} lang="text" title="Prompt (EN) · la mappa è completa?" />
+
+## Come rispondere (promemoria per te)
+
+Rispondi con il perché; di' «non lo so, dammi opzioni e una raccomandazione» quando serve; chiedi un prototipo o una ricerca per le scelte irreversibili; usa `/wait-what` se una domanda è oscura; scegli tu tra le varianti di un prototipo.

@@ -1,0 +1,92 @@
+---
+title: "Toolkit · Comandi di Claude Code e integrazioni"
+description: "Build with Claude Code"
+lastVerified: 2026-11-12
+sidebar:
+  order: 3
+---
+
+import Role from '~/components/Role.astro';
+
+## Quattro tipi di comandi: come riconoscerli
+
+| Tipo | Cos'è | Esempi | Come verificare che ci sia |
+|---|---|---|---|
+| <Role as="builtin" /> | Comando nativo con logica fissa nella CLI. | `/compact`, `/clear`, `/context`, `/rewind`, `/plan` | Digita `/`: compare nel menu. |
+| <Role as="bundled" /> | Skill inclusa in Claude Code: istruzioni che Claude esegue con i suoi strumenti. | `/code-review`, `/simplify`, `/run`, `/verify`, `/debug`, `/design` | Menu `/` e `/skills`; disattivabili da impostazioni. |
+| <Role as="pocock" /> | Skill del plugin `mattpocock-skills`, da installare. | `/wayfinder`, `/handoff`, `/to-spec`, `/tdd` | `/skills` e `/plugin`. |
+| <Role as="integration" /> | Strumento esterno: CLI, connettore MCP, servizio. | `gh`, connettori Supabase e Vercel, Claude in Chrome, Playwright | `gh --version`, `/mcp`, `/chrome`. |
+
+## I comandi nativi e inclusi usati nel playbook
+
+| Comando | Cosa fa | Dove nel playbook |
+|---|---|---|
+| **Sessione e contesto** |  |  |
+| `/clear` (alias `/reset`, `/new`) | Nuova conversazione vuota; la precedente resta in `/resume`. | Tra lavori non collegati |
+| `/compact [istruzioni]` | Riassume la conversazione per liberare contesto, con un focus opzionale. | F5, passo 8 |
+| `/context` | Griglia del contesto usato, con suggerimenti. | Inizio e durante ogni sessione |
+| `/autocompact <token>\|auto` | Imposta la soglia di compattazione automatica (es. `200k`). | F0 |
+| `/resume` (alias `/continue`) | Riapre una conversazione precedente. | Ripresa del lavoro |
+| `/rewind` (alias `/checkpoint`, `/undo`) | Riporta codice e conversazione a un checkpoint, o riassume una parte della conversazione. | Quando una strada è sbagliata |
+| `/branch`, `/fork` | Ramifica la conversazione; `/fork` la copia in una sessione in background. | Esplorare alternative |
+| `/btw <domanda>` | Domanda laterale che non entra nella cronologia. | Durante il lavoro |
+| `/recap`, `/rename`, `/export` | Riassunto di una riga, rinomina, esporta la conversazione. | A piacere |
+| **Pianificazione, modello, permessi** |  |  |
+| `/plan [descrizione]` e `Shift+Tab` | Plan mode: Claude pianifica senza modificare i file. `Shift+Tab` fa scorrere le modalità di permesso. | Ogni build phase (G5) |
+| `/model`, `/effort` | Cambiano modello e livello di ragionamento. | Quando serve |
+| `/permissions`, `/fewer-permission-prompts` | Gestiscono le regole di permesso; la seconda propone un elenco di comandi di sola lettura da approvare. | F0 e dopo le prime fasi |
+| `/goal <condizione>` | Claude continua per più turni finché la condizione è soddisfatta. | Modalità avanzata |
+| **Progetto e configurazione** |  |  |
+| `/init`, `/memory` | Crea un `CLAUDE.md` iniziale; modifica `CLAUDE.md` e la memoria automatica. | F0, dopo BP-01 |
+| `/statusline`, `/config` | Configurano riga di stato e impostazioni. | F0 |
+| `/mcp`, `/plugin`, `/reload-plugins` | Gestiscono server MCP e plugin. | F0 |
+| `/skills`, `/reload-skills`, `/skill-doctor` | Elencano le skill, le ricaricano, mostrano costo in contesto e uso. | F0 e manutenzione |
+| `/doctor` | Controllo completo dell'installazione con correzioni proposte. | F0 e problemi |
+| `/usage` (alias `/cost`, `/stats`) | Costi della sessione e consumi rispetto ai limiti del piano. | Controllo dei limiti |
+| `/voice`, `/chrome` | Dettatura vocale; impostazioni di Claude in Chrome. | F1, test manuali |
+| **Qualità** |  |  |
+| `/diff` | Mostra le modifiche correnti, comprese quelle di Claude. | Prima della PR |
+| `/code-review [livello] [--fix]` (alias `/review`) | Cerca bug di correttezza nelle modifiche o in una PR; `ultra` = review multi-agente in cloud. | F5, F6 |
+| `/simplify` | Quattro agenti cercano semplificazioni e riuso (non bug). | F5 |
+| `/security-review` | Vulnerabilità nelle modifiche del branch rispetto al branch principale del remote. | F5, F6, F8 |
+| `/run`, `/verify`, `/run-skill-generator` | Avviano e usano l'app per verificare una modifica; il terzo registra la ricetta di avvio del progetto. | F5 |
+| `/debug` | Attiva il log di debug e analizza problemi di Claude Code. | Problemi tecnici |
+| **GitHub, cloud e altro** |  |  |
+| `/install-github-app` | Installa l'app GitHub di Claude e, se vuoi, i workflow di GitHub Actions (`@claude`). | F0, opzionale |
+| `/web-setup`, `/teleport`, `/remote-control` | Collegano GitHub alle sessioni cloud; portano una sessione cloud nel terminale; controllo da un altro dispositivo. | Lavoro in mobilità |
+| `/design`, `/batch`, `/loop`, `/schedule` | Mockup come artifact di design; modifiche massive in parallelo; prompt ripetuti; attività pianificate in cloud. | F3; avanzato |
+
+## Scorciatoie e comandi da terminale
+
+| Scorciatoia o comando | Effetto |
+|---|---|
+| `Shift+Tab` | Fa scorrere le modalità di permesso: `default`, `acceptEdits`, `plan`. |
+| `Esc` / `Esc` due volte | Interrompe Claude mantenendo il lavoro fatto / apre il menu di rewind. |
+| `Ctrl+G` | In plan mode apre il piano nell'editor per modificarlo prima di approvarlo. |
+| `!<comando>` | Esegue un comando nel terminale e mette comando e risultato nel contesto. |
+| `@<file>` | Richiama un file o una cartella nel messaggio. |
+| `claude`, `claude "<compito>"` | Avvia la sessione interattiva, con o senza un primo compito. |
+| `claude -c`, `claude -r` | Continua l'ultima conversazione della cartella / sceglie una conversazione da riprendere. |
+| `claude -p "<domanda>"` | Esegue una richiesta singola e termina (utile negli script). |
+| `claude --permission-mode plan` | Avvia direttamente in plan mode. |
+| `claude --chrome`, `claude doctor`, `claude --version` | Abilita Claude in Chrome; diagnostica senza aprire la sessione; versione installata. |
+
+## Integrazioni esterne
+
+| Integrazione | A cosa serve | Come si attiva |
+|---|---|---|
+| GitHub CLI (`gh`) | Repository, issue, label, pull request, release: è il collegamento tra Claude Code e GitHub. | `winget install --id GitHub.cli -e`, poi `gh auth login`. |
+| App GitHub di Claude | Menzioni `@claude` in issue e pull request tramite GitHub Actions. | `/install-github-app` (solo repository su github.com). |
+| Connettori MCP Supabase e Vercel | Claude legge tabelle, log, avvisi, deploy e variabili d'ambiente. | Connettori su claude.ai con lo stesso account; verifica con `/mcp`. |
+| Claude in Chrome | Claude usa il tuo browser: apre l'app, clicca, legge la console. | `/chrome` o `claude --chrome`; estensione Chrome. |
+| Playwright | Test E2E automatici nel browser. | Installato in BP-01 come dipendenza di sviluppo. |
+| Skill per agenti di Supabase | Linee guida di sviluppo e sicurezza Supabase per l'agente. | `npx skills add supabase/agent-skills` |
+
+:::caution[Limiti che dipendono dall'ambiente]
+- Non tutti i comandi compaiono per tutti: dipende da piattaforma, piano e ambiente. Esempi: `/desktop` solo su macOS e Windows x64 con abbonamento; `/design` solo dove gli artifact sono disponibili; la modalità `auto` solo per gli account idonei; nelle sessioni cloud sono disponibili solo alcune modalità di permesso.
+- `/code-review ultra` gira in cloud: 3 esecuzioni gratuite con Pro e Max, poi crediti di utilizzo.
+- `/security-review` richiede un remote `origin`.
+- Le skill di Matt Pocock richiedono `/setup-matt-pocock-skills` in ogni repository; `/wizard` genera script Bash (su Windows serve Git Bash); `/handoff` scrive in `%TEMP%`.
+- Le skill personali in `~/.claude/skills` non sono disponibili nelle sessioni cloud: lì servono skill del repository o abilitate sull'account claude.ai.
+- Claude Code si aggiorna spesso: `/release-notes` mostra le novità di ogni versione.
+:::

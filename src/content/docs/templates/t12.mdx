@@ -1,0 +1,34 @@
+---
+title: "T12 · Context management checklist"
+description: "Always: at the start of a session, every time you change zone, before /clear."
+lastVerified: 2026-11-12
+sidebar:
+  order: 13
+---
+
+| Item | Detail |
+|---|---|
+| **When** | Always: at the start of a session, every time you change zone, before `/clear`. |
+| **What you provide** | Nothing: it is a personal routine. |
+| **Output and location** | No file: it is your working discipline. |
+
+:::tip[Session start]
+- [ ] A single goal for the session (one build phase, one map ticket).
+- [ ] Status line visible; `/context` for the starting point.
+- [ ] Claude has read `docs/STATUS.md` (or the handoff document).
+:::
+
+:::caution[During (zone heuristic, 200,000-token budget)]
+- [ ] **Under 100,000**: work normally.
+- [ ] **100,000–150,000**: finish the step; no big new work; if you continue on the same phase, `/compact focus on <phase, decisions, tests, next steps>`.
+- [ ] **150,000–200,000**: at the first stable point run T11 (handoff) and `/clear`.
+- [ ] **Over 200,000**: `/autocompact 200k` kicks in; check that the state is in files.
+- [ ] Side questions with `/btw`; broad research to a subagent; errors pasted with 20 lines of context, not whole logs.
+:::
+
+:::danger[Before /clear or closing the session]
+- [ ] Decisions taken are in an ADR, an issue comment or the spec.
+- [ ] The work is committed and pushed; `STATUS.md` is updated.
+- [ ] If the work continues: handoff done and the file path noted.
+- [ ] If the work is unrelated to the previous one: `/clear` is enough.
+:::

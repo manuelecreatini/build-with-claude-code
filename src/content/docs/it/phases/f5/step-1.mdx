@@ -1,0 +1,13 @@
+---
+title: "Passo 1 — Avvia la build phase (gate G5)"
+description: "Build with Claude Code"
+lastVerified: 2026-11-12
+phase: F5
+---
+
+1. Premi `Shift+Tab` finché la riga di stato mostra *plan mode on* (oppure inizia il messaggio con `/plan`).
+2. Incolla il prompt del template T8 con il numero della fase: «Proceed with Build Phase 07 (issue \#23)».
+3. Claude legge la issue con i commenti, `STATUS.md`, le sezioni della spec citate, gli ADR, il glossario e il codice coinvolto; verifica che le dipendenze siano chiuse e che `main` sia verde.
+4. Ti presenta il piano in italiano: cosa potrà fare l'utente alla fine, approccio e moduli toccati, seam e test da scrivere per primi, rischi e cose fuori scope notate, azioni umane necessarie, controlli finali.
+
+**Come rivedere il piano.** Fai domande finché non è chiaro; premi `Ctrl+G` per modificarne il testo nell'editor. Non approvare piani che toccano aree fuori dalla issue, aggiungono dipendenze senza dirlo, saltano i test o lasciano azioni umane senza risposta. Quando approvi, scegli *approve and manually review each edit* per le prime 3–5 fasi, *approve and accept edits* quando hai fiducia nel processo.

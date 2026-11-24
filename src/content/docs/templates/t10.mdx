@@ -1,0 +1,18 @@
+---
+title: "T10 · Test and quality checklist"
+description: "Phase 5 at the end of every build phase (Claude fills it in in the pull request); Phase 6 on the whole product."
+lastVerified: 2026-11-12
+sidebar:
+  order: 11
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt10_1 from '~/data/templates/en/t10-1.txt?raw';
+
+| Item | Detail |
+|---|---|
+| **When** | Phase 5 at the end of every build phase (Claude fills it in in the pull request); Phase 6 on the whole product. |
+| **What you provide** | The manual check on the preview. |
+| **Output and location** | The pull request body, or `docs/testing/qa-checklist.md`. |
+
+<TemplateBlock id="t10-1" code={tplt10_1} lang="markdown" title="QA checklist · to paste into the pull request" />

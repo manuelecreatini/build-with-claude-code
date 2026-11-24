@@ -1,0 +1,20 @@
+---
+title: "T8 · Running a build phase"
+description: "Phase 5, at the start of every build phase, in plan mode (Shift+Tab until plan mode on)."
+lastVerified: 2026-11-12
+sidebar:
+  order: 9
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt8_1 from '~/data/templates/en/t8-1.txt?raw';
+
+| Item | Detail |
+|---|---|
+| **When** | Phase 5, at the start of every build phase, in plan mode (`Shift+Tab` until *plan mode on*). |
+| **What you provide** | The phase number and the issue number. |
+| **Output and location** | A plan to approve (gate G5); then branch, commits, pull request. |
+
+<TemplateBlock id="t8-1" code={tplt8_1} lang="text" title="Prompt · Proceed with Build Phase NN" />
+
+**Short variant** for small, very clear phases, on a branch you have already created: `/implement #<n>`.

@@ -1,0 +1,25 @@
+---
+title: "T5 · Documento di architettura tecnica"
+description: "Fase 3, subito dopo T4; aggiornato quando un ADR cambia l'architettura."
+lastVerified: 2026-11-12
+sidebar:
+  order: 6
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt5_1 from '~/data/templates/it/t5-1.txt?raw';
+import tplt5_2 from '~/data/templates/it/t5-2.txt?raw';
+
+| Voce | Dettaglio |
+|---|---|
+| **Quando** | Fase 3, subito dopo T4; aggiornato quando un ADR cambia l'architettura. |
+| **Cosa fornisci** | Nulla oltre ai documenti già esistenti; le tue risposte se Claude trova decisioni mancanti. |
+| **Output e posizione** | `docs/03-architecture.md`, con diagrammi Mermaid. |
+
+## Prompt
+
+<TemplateBlock id="t5-1" code={tplt5_1} lang="text" title="Prompt (EN) · scrivere l'architettura" />
+
+## Template
+
+<TemplateBlock id="t5-2" code={tplt5_2} lang="markdown" title="docs/03-architecture.md" />

@@ -1,0 +1,36 @@
+# <Product> — Product Specification
+Version 1.0 · Status: DRAFT | APPROVED (YYYY-MM-DD, by <owner>) · Single source of truth
+Links: spec issue <URL> · wayfinder map <URL> · architecture docs/03-architecture.md
+
+## 1. Vision and objectives (vision statement; 3-5 objectives with target dates)
+## 2. Problem statement (user perspective)
+## 3. Target users and personas (persona cards: goals, pains, context, tech savviness)
+## 4. Use cases (who, when, why; frequency)
+## 5. Solution overview (user perspective)
+## 6. Core functionalities (MVP)
+| ID | Capability | Priority (Must/Should/Could) | Notes |
+## 7. User stories
+US-001 As a <persona>, I want <capability>, so that <benefit>.
+  - Given <context>, when <action>, then <outcome>.
+## 8. User journeys
+### J1 <name>: steps, happy path, edge cases, empty / loading / error states
+## 9. Functional requirements
+FR-001 The system shall ... (serves US-00x)
+## 10. Non-functional requirements
+Performance (e.g. LCP < 2.5 s) · availability · security · privacy/GDPR · accessibility
+(WCAG 2.2 AA) · languages · browsers/devices · scalability · monthly cost ceiling
+## 11. UI/UX requirements
+Design principles · key screens (links to mockups) · navigation map · design system ·
+responsive rules · tone of copy · empty, loading and error states
+## 12. Technical architecture (summary; details in docs/03-architecture.md)
+## 13. Data model (core entities and relationships; summary)
+## 14. APIs and external integrations (service, purpose, data exchanged)
+## 15. Authentication and authorisation (methods; roles x permissions matrix)
+## 16. Security and privacy (personal data inventory, retention, data location, consents)
+## 17. Technology stack (choice -> ADR link)
+## 18. Deployment and hosting (environments, providers, regions)
+## 19. Testing decisions (seams, what is tested at which level, critical journeys for E2E)
+## 20. Analytics and success criteria (metrics, targets, events to track)
+## 21. Out of scope / explicit exclusions (and why)
+## 22. Risks and open questions
+## 23. Change log of this spec (date, change, PR link)

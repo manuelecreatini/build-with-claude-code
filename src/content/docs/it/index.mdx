@@ -1,0 +1,67 @@
+---
+title: Build with Claude Code
+description: Un playbook open source e interattivo per portare qualsiasi prodotto digitale dall'idea alla produzione con Claude Code, capendo cosa succede a ogni passo.
+lastVerified: 2026-11-12
+template: splash
+hero:
+  tagline: Un sistema ripetibile per portare qualsiasi prodotto digitale dall'idea alla produzione usando Claude, spiegato passo per passo perché tu sappia cosa succede e perché.
+  actions:
+    - text: Inizia qui
+      link: /it/start/how-to-use/
+      icon: right-arrow
+    - text: Scopri il metodo
+      link: /it/method/overview/
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import Role from '~/components/Role.astro';
+
+## Cosa contiene
+
+<CardGrid>
+  <Card title="Nove fasi" icon="rocket">
+    Dalla prima idea dettata ai miglioramenti settimanali dopo il lancio, con obiettivo, input, output e gate di approvazione per ogni fase.
+  </Card>
+  <Card title="Un build loop in otto passi" icon="random">
+    La stessa routine per ogni fetta del prodotto: piano, implementazione con i test, review, documentazione, merge, handoff.
+  </Card>
+  <Card title="15 template e prompt" icon="document">
+    Prompt pronti all'uso, template di issue e pull request e checklist da copiare nel tuo progetto.
+  </Card>
+  <Card title="Un toolkit verificato" icon="setting">
+    Comandi di Claude Code, skill di Matt Pocock e integrazioni, verificati sulle fonti primarie.
+  </Card>
+</CardGrid>
+
+## Chi fa cosa
+
+Ogni passo è etichettato, così sai sempre chi agisce:
+
+- <Role as="claude" /> Claude lo fa in autonomia.
+- <Role as="you" /> Lo fai tu: una decisione, un account, un pagamento o un test finale.
+- <Role as="gate" /> Claude si ferma e aspetta la tua approvazione esplicita.
+
+## Il percorso
+
+<CardGrid>
+  <LinkCard title="Fase 0 · Setup" description="Installa gli strumenti, collega GitHub, crea il progetto." href="/it/phases/f0-setup/" />
+  <LinkCard title="Fase 1 · Spec preliminare" description="Detta la tua idea e trasformala in una prima spec." href="/it/phases/f1-preliminary-spec/" />
+  <LinkCard title="Fase 2 · Discovery" description="Prendi ogni decisione aperta con /wayfinder." href="/it/phases/f2-discovery/" />
+  <LinkCard title="Fase 3 · Spec e architettura" description="Specifica finale, architettura e costi." href="/it/phases/f3-spec-architecture/" />
+  <LinkCard title="Fase 4 · Build phase" description="Suddividi il prodotto in fette verticali." href="/it/phases/f4-build-phases/" />
+  <LinkCard title="Fase 5 · Il build loop" description="Costruisci ogni fetta con piano, test e review." href="/it/phases/f5-build-loop/" />
+  <LinkCard title="Fase 6 · Integrazione" description="Valida l'intero prodotto end-to-end." href="/it/phases/f6-integration/" />
+  <LinkCard title="Fase 7 · Deploy e lancio" description="Produzione, dominio, monitoraggio, rollback." href="/it/phases/f7-deploy/" />
+  <LinkCard title="Fase 8 · Post-lancio" description="Migliora ogni settimana senza rompere nulla." href="/it/phases/f8-post-launch/" />
+</CardGrid>
+
+## Da tenere a portata di mano
+
+<CardGrid>
+  <LinkCard title="Master checklist" description="Tutte le fasi in una pagina, da copiare nel progetto." href="/it/reference/checklist/" />
+  <LinkCard title="Quick reference" description="La sequenza esatta di comandi e prompt." href="/it/reference/quick-reference/" />
+  <LinkCard title="Template" description="Tutti i 15 template e i prompt bonus." href="/it/templates/" />
+</CardGrid>
+
+Fonti primarie: documentazione ufficiale di Claude Code (code.claude.com) e repository `mattpocock/skills`, verificati l'11–12 novembre 2026. Prezzi e limiti dei servizi di terze parti verificati alla stessa data: cambiano spesso, ricontrollali prima di acquistare.

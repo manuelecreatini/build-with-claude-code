@@ -1,0 +1,16 @@
+---
+import { localeFrom, t, type UiKey } from '~/lib/i18n';
+
+interface Props {
+  /** Who acts: claude | you | gate | builtin | bundled | pocock | integration */
+  as: 'claude' | 'you' | 'gate' | 'builtin' | 'bundled' | 'pocock' | 'integration';
+  /** Gate number, only with as="gate". */
+  n?: number;
+}
+const { as, n } = Astro.props;
+const locale = localeFrom(Astro.currentLocale);
+const label = t(locale, `role.${as}` as UiKey) + (as === 'gate' && n ? ` G${n}` : '');
+const title = t(locale, `role.${as}.title` as UiKey);
+const color = as === 'claude' ? 'claude' : as === 'you' ? 'you' : as === 'gate' ? 'gate' : 'tool';
+---
+<span class="bcc-badge" data-role={color} title={title}>{label}</span>

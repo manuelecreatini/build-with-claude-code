@@ -1,0 +1,69 @@
+---
+title: "Phase 1 · Preliminary spec from dictation"
+description: "Capture the idea completely and without technical filters, then turn it into a first structured draft."
+lastVerified: 2026-11-12
+phase: F1
+---
+
+import Role from '~/components/Role.astro';
+
+| Item | Detail |
+|---|---|
+| **Goal** | Capture the idea completely and without technical filters, then turn it into a first structured draft. |
+| **Input** | Your voice: 10–20 minutes of free dictation. |
+| **Output** | `docs/00-brain-dump.md` (raw transcript) and `docs/01-preliminary-spec.md` (structured draft with assumptions and open questions). |
+| **Tools** | Wispr Flow, Windows dictation or `/voice`; Claude Code; templates T1 and T2. |
+| **Gate** | <Role as="gate" n={1} /> you approve the preliminary spec. |
+| **Typical time** | 30–90 minutes. |
+
+## Why start with your voice
+
+When you talk, you give context, motivations and examples that you cut when you write. No technical term is needed in this phase: we will decide architecture, frameworks and databases later. Your job is to describe the *problem*, the *people* and the *experience*; Claude's job is to give it structure and flag what is missing.
+
+## Step 1 — Get ready to dictate
+
+- **Wispr Flow** <Role as="integration" />: you turn it on with a key and it types into any application, cleaning up filler words and repetitions. The free plan (2,000 words per week on Windows and Mac) is enough for one or two 10–15 minute sessions.
+- **Windows dictation**: `Win+H`, free and already installed.
+- **`/voice`** <Role as="builtin" />: dictation inside Claude Code (requires a claude.ai account).
+
+Open `docs/00-brain-dump.md` in VS Code, place the cursor and dictate. You can speak in your own language: Claude handles the translation in the next steps.
+
+## Step 2 — Dictate following the script
+
+Follow the script in template T1 (part A): thirteen prompts, from "what I want to build" to "the doubts I have". The order doesn't matter. Tell concrete stories ("on a Tuesday evening the coach opens the app and…"), say what you *don't* want, mention products you admire and why. Repetitions and contradictions are perfectly fine: Claude will bring them to the surface.
+
+## Step 3 — Turn the transcript into a preliminary spec
+
+Save the file, open Claude Code in the project folder and paste the prompt from template T1 (part B). Claude:
+
+1. reads `docs/00-brain-dump.md`;
+2. writes `docs/01-preliminary-spec.md` with the structure of template T2;
+3. marks what it infers as `[ASSUMPTION]` and what it proposes as `[SUGGESTION]`, keeping it apart from what you said;
+4. lists contradictions and open questions, ordered by impact;
+5. gives you back a ten-line summary and the five most important questions.
+
+## Step 4 — Review, answer, approve
+
+Read the draft (15 minutes). Answer the open questions directly in the chat, by voice if you like; ask Claude to update the document. Two or three rounds are enough: don't aim for perfection, Phase 2 will dig into every point. Then commit: `docs: preliminary spec v0.1`.
+
+:::note[When to use Claude chat in this phase]
+For market research, competitor analysis, naming or a first exploration of the idea, use a Project on claude.ai dedicated to the product. Save the useful conclusions in `docs/research/` (one file per topic) so they enter the repository and Claude Code can use them in Phase 2.
+:::
+
+:::danger[GATE G1 · You approve the preliminary spec]
+Approve when, rereading the draft, you recognise your idea: problem, users, experience and differentiation are described in your words and every assumption Claude made is marked. It doesn't need to be complete.
+:::
+
+:::tip[Definition of Done · Phase 1]
+- [ ] `docs/00-brain-dump.md` contains the raw transcript.
+- [ ] `docs/01-preliminary-spec.md` follows template T2, with the *Assumptions*, *Contradictions* and *Open questions* sections filled in.
+- [ ] The five most important open questions have an answer or are explicitly deferred to Phase 2.
+- [ ] Commit done and gate G1 passed.
+:::
+
+### Common mistakes
+
+- Describing technical solutions ("we need a Postgres database") instead of problems and behaviours.
+- Dictating for two minutes: without stories and details, the draft will be generic.
+- Silently accepting the assumptions marked `[ASSUMPTION]`: they are exactly the points to check.
+- Trying to close every decision here: that is Phase 2's job.

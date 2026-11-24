@@ -1,0 +1,47 @@
+---
+title: "Phase 5 · The build loop"
+description: "Implement the build phases one at a time, each verified, documented and merged into main, without losing quality or context."
+lastVerified: 2026-11-12
+phase: F5
+---
+
+import Role from '~/components/Role.astro';
+
+| Item | Detail |
+|---|---|
+| **Goal** | Implement the build phases one at a time, each verified, documented and merged into `main`, without losing quality or context. |
+| **Input** | A `BP-NN` issue on the frontier (dependencies closed), spec, architecture, ADRs, `docs/STATUS.md`. |
+| **Output** | For each phase: a merged pull request with green tests, the issue closed with a summary, documentation and `STATUS.md` updated. |
+| **Tools** | Plan mode, `/implement`, `/tdd`, review (`/mattpocock-skills:code-review`, `/code-review`), `/handoff`, `/compact`, `/context`, `gh`. |
+| **Gate** | <Role as="gate" n={5} /> each phase's plan; <Role as="gate" n={6} /> acceptance and merge. |
+| **Typical time** | 1–3 hours of your time per phase; Claude works longer on its own. |
+
+```mermaid
+flowchart TD
+    S1["1 · Start the phase<br/>plan mode, plan"]
+    S2["2 · Implement<br/>TDD where it matters"]
+    S3["3 · Human action<br/>when needed"]
+    S4["4 · Review and tests<br/>automated and manual"]
+    S5["5 · Documentation<br/>STATUS, ADR, glossary"]
+    S6["6 · Close the phase<br/>PR, CI, merge"]
+    S7["7 · Handoff<br/>/handoff at the boundary"]
+    S8["8 · Context<br/>/context, /compact, /clear"]
+    S1 -->|"GATE G5 · you approve the plan"| S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+    S5 --> S6
+    S6 -->|"GATE G6 · you accept and merge"| S7
+    S7 --> S8
+    S8 -->|"then the next phase on the frontier"| S1
+    classDef step fill:#E7F4F4,stroke:#0E7C7B,color:#1F2328
+    classDef cross fill:#FFF4E5,stroke:#C2410C,color:#1F2328,stroke-dasharray: 5 5
+    class S1,S2,S4,S5,S6,S7 step
+    class S3,S8 cross
+```
+
+*At the centre of the loop is a build phase: **BP-NN** = 1 issue · 1 branch · 1 session · 1 pull request; then you move on to the next phase on the frontier. Dashed border = cross-cutting steps (3 and 8), which may be needed at any time.*
+
+:::note[Why the order of the eight steps differs from the brief]
+The brief had: start, implementation, human action, documentation, handoff, `/compact`, review and tests, close. In the playbook **review and tests come right after implementation** (step 4), because there is no point documenting or handing over unverified code; documentation and closing follow (5 and 6); **handoff and context management** (7 and 8) are boundary operations, between one phase and the next or when the context fills up. Human action (3) and context control (8) are *cross-cutting*: they can kick in at any moment.
+:::

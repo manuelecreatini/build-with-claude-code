@@ -1,0 +1,31 @@
+## Automated checks
+- [ ] Typecheck clean            (npm run typecheck)
+- [ ] Lint clean                 (npm run lint)
+- [ ] Unit + integration green   (npm test)
+- [ ] E2E for touched journeys   (npm run test:e2e)
+- [ ] Full suite green (regression) and production build OK (npm run build)
+- [ ] CI green on this PR; preview deployment available
+
+## Test-first evidence
+- [ ] Tests written before the code for business rules / permissions / payments / data
+
+## Acceptance criteria -> evidence
+| Criterion | Evidence (test name, screenshot, recording) | Status |
+|-----------|---------------------------------------------|--------|
+
+## Manual check by the owner (on the preview URL)
+- [ ] Happy path works end to end
+- [ ] Edge cases: empty data, invalid input, slow network
+- [ ] Mobile viewport; keyboard-only navigation; readable error messages
+- [ ] No errors in the browser console
+
+## Security quick check
+- [ ] User A cannot read or change user B's data (authorisation tested)
+- [ ] Server-side validation of inputs; no secrets in code, logs or commits
+- [ ] RLS enabled on new tables; /security-review run if auth, payments or personal data
+
+## Data
+- [ ] Migrations apply on an empty database; seed data works
+
+## Review
+- [ ] Code review findings resolved (standards + spec)

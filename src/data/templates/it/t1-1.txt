@@ -1,0 +1,15 @@
+1.  In una frase: che cosa voglio costruire.
+2.  Il problema: chi lo vive, quando, come lo risolve oggi, quanto gli costa
+    (tempo, soldi, frustrazione).
+3.  Gli utenti: ruoli, quanti sono, quanto sono pratici di tecnologia; chi usa e chi paga.
+4.  Una storia: un utente tipo, dal primo accesso al momento in cui dice "wow".
+    Racconta i passaggi uno per uno.
+5.  Cosa devono poter fare: azioni concrete con verbi (creare, invitare, pagare, esportare...).
+6.  Come deve apparire e "sentirsi": stile, tono, dispositivi (telefono, computer), lingue.
+7.  Prodotti che ammiro e cosa prendo da ciascuno; prodotti a cui NON voglio somigliare.
+8.  Cosa rende diversa la mia idea; perché un utente dovrebbe cambiare abitudine.
+9.  I dati: cosa inseriscono gli utenti, cosa vedono, da quali strumenti arrivano o dove vanno.
+10. Il modello di business: chi paga, quanto, quando (anche solo ipotesi).
+11. Vincoli: budget, scadenze, privacy e GDPR, cosa NON deve fare.
+12. Successo: tre numeri che a tre mesi dal lancio mi direbbero che funziona.
+13. Dubbi, rischi e cose che non so.

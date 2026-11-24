@@ -1,0 +1,62 @@
+---
+title: "Step 4 — Review and tests"
+description: "Tests are not optional for critical features. Every phase closes only with all checks green."
+lastVerified: 2026-11-12
+phase: F5
+---
+
+import Role from '~/components/Role.astro';
+
+Tests are not optional for critical features. Every phase closes only with all checks green.
+
+| Level | What it checks | Tool | Typical command | When |
+|---|---|---|---|---|
+| Types | Data consistency in the code | TypeScript | `npm run typecheck` | Always, before every commit |
+| Lint | Common errors and style | ESLint | `npm run lint` | Always |
+| Unit | One isolated function or module | Vitest | `npm test` | Rules, calculations, transformations |
+| Integration | Modules working together: API and database | Vitest + test database | `npm test` | Every phase that touches data |
+| End-to-end | A real user journey in the browser | Playwright | `npm run test:e2e` | Critical journeys |
+| Build | That the app compiles for production | Next.js | `npm run build` | Before the pull request |
+| Manual | Experience, copy, look, mobile | You, with Claude's help | `npm run dev`, preview URL | Every phase |
+
+The three main automated levels form the so-called test pyramid[^32]. BP-01 fixes the exact commands and they go into `CLAUDE.md`.
+
+## Regressions
+
+A regression[^33] is found by running the *whole* suite, not just the new tests: Claude runs it at the end of every phase, and CI repeats it on every pull request. For every bug fixed, a test that reproduces it is added first.
+
+## Code review: complementary tools
+
+- `/mattpocock-skills:code-review` <Role as="pocock" />: a review on two axes, *standards* (the repository's rules and a classic list of code smells) and *spec* (does it faithfully implement the issue?), with two parallel subagents. It is the one `/implement` calls at the end of the work.
+- `/code-review` <Role as="bundled" />: looks for correctness bugs in the current diff; it accepts an effort level and `--fix` to apply the fixes. The `ultra` level starts a multi-agent review in the cloud (3 free runs with Pro and Max, then credits).
+- `/simplify` <Role as="bundled" />: four agents in parallel look for simplifications and reuse; it doesn't look for bugs.
+- `/security-review` <Role as="builtin" />: analyses the branch's changes against the remote's main branch looking for vulnerabilities. Mandatory in phases that touch login, permissions, payments or personal data.
+
+## Manual testing
+
+Start the app locally (`npm run dev`, then [http://localhost:3000](http://localhost:3000)) or open the preview URL Vercel generates for every pull request. You can get help:
+
+- `/run` <Role as="bundled" /> starts and uses the app to show the change working; `/verify` <Role as="bundled" /> builds it, runs it and observes the result to confirm the change does what it should. Run `/run-skill-generator` once to teach both of them how your project starts.
+- Claude in Chrome: "Open http://localhost:3000, sign in as the test coach, create a training plan and report any console error".
+
+Always try: the happy path, three edge cases (empty data, invalid data, slow network), the mobile layout, keyboard-only navigation, the readability of error messages.
+
+## Checking the acceptance criteria
+
+In the pull request Claude fills in the *criterion → evidence* table (test name or screenshot) required by template T10. A criterion without evidence is not met.
+
+## Test level by project type
+
+| Project type | Mandatory minimum | Recommended |
+|---|---|---|
+| Showcase site, landing page | Types, lint, build, basic E2E (home, contact form). | Lighthouse, link checking. |
+| Internal tool, dashboard | Plus: unit tests on calculations, integration tests on data access. | E2E on the main flows, tests with realistic data. |
+| SaaS with login and payments | TDD on authentication, permissions, payments and data integrity; integration on API and database; E2E from sign-up to payment to key action; `/security-review`. | `/code-review ultra` before launch. |
+| Mobile app (Expo) | Unit tests on the logic; E2E on the main flows with a mobile tool. | Tests on real iOS and Android devices. |
+| App with AI features | Tests with a mocked model; an evaluation set (*eval*) for the prompts. | `/claude-api build-eval` to build the evaluation set. |
+
+**TDD yes**: business rules, calculations, permissions, payments, data transformations, bug fixes. **TDD optional**: purely visual layouts, prototypes, throwaway scripts.
+
+[^32]: **Unit test**: checks a small isolated piece, and is fast. **Integration test**: checks that several pieces work together (for example API and database). **End-to-end (E2E)**: simulates a real user in the browser from start to finish. You need many unit tests, a good number of integration tests and a few E2E tests on the critical journeys.
+
+[^33]: **Regression**: a defect in something that used to work, introduced by a later change.

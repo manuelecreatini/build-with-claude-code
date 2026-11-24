@@ -1,0 +1,101 @@
+---
+title: "Checklist · Master checklist di progetto"
+description: "Da stampare o copiare in docs/STATUS.md all'inizio di ogni progetto. Ogni blocco corrisponde a una fase; i gate sono in grassetto."
+lastVerified: 2026-11-12
+sidebar:
+  order: 1
+---
+
+Da stampare o copiare in `docs/STATUS.md` all'inizio di ogni progetto. Ogni blocco corrisponde a una fase; i gate sono in grassetto.
+
+#### F0 · Setup (una volta per PC)
+
+- [ ] Claude Pro o Max attivo; account GitHub.
+- [ ] Git, GitHub CLI, Node.js LTS, VS Code, Claude Code installati e verificati.
+- [ ] `gh auth login` completato.
+- [ ] Plugin `mattpocock-skills` installato; `/skills` lo mostra.
+- [ ] Riga di stato con contesto; `/autocompact 200k`.
+
+#### F0 · Setup (ogni progetto)
+
+- [ ] Cartella fuori da OneDrive; `git init`.
+- [ ] Scaffolding: `CLAUDE.md` (T0), `docs/`, template GitHub, `.gitignore`, `.env.example`, `.claude/settings.json`.
+- [ ] Repository privato creato e pubblicato.
+- [ ] `/setup-matt-pocock-skills`: GitHub, label di default, single-context.
+- [ ] Label `build-phase` e `tech-debt`.
+
+#### F1 · Spec preliminare
+
+- [ ] 10–20 minuti di dettatura con il copione T1-A.
+- [ ] `docs/00-brain-dump.md` salvato.
+- [ ] Prompt T1-B eseguito; `docs/01-preliminary-spec.md` creato.
+- [ ] Assunzioni e contraddizioni riviste; 5 domande principali chiarite o rimandate.
+- [ ] **G1** spec preliminare approvata; commit.
+
+#### F2 · Discovery
+
+- [ ] Sessione 1: `/wayfinder` + T3; destinazione chiara e delimitata.
+- [ ] Mappa e decision ticket controllati su GitHub (sono domande, non compiti).
+- [ ] Un ticket per sessione: `/clear` → `/wayfinder <mappa>`.
+- [ ] Scelte tra prototipi fatte da te.
+- [ ] ADR per stack, hosting, autenticazione, dati, pagamenti; `GLOSSARY.md`.
+- [ ] Verifica finale: «Map clear».
+- [ ] **G2** nessuna decisione aperta.
+
+#### F3 · Spec finale e architettura
+
+- [ ] `/to-spec <mappa>`; seam di test confermati.
+- [ ] T4: `docs/02-product-spec.md` con ID US/FR/NFR e criteri Given/When/Then.
+- [ ] T5: `docs/03-architecture.md` con diagrammi e costi.
+- [ ] Mockup o prototipi per le schermate incerte.
+- [ ] Revisione critica con subagent; problemi critici risolti.
+- [ ] **G3** spec v1.0 approvata; commit.
+
+#### F4 · Build phase
+
+- [ ] `/to-tickets` con i vincoli T6.
+- [ ] Proposta rivista: dimensioni, ordine, dipendenze, azioni umane.
+- [ ] Tabella di copertura US/FR → BP senza buchi.
+- [ ] **G4** approvazione; issue pubblicate.
+- [ ] `docs/04-build-plan.md` e `STATUS.md` aggiornati.
+
+#### F5 · Per ogni build phase
+
+- [ ] Preflight: `main` aggiornato, `/context`.
+- [ ] Plan mode + T8; **G5** piano approvato.
+- [ ] Branch `bp-NN-slug`; TDD ai seam; commit piccoli.
+- [ ] Azioni umane gestite con T9; nessun segreto in chat.
+- [ ] Tipi, lint, test, E2E, build verdi; review fatta; `/security-review` se serve.
+- [ ] Anteprima provata da te; T10 compilato nella PR.
+- [ ] Documentazione aggiornata.
+- [ ] **G6** merge squash; issue chiusa con riepilogo.
+- [ ] Handoff (T11) e `/clear` prima della fase successiva.
+
+#### F6 · Integrazione
+
+- [ ] Scope congelato; `main` verde.
+- [ ] T13: tracciabilità e integration review.
+- [ ] Sicurezza: `/security-review`, autorizzazioni, RLS, `npm audit`.
+- [ ] `/code-review ultra` sulla PR di release (SaaS).
+- [ ] Collaudo con 2–3 utenti reali; bug bash.
+- [ ] **G7** Go: zero S1, S2 chiusi o accettati.
+
+#### F7 · Deploy e lancio
+
+- [ ] Vercel e Supabase di produzione (piani commerciali); regione UE.
+- [ ] Variabili e segreti nei pannelli; `.env.example` completo.
+- [ ] Migrazioni applicate; RLS; backup e ripristino provati.
+- [ ] CI e protezione di `main`; deploy automatico.
+- [ ] Dominio, HTTPS, DNS per le email.
+- [ ] Sentry, PostHog, uptime monitor con alert.
+- [ ] Runbook di rollback e incidenti; rollback provato.
+- [ ] Pagine legali; checklist T14; tag `v1.0.0`.
+
+#### F8 · Post-lancio (ogni settimana)
+
+- [ ] `/triage` delle nuove issue; gravità ai bug.
+- [ ] Review operativa T15 in `docs/ops/`.
+- [ ] Priorità RICE; scelta del percorso per dimensione della modifica.
+- [ ] Ogni modifica passa dal build loop (G5, G6).
+- [ ] Release taggata, CHANGELOG e note.
+- [ ] Ogni due settimane: `/improve-codebase-architecture`; ogni mese: dipendenze e sicurezza.

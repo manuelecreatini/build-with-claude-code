@@ -1,0 +1,4 @@
+Prepare this week's ops review in docs/ops/<YYYY-WW>.md using the template below. Gather data
+from GitHub issues/PRs, and from Sentry, PostHog and Vercel if their connectors are available
+(otherwise leave the fields for me to fill). Run /triage on issues labelled needs-triage first.
+Compute RICE for the top 10 candidate items. Summarise in Italian the 3 decisions I need to take.

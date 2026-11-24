@@ -1,0 +1,25 @@
+Proceed with Build Phase <NN> (issue #<n>).
+
+Before writing any code:
+1. Read the issue with its comments (gh issue view <n> --comments), docs/STATUS.md, the spec
+   sections it references, the relevant ADRs, GLOSSARY.md and the code areas involved.
+2. Check that every blocking issue is closed and that main is green. If not, stop and tell me.
+3. Present your plan in Italian (technical terms in English):
+   a. what the user will be able to do at the end;
+   b. approach, modules touched and why; confirm or correct the "expected modules" list;
+   c. test seams and the tests you will write first (/tdd), mapped to acceptance criteria;
+   d. risks, assumptions, anything out of scope you noticed (list it, do not fix it);
+   e. human actions you need from me, as HUMAN ACTION REQUIRED blocks;
+   f. the Definition of Done checks you will run.
+Wait for my approval.
+
+After approval, follow the /implement discipline:
+- Create branch bp-<NN>-<slug> from an up-to-date main.
+- Use /tdd at the agreed seams. Small commits (Conventional Commits). Run typecheck and single
+  test files often; the full suite, lint and build at the end.
+- Touch nothing outside the issue scope. No new dependency without asking.
+- Run the code review (/mattpocock-skills:code-review) and fix the findings; run
+  /security-review if this phase touches auth, permissions, payments or personal data.
+- Update the docs required by CLAUDE.md, push, open the PR with the template, and report:
+  acceptance criteria -> evidence table, what I must test manually on the preview, and any
+  new issue you created.

@@ -1,0 +1,15 @@
+### HUMAN ACTION REQUIRED ###
+What:   <one line: e.g. "Create a Stripe test account and add the test keys">
+Type:   decision | credential | account | payment | configuration | legal | manual test
+Why:    <what is blocked and why only you can do it>
+Options (decisions only):
+        A) <option> — pros / cons / cost / reversible?
+        B) <option> — pros / cons / cost / reversible?
+        Recommended: <A or B, one-line reason>
+Steps:  1. Go to <URL> -> <menu> -> <button>
+        2. <next exact step>
+        3. Put the value in .env.local as STRIPE_SECRET_KEY=...   (never paste it in chat)
+Verify: <command or check that proves it worked, e.g. "npm run dev, then open /billing">
+Time:   ~<n> min        Cost: <amount per month, or "none">
+Meanwhile I will: <safe parallel work, or "nothing: this phase is blocked">
+Reply with: "done" | your choice (A/B) | your questions

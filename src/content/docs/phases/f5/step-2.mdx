@@ -1,0 +1,24 @@
+---
+title: "Step 2 — Implement (TDD where it matters)"
+description: "After approval Claude:"
+lastVerified: 2026-11-12
+phase: F5
+---
+
+import Role from '~/components/Role.astro';
+
+After approval Claude:
+
+- creates the `bp-07-<slug>` branch from an up-to-date `main`;
+- for business logic, permissions, payments and data transformations uses `/tdd` <Role as="pocock" />, which follows the red-green-refactor cycle[^29] one vertical slice at a time;
+- runs the type check and individual test files often, the full suite at the end;
+- makes small commits with messages in Conventional Commits format[^30];
+- touches nothing outside the scope: whatever it notices it lists as "out of scope", and it will become a new issue.
+
+This is exactly the discipline of the `/implement` <Role as="pocock" /> skill, which prompt T8 builds on. For small, very clear phases you can skip plan mode and type `/implement #<number>` directly on a branch you have already created.
+
+**While Claude works** you can watch, interrupt with `Esc` and correct the direction, ask side questions with `/btw` without cluttering the conversation, or go back with `/rewind`.
+
+[^29]: **TDD** (*test-driven development*): first you write a test that describes the expected behaviour and fails (*red*), then the minimum code to make it pass (*green*), finally you improve the code while keeping the tests green (*refactor*). It gives Claude an objective "it works" signal.
+
+[^30]: **Conventional Commits**: a convention for commit messages with a prefix that states the type of change: `feat:` (feature), `fix:` (fix), `docs:`, `test:`, `refactor:`, `chore:` (maintenance). It makes the history readable and lets you generate the changelog.

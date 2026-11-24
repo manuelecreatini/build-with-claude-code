@@ -1,0 +1,40 @@
+---
+title: "T11 · Handoff: prompt e checklist"
+description: "Fine di una fase se continui in una nuova sessione; contesto in zona rossa; fine giornata; cambio di focus; Claude confuso."
+lastVerified: 2026-11-12
+sidebar:
+  order: 12
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt11_1 from '~/data/templates/it/t11-1.txt?raw';
+import tplt11_2 from '~/data/templates/it/t11-2.txt?raw';
+import tplt11_3 from '~/data/templates/it/t11-3.txt?raw';
+
+| Voce | Dettaglio |
+|---|---|
+| **Quando** | Fine di una fase se continui in una nuova sessione; contesto in zona rossa; fine giornata; cambio di focus; Claude confuso. |
+| **Cosa fornisci** | Una frase su cosa farà la prossima sessione. |
+| **Output e posizione** | Un file Markdown nella cartella temporanea (`%TEMP%` su Windows), più commit, commento sulla issue e `STATUS.md` aggiornati prima. |
+
+## 1. Prima dell'handoff
+
+<TemplateBlock id="t11-1" code={tplt11_1} lang="text" title="Prompt (EN) · mettere al sicuro lo stato" />
+
+## 2. L'handoff
+
+<TemplateBlock id="t11-2" code={tplt11_2} lang="text" title="Claude Code · /handoff con l'argomento" />
+
+Annota il percorso del file che Claude stampa alla fine.
+
+## 3. La ripresa
+
+<TemplateBlock id="t11-3" code={tplt11_3} lang="text" title="Claude Code · nuova conversazione" />
+
+## Checklist di qualità dell'handoff
+
+- [ ] Il lavoro è committato e pubblicato sul branch; la issue ha un commento di avanzamento.
+- [ ] Il documento cita issue, pull request, commit e ADR invece di ricopiarli.
+- [ ] Contiene i prossimi passi esatti e le skill suggerite.
+- [ ] Non contiene segreti.
+- [ ] Il riassunto di ripresa di Claude corrisponde a ciò che sai: se no, correggilo subito.

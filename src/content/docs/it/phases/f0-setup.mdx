@@ -1,0 +1,364 @@
+---
+title: "Fase 0 · Setup del progetto e dell'ambiente"
+description: "Avere PC, account e repository pronti: Claude Code installato e collegato a GitHub, skill di Matt Pocock configurate, struttura standard delle cartelle."
+lastVerified: 2026-11-12
+phase: F0
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Role from '~/components/Role.astro';
+
+| Voce | Dettaglio |
+|---|---|
+| **Obiettivo** | Avere PC, account e repository pronti: Claude Code installato e collegato a GitHub, skill di Matt Pocock configurate, struttura standard delle cartelle. |
+| **Input** | Solo il nome provvisorio del progetto. |
+| **Output** | Strumenti installati; repository GitHub privato con struttura standard; `CLAUDE.md`; `.claude/settings.json`; skill configurate; label GitHub. |
+| **Strumenti** | winget, Git, GitHub CLI (`gh`), Node.js, VS Code, Claude Code, plugin `mattpocock-skills`. |
+| **Gate** | Nessuno. |
+| **Tempo tipico** | 1–2 ore la prima volta sul PC; 10–15 minuti per ogni nuovo progetto. |
+
+## 0.1 Claude Chat o Claude Code?
+
+Sono due modi diversi di lavorare con lo stesso modello. La regola pratica è una sola: **se l'output deve vivere nel repository, usa Claude Code**.
+
+|  | Claude (chat: web, desktop, mobile) | Claude Code |
+|---|---|---|
+| Cos'è | Assistente conversazionale con Projects, artifact, ricerca, design, documenti e modalità vocale. | Agente di coding: legge e modifica i file del progetto, esegue comandi, usa Git e GitHub. |
+| Dove gira | claude.ai e app Claude. | Terminale (CLI), estensione per VS Code e JetBrains, app desktop (sezione Code), web su claude.ai/code con sessioni in cloud, mobile per avviare e seguire le sessioni. |
+| Accesso ai file | Upload manuale o connettori. | Accesso diretto alla cartella del progetto, entro i permessi che concedi. |
+| Usalo per | Esplorare l'idea, ricerca di mercato e competitor, naming, mockup visivi, imparare un concetto, rivedere un documento. | Tutto ciò che diventa file, issue, commit o pull request: spec, piano, codice, test, deploy. |
+| Output | Conversazione o artifact. | File nel repository, commit, issue, pull request. |
+
+**Quale interfaccia di Claude Code usare.** Consiglio la CLI[^6] dentro il terminale integrato di VS Code[^7]: vedi i file a sinistra, Claude in basso, e hai a disposizione tutti i comandi descritti in questo playbook. L'app desktop (sezione Code) è un'alternativa valida, più visuale per diff e anteprime; se un comando non è disponibile in un'interfaccia grafica, usalo dalla CLI. Claude Code sul web (claude.ai/code) esegue le sessioni in cloud sui tuoi repository GitHub: utile per lanciare lavoro dal telefono, non come ambiente principale all'inizio.
+
+## 0.2 Account e costi di partenza
+
+| Servizio | Piano consigliato | Costo | Note |
+|---|---|---|---|
+| Claude | Pro; passa a Max se esaurisci spesso i limiti | Pro 20 USD/mese (17 USD/mese con pagamento annuale di 200 USD); Max da 100 USD/mese | Claude Code è incluso in Pro e Max, non nel piano gratuito. Controlla i consumi con `/usage`. |
+| GitHub | Free | 0 | Repository privati; 2.000 minuti al mese di GitHub Actions per i repository privati, gratis sui runner standard per quelli pubblici. |
+| Wispr Flow (opz.) | Flow Basic, poi Pro se detti molto | Basic gratis (2.000 parole a settimana su Mac/Windows); Pro 15 USD/mese, 12 con pagamento annuale | Alternative gratuite: dettatura di Windows (`Win+H`) e `/voice` in Claude Code. |
+| Vercel, Supabase, Sentry, PostHog | Piani gratuiti in sviluppo | 0 fino al lancio | I costi di produzione sono analizzati nella Fase 7. |
+
+## 0.3 Installa gli strumenti (una volta per PC)
+
+<Tabs syncKey="os">
+<TabItem label="Windows">
+
+Apri PowerShell come utente normale ed esegui un comando alla volta. `winget`[^8] installa Git[^9], la GitHub CLI, Node.js[^10] e VS Code; l'ultimo comando installa Claude Code con l'installer nativo, che si aggiorna da solo.
+
+**PowerShell · installazione**
+```powershell
+winget install --id Git.Git -e
+winget install --id GitHub.cli -e
+winget install --id OpenJS.NodeJS.LTS -e
+winget install --id Microsoft.VisualStudioCode -e
+irm https://claude.ai/install.ps1 | iex
+```
+
+Chiudi e riapri il terminale (serve perché i nuovi programmi entrino nel PATH[^11]), poi verifica: ogni comando deve stampare un numero di versione.
+
+**PowerShell · verifica**
+```powershell
+git --version
+gh --version
+node --version
+npm --version
+claude --version
+```
+
+In alternativa, Claude Code si installa anche con `winget install Anthropic.ClaudeCode`: in quel caso non si aggiorna da solo e va aggiornato con `winget upgrade Anthropic.ClaudeCode`.
+
+</TabItem>
+<TabItem label="macOS">
+
+Apri l'app Terminale. Con [Homebrew](https://brew.sh) installa Git, la GitHub CLI, Node.js e VS Code; l'ultimo comando installa Claude Code con l'installer nativo.
+
+**Terminale · installazione**
+```bash
+brew install git gh node
+brew install --cask visual-studio-code
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+Chiudi e riapri il terminale, poi verifica: ogni comando deve stampare un numero di versione.
+
+**Terminale · verifica**
+```bash
+git --version
+gh --version
+node --version
+npm --version
+claude --version
+```
+
+</TabItem>
+<TabItem label="Linux">
+
+Apri un terminale. Con Homebrew su Linux i comandi sono gli stessi di macOS, tranne VS Code: `--cask` funziona solo su macOS, quindi installa VS Code da code.visualstudio.com o con il gestore di pacchetti della tua distribuzione.
+
+**Terminale · installazione**
+```bash
+brew install git gh node
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+Chiudi e riapri il terminale, poi verifica: ogni comando deve stampare un numero di versione.
+
+**Terminale · verifica**
+```bash
+git --version
+gh --version
+node --version
+npm --version
+claude --version
+```
+
+</TabItem>
+</Tabs>
+
+:::caution[Se qualcosa non funziona]
+Se `claude` non viene trovato, il terminale non vede ancora il PATH: riaprilo o segui la pagina *Troubleshoot installation* della documentazione. Se PowerShell blocca gli script (*running scripts is disabled on this system*), la stessa pagina indica la correzione. Una volta dentro Claude Code, `/doctor` esegue un controllo completo dell'installazione.
+:::
+
+## 0.4 Configura Git e collega GitHub
+
+**PowerShell · Git e GitHub**
+```powershell
+git config --global user.name "<Nome Cognome>"
+git config --global user.email "<email-del-tuo-account-github>"
+git config --global init.defaultBranch main
+gh auth login      # GitHub.com -> HTTPS -> Login with a web browser
+gh auth status     # deve risultare "Logged in"
+```
+
+**Come Claude Code si collega a GitHub.** Non serve un'integrazione dedicata: Claude Code usa `git` e `gh` dal tuo terminale, con le tue credenziali. Così può creare repository, issue[^12], branch[^13], commit[^14] e pull request[^15]. Le skill di Matt Pocock usano lo stesso `gh`. Due integrazioni opzionali: `/install-github-app` installa l'app GitHub di Claude e, se vuoi, i workflow di GitHub Actions per menzionare `@claude` in issue e pull request; `/web-setup` collega il tuo account GitHub alle sessioni cloud di Claude Code usando le credenziali di `gh`.
+
+## 0.5 Primo avvio di Claude Code e impostazioni consigliate
+
+Apri un terminale in qualsiasi cartella, scrivi `claude` e completa il login nel browser con il tuo account Claude. Poi, dentro Claude Code:
+
+**Claude Code · impostazioni una tantum**
+```text
+/doctor
+/statusline show the model, the current git branch and context window usage as a percentage
+/autocompact 200k
+```
+
+- `/doctor` <Role as="bundled" /> controlla installazione, impostazioni, estensioni e `CLAUDE.md`; propone correzioni che Claude applica dopo la tua conferma.
+- `/statusline` <Role as="builtin" /> configura la riga di stato: descrivi a parole cosa vuoi vedere. Avere sempre sotto gli occhi la percentuale di contesto usato è la base della gestione del contesto (Fase 5, passo 8).
+- `/autocompact 200k` <Role as="builtin" /> fissa a 200.000 token la soglia di compattazione automatica: è la rete di sicurezza del budget prudente di questo playbook. Il valore viene salvato nelle impostazioni utente; per tornare al default usa `/autocompact auto`.
+
+In VS Code installa anche l'estensione *Claude Code* dal marketplace delle estensioni: ti dà il pannello grafico e la visualizzazione delle differenze, ma continua a usare la CLI nel terminale integrato quando ti serve un comando specifico.
+
+## 0.6 Installa le skill di Matt Pocock (una volta per PC)
+
+Le skill[^16] di Matt Pocock sono un insieme open source (licenza MIT) di procedure di ingegneria: discovery, specifica, suddivisione del lavoro, TDD, review, handoff. Per Claude Code il metodo consigliato dal README è il plugin, che si aggiorna da solo:
+
+**PowerShell · installazione del plugin**
+```powershell
+claude plugin install mattpocock-skills@claude-plugins-official
+```
+
+In alternativa, dentro una sessione: `/plugin install mattpocock-skills@claude-plugins-official`. Se Claude Code risponde che il marketplace non esiste, aggiungilo con `/plugin marketplace add anthropics/claude-plugins-official` e ripeti. Verifica con `/skills`: devi vedere, tra le altre, `wayfinder`, `handoff`, `to-spec`, `to-tickets`, `tdd`.
+
+:::caution[Tre dettagli che evitano problemi]
+- **Nomi delle skill.** Le skill di un plugin hanno il prefisso del plugin: `/mattpocock-skills:wayfinder`. Funziona anche il nome breve (`/wayfinder`) se nessun altro comando lo usa già.
+- **Conflitto su `code-review`.** Claude Code ha già un `/code-review` incluso: il nome breve avvia quello. La review di Matt Pocock si richiama con `/mattpocock-skills:code-review`.
+- **Un solo metodo di installazione.** L'alternativa `npx skills@latest add mattpocock/skills` copia le skill come file modificabili nel progetto, da aggiornare a mano con `npx skills@latest update`. Non usare entrambi i metodi: avresti ogni skill due volte.
+:::
+
+## 0.7 Crea il progetto e il repository (ogni nuovo progetto)
+
+### Passo 1 — Cartella e repository locale
+
+Crea i progetti in una cartella fuori da OneDrive, per esempio `C:\dev`: la sincronizzazione cloud entra in conflitto con le migliaia di file che un progetto JavaScript genera.
+
+**PowerShell · nuovo progetto**
+```powershell
+mkdir C:\dev\<nome-progetto>
+cd C:\dev\<nome-progetto>
+git init
+claude
+```
+
+### Passo 2 — Struttura standard e CLAUDE.md
+
+Dentro Claude Code incolla il prompt di scaffolding qui sotto. Claude crea cartelle e file della struttura standard (sezione 0.8), il `CLAUDE.md` di progetto dal template T0 e il file dei permessi.
+
+**Prompt (EN) · scaffolding iniziale**
+```text
+Set up this empty repository with the standard structure of my AI-Assisted Build Playbook.
+Create, with short placeholder content where relevant:
+- CLAUDE.md using the template I paste below (keep it under 120 lines)
+- README.md (project name, one-line purpose, "how to run" section to fill later)
+- docs/00-brain-dump.md, docs/STATUS.md (status template), docs/adr/ (empty, with .gitkeep),
+  docs/testing/, docs/runbooks/, docs/research/
+- .github/ISSUE_TEMPLATE/build-phase.md, .github/ISSUE_TEMPLATE/bug-report.md,
+  .github/pull_request_template.md (templates I paste below)
+- .gitignore suitable for a Node.js/Next.js project, including .env, .env.local, .env.*.local
+- .env.example (empty for now, with a comment explaining its purpose)
+- CHANGELOG.md in "Keep a Changelog" format with an [Unreleased] section
+- .claude/settings.json with the permissions block I paste below
+Do not install any dependency and do not create application code yet.
+When done, list the files you created and stop.
+
+<paste here: T0 CLAUDE.md, B2 STATUS.md, T7 issue template, B4 bug report, B3 PR template,
+ and the settings.json block from section 0.7 of the playbook>
+```
+
+Il blocco dei permessi da incollare nel prompt impedisce a Claude di leggere i file con i segreti e di forzare la storia di Git:
+
+**.claude/settings.json**
+```json
+{
+  "permissions": {
+    "defaultMode": "default",
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.local)",
+      "Read(./.env.production)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)"
+    ]
+  }
+}
+```
+
+### Passo 3 — Primo commit e repository su GitHub
+
+**PowerShell (o comando ! in Claude Code)**
+```powershell
+git add -A
+git commit -m "chore: project scaffold"
+gh repo create <nome-progetto> --private --source=. --remote=origin --push
+```
+
+Dentro Claude Code puoi eseguire un comando di terminale anteponendo `!` (per esempio `!git status`): comando e risultato entrano nel contesto della conversazione. Oppure chiedi semplicemente a Claude di farlo. Tieni il repository **privato**: le issue di decisione della Fase 2 contengono ragionamenti di business.
+
+### Passo 4 — Configura le skill per questo repository
+
+**Claude Code**
+```text
+/setup-matt-pocock-skills
+```
+
+`/setup-matt-pocock-skills` <Role as="pocock" /> esplora il repository, ti mostra cosa ha trovato e ti fa tre domande, una alla volta, proponendo la risposta consigliata:
+
+1. **Issue tracker**: rispondi *GitHub* (default se il remote punta a GitHub). Alternative: GitLab, file Markdown[^17] locali, oppure un altro strumento descritto a parole.
+2. **Label di triage**: accetta le cinque predefinite (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). La domanda compare solo se la skill `triage` è installata, come avviene con il plugin.
+3. **Documenti di dominio**: accetta *single-context*, cioè un `GLOSSARY.md` e una cartella `docs/adr/` alla radice.
+
+Ti mostra le bozze prima di scriverle. Alla fine aggiunge al `CLAUDE.md` una sezione `## Agent skills` e crea `docs/agents/issue-tracker.md`, `docs/agents/domain.md`, `docs/agents/triage-labels.md`; crea su GitHub le label mancanti. Va eseguita una volta per repository.
+
+### Passo 5 — Label aggiuntive
+
+**PowerShell**
+```powershell
+gh label create build-phase --color 0E7C7B --description "Vertical slice of the product, one PR"
+gh label create tech-debt --color 6B4FA0 --description "Technical debt to pay down"
+```
+
+## 0.8 Struttura standard delle cartelle
+
+La stessa struttura per ogni progetto: tu e Claude sapete sempre dove cercare. Le cartelle del codice (`src/`, `tests/`, `supabase/`) nascono con la prima build phase.
+
+**Struttura del repository**
+```text
+<nome-progetto>/
+├── CLAUDE.md                  # istruzioni permanenti per Claude (T0), < 200 righe
+├── GLOSSARY.md                # lingua del dominio (creato e aggiornato dalle skill)
+├── README.md                  # cos'è e come si avvia
+├── CHANGELOG.md               # storia delle versioni
+├── .env.example               # NOMI delle variabili d'ambiente, mai i valori
+├── .gitignore                 # esclude .env, .env.local, node_modules, build
+├── .claude/
+│   └── settings.json          # permessi condivisi del progetto
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── build-phase.md     # template T7
+│   │   └── bug-report.md      # template B4
+│   ├── pull_request_template.md   # template B3
+│   └── workflows/ci.yml       # controlli automatici (nasce in BP-01)
+├── docs/
+│   ├── 00-brain-dump.md       # trascrizione grezza della dettatura (F1)
+│   ├── 01-preliminary-spec.md # spec preliminare (F1)
+│   ├── 02-product-spec.md     # SPEC FINALE = fonte di verità (F3)
+│   ├── 03-architecture.md     # architettura tecnica (F3)
+│   ├── 04-build-plan.md       # indice delle build phase + grafo dipendenze (F4)
+│   ├── STATUS.md              # stato corrente: la prima cosa che Claude legge
+│   ├── adr/                   # Architecture Decision Records: 0001-titolo.md
+│   ├── agents/                # creati da /setup-matt-pocock-skills
+│   ├── research/              # ricerche e analisi (F1-F2)
+│   ├── testing/               # checklist QA, tracciabilità, integration review
+│   ├── runbooks/              # deploy, rollback, incidenti (F7)
+│   └── ops/                   # review operative settimanali (F8)
+├── src/                       # codice dell'applicazione (da BP-01)
+├── tests/                     # unit/, integration/, e2e/ (da BP-01)
+└── supabase/migrations/       # migrazioni del database, se usi Supabase
+```
+
+| Documento | Chi lo crea | Fase | Regola |
+|---|---|---|---|
+| `CLAUDE.md` | Claude da T0 | F0 | Breve, sotto le 200 righe: solo regole sempre valide. |
+| `docs/01-preliminary-spec.md` | Claude da T1 e T2 | F1 | Bozza: non è vincolante. |
+| `GLOSSARY.md`, `docs/adr/` | Skill di grilling e domain modeling | F2–F8 | Un termine, un significato; ADR solo in aggiunta, mai riscritti. |
+| `docs/02-product-spec.md` | Claude da `/to-spec` e T4 | F3 | Fonte di verità: si modifica solo con pull request. |
+| `docs/03-architecture.md` | Claude da T5 | F3 | Ogni scelta importante rimanda a un ADR. |
+| `docs/04-build-plan.md` | Claude da T6 | F4 | Indice; il dettaglio vive nelle issue. |
+| `docs/STATUS.md` | Claude | F0–F8 | Aggiornato alla fine di ogni build phase. |
+
+## 0.9 Integrazioni opzionali
+
+- **Connettori Supabase e Vercel** <Role as="integration" />. Se li hai già collegati su claude.ai, Claude Code può usarli quando accedi con lo stesso account; controlla con `/mcp`. Sono server MCP[^18]: permettono a Claude di leggere tabelle, log e deploy senza che tu copi nulla a mano.
+- **Claude in Chrome** <Role as="integration" />. Con `/chrome` o avviando `claude --chrome`, Claude può aprire la tua app nel browser, cliccare e leggere la console: utilissimo per il test manuale assistito.
+- **Skill di Supabase** <Role as="integration" />. Supabase pubblica istruzioni per agenti su sviluppo e sicurezza: `npx skills add supabase/agent-skills`. Da valutare quando scegli Supabase in Fase 2.
+
+## Checklist: tutto pronto prima di iniziare
+
+- [ ] Claude Pro o Max attivo; login completato in Claude Code.
+- [ ] `git`, `gh`, `node`, `npm`, `claude` rispondono con un numero di versione.
+- [ ] `gh auth status` risulta collegato al tuo account.
+- [ ] Riga di stato con percentuale di contesto; `/autocompact 200k` impostato.
+- [ ] Plugin `mattpocock-skills` installato e visibile in `/skills`.
+- [ ] Cartella del progetto fuori da OneDrive; repository GitHub privato creato e collegato.
+- [ ] Struttura standard, `CLAUDE.md` e `.claude/settings.json` presenti nel primo commit.
+- [ ] `/setup-matt-pocock-skills` eseguito; label `build-phase` e `tech-debt` create.
+
+:::tip[Definition of Done · Fase 0]
+Da un terminale nuovo, `claude` si avvia nella cartella del progetto, `/skills` mostra le skill di Matt Pocock, `gh repo view --web` apre il repository privato con la struttura standard e il `CLAUDE.md` contiene la sezione `Agent skills`.
+:::
+
+### Errori comuni
+
+- Lavorare in una cartella sincronizzata con OneDrive o Dropbox.
+- Installare le skill con entrambi i metodi (plugin e `npx`), ritrovandosi ogni skill doppia.
+- Dimenticare `gh auth login`: le skill non riescono a creare issue.
+- Aggiungere al primo commit un file `.env` con valori reali.
+- Non riaprire il terminale dopo le installazioni e concludere che qualcosa «non funziona».
+
+[^6]: **CLI** (*command-line interface*): un programma che si usa scrivendo comandi in un **terminale**, la finestra di testo del sistema operativo. Su Windows il terminale standard è **PowerShell**.
+
+[^7]: **VS Code** (Visual Studio Code) è un editor di codice gratuito di Microsoft: a sinistra vedi i file del progetto, in basso un terminale integrato. Un editor di questo tipo si chiama anche **IDE**.
+
+[^8]: **winget** è il gestore di pacchetti di Windows: installa e aggiorna programmi da riga di comando, senza scaricare installer a mano.
+
+[^9]: Su Windows il pacchetto *Git for Windows* include anche **Git Bash**, un terminale in stile Linux. Claude Code lo usa per eseguire comandi Bash; senza, ripiega su PowerShell.
+
+[^10]: **Node.js** esegue JavaScript fuori dal browser ed è la base della maggior parte delle web app moderne. Include **npm**, il gestore delle librerie (*dipendenze*) di un progetto, e **npx**, che esegue uno strumento senza installarlo in modo permanente.
+
+[^11]: **PATH**: l'elenco delle cartelle in cui il sistema cerca i programmi quando scrivi un comando. Un terminale aperto prima dell'installazione non vede i nuovi programmi.
+
+[^12]: **Issue**: una scheda di lavoro su GitHub (bug, attività, decisione) con titolo, descrizione, etichette (*label*), assegnatario e commenti. In questo playbook le issue contengono sia le decisioni (Fase 2) sia le build phase (Fase 4).
+
+[^13]: **Branch**: una linea di sviluppo parallela. Si lavora su un branch separato e si riporta il lavoro sul branch principale (`main`) solo quando è pronto.
+
+[^14]: **Commit**: un salvataggio permanente e descritto di un insieme di modifiche. La sequenza dei commit è la storia del progetto e permette di tornare a qualsiasi punto precedente.
+
+[^15]: **Pull request (PR)**: la richiesta di unire (*merge*) un branch in `main`. Mostra le differenze, esegue i controlli automatici e raccoglie la revisione prima dell'integrazione.
+
+[^16]: **Skill**: un pacchetto di istruzioni (un file `SKILL.md` più eventuali file di supporto) che insegna a Claude una procedura. Si invoca scrivendo `/nome-skill`; alcune Claude le usa anche da solo quando il compito lo richiede. Un **plugin** è un pacchetto che distribuisce skill e altre estensioni, installato da un *marketplace*.
+
+[^17]: **Markdown**: un formato di testo semplice in cui pochi simboli indicano titoli (`#`), elenchi (`-`) e caselle da spuntare (`- [ ]`). GitHub lo mostra formattato. Tutti i documenti del playbook sono file Markdown (`.md`).
+
+[^18]: **MCP** (*Model Context Protocol*): lo standard con cui Claude si collega a strumenti e dati esterni (database, servizi cloud, applicazioni). Un **connettore** o **server MCP** espone a Claude le azioni di un servizio.

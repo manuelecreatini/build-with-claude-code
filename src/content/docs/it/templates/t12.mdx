@@ -1,0 +1,34 @@
+---
+title: "T12 · Checklist di gestione del contesto"
+description: "Sempre: a inizio sessione, ogni volta che cambi zona, prima di /clear."
+lastVerified: 2026-11-12
+sidebar:
+  order: 13
+---
+
+| Voce | Dettaglio |
+|---|---|
+| **Quando** | Sempre: a inizio sessione, ogni volta che cambi zona, prima di `/clear`. |
+| **Cosa fornisci** | Nulla: è una routine personale. |
+| **Output e posizione** | Nessun file: è la tua disciplina di lavoro. |
+
+:::tip[Inizio sessione]
+- [ ] Un solo obiettivo per la sessione (una build phase, un ticket della mappa).
+- [ ] Riga di stato visibile; `/context` per il punto di partenza.
+- [ ] Claude ha letto `docs/STATUS.md` (o il documento di handoff).
+:::
+
+:::caution[Durante (euristica a zone, budget 200.000 token)]
+- [ ] **Sotto 100.000**: lavora normalmente.
+- [ ] **100.000–150.000**: finisci il passo; niente lavori nuovi grandi; se continui sulla stessa fase, `/compact focus on <fase, decisioni, test, prossimi passi>`.
+- [ ] **150.000–200.000**: al primo punto stabile esegui T11 (handoff) e `/clear`.
+- [ ] **Oltre 200.000**: interviene `/autocompact 200k`; verifica che lo stato sia nei file.
+- [ ] Domande laterali con `/btw`; ricerche ampie a un subagent; errori incollati con 20 righe di contesto, non log interi.
+:::
+
+:::danger[Prima di /clear o di chiudere la sessione]
+- [ ] Le decisioni prese sono in un ADR, in un commento di issue o nella spec.
+- [ ] Il lavoro è committato e pubblicato; `STATUS.md` è aggiornato.
+- [ ] Se il lavoro continua: handoff fatto e percorso del file annotato.
+- [ ] Se il lavoro non è collegato al precedente: basta `/clear`.
+:::

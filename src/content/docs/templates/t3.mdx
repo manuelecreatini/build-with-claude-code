@@ -1,0 +1,40 @@
+---
+title: "T3 · Interview instructions for /wayfinder"
+description: "Phase 2: at the first session (drawing the map), at every following session (one ticket), at the final check."
+lastVerified: 2026-11-12
+sidebar:
+  order: 4
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt3_1 from '~/data/templates/en/t3-1.txt?raw';
+import tplt3_2 from '~/data/templates/en/t3-2.txt?raw';
+import tplt3_3 from '~/data/templates/en/t3-3.txt?raw';
+
+| Item | Detail |
+|---|---|
+| **When** | Phase 2: at the first session (drawing the map), at every following session (one ticket), at the final check. |
+| **What you provide** | The map's URL or number after the first session; your answers, one at a time. |
+| **Output and location** | A `wayfinder:map` on GitHub, closed decision tickets, ADRs in `docs/adr/`, `GLOSSARY.md`. |
+
+## Before session 1 (checklist)
+
+- [ ] `/setup-matt-pocock-skills` run with GitHub as the tracker; `gh auth status` ok.
+- [ ] `docs/01-preliminary-spec.md` approved (gate G1) and in the repository.
+- [ ] Private repository; 60–90 free minutes for the first session.
+
+## Session 1 — draw the map
+
+<TemplateBlock id="t3-1" code={tplt3_1} lang="text" title="Claude Code · text to paste after /wayfinder" />
+
+## Sessions 2…N — one ticket per session
+
+<TemplateBlock id="t3-2" code={tplt3_2} lang="text" title="Claude Code" />
+
+## Final check of the map (before gate G2)
+
+<TemplateBlock id="t3-3" code={tplt3_3} lang="text" title="Prompt · is the map complete?" />
+
+## How to answer (a reminder for you)
+
+Answer with the why; say "I don't know, give me options and a recommendation" when you need to; ask for a prototype or some research for irreversible choices; use `/wait-what` if a question is unclear; choose between a prototype's variants yourself.

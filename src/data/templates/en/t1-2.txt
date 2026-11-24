@@ -1,0 +1,17 @@
+You are my product strategist. docs/00-brain-dump.md contains a raw voice transcript in which
+I describe a product idea. It is messy, may mix languages, and contains repetitions
+and contradictions.
+
+Turn it into a PRELIMINARY product spec at docs/01-preliminary-spec.md, using the template
+in section T2 of my playbook (pasted below). Rules:
+1. Do not invent facts. Anything you infer is marked [ASSUMPTION].
+2. Keep my wording for vision, problem and differentiation: tidy it, do not dilute it.
+3. Separate what I said from what you propose: mark proposals [SUGGESTION].
+4. Turn vague wishes into concrete user capabilities: "As a <persona>, I can <action>...".
+5. List every contradiction you notice and every important question I did not answer,
+   ranked by impact on what we would build.
+6. No technical architecture. Mention a technology only if I explicitly required it.
+7. Write the document in English. Then reply to me in plain English with a 10-line summary and
+   the 5 most important open questions, one per line.
+
+<paste template T2 here>

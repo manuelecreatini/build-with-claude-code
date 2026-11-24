@@ -1,0 +1,20 @@
+---
+title: "T9 · Human intervention instructions"
+description: "Every time Claude needs you (Phases 5–7). The format is already in CLAUDE.md (T0)."
+lastVerified: 2026-11-12
+sidebar:
+  order: 10
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt9_1 from '~/data/templates/en/t9-1.txt?raw';
+
+| Item | Detail |
+|---|---|
+| **When** | Every time Claude needs you (Phases 5–7). The format is already in `CLAUDE.md` (T0). |
+| **What you provide** | Your action or decision, then a reply: "done", an option or a question. |
+| **Output and location** | The block in the chat; if the action is delayed, a comment on the issue and the `ready-for-human` label. |
+
+<TemplateBlock id="t9-1" code={tplt9_1} lang="text" title="Format · HUMAN ACTION REQUIRED" />
+
+**Rules for Claude** (already in `CLAUDE.md`): don't make up values; don't carry on with placeholders; don't ask for secrets in the chat; if the action can't be done right away, comment on the issue, apply `ready-for-human` and move to another unblocked phase. For long procedures, propose `/wizard`.

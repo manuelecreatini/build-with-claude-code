@@ -1,0 +1,19 @@
+## What and why
+BP-NN · <title> — Closes #<issue>
+<Smallest visual that makes the change clear: screenshot, diagram, or 3 bullets.>
+
+## Evidence it works
+- Before / after: <screenshots or recording>
+- Tests added or updated: <list>; CI: <status>
+- Acceptance criteria:
+  - [ ] <criterion> -> <evidence>
+
+## Merge danger
+- Door: two-way (easy to undo) | one-way (hard to undo: migrations, data, public API)
+- Blast radius: <who or what is affected if this is wrong>
+
+## Docs updated
+- [ ] STATUS.md  - [ ] ADR  - [ ] GLOSSARY  - [ ] CHANGELOG  - [ ] .env.example
+
+## Out of scope noticed
+- <items, each with a new issue link>

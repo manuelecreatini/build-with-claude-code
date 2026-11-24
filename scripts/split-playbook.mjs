@@ -1,0 +1,537 @@
+#!/usr/bin/env node
+/**
+ * Splits a playbook Markdown source into Starlight MDX pages.
+ *
+ *   node scripts/split-playbook.mjs <source.md> <locale>     (locale: it | en)
+ *
+ * IT source: indicative-playbook/AI-Assisted-Build-Playbook_IT.md (canonical, never edited)
+ * EN source: content-source/playbook.en.md (translation of the IT source, same structure)
+ *
+ * What it does:
+ *  - splits on top-level sections (and on template / build-loop sub-sections), ignoring
+ *    headings inside code fences;
+ *  - writes frontmatter (title, description, lastVerified, phase, sidebar order);
+ *  - converts GitHub callouts (> [!NOTE]) into Starlight asides (:::note);
+ *  - converts role markers (**[CLAUDE]**, **[TU]**, **[GATE G3]**...) into <Role /> badges;
+ *  - rewrites in-document anchor links to the page that now holds the heading;
+ *  - copies footnote definitions into every page that references them;
+ *  - escapes text that MDX would otherwise parse as JSX;
+ *  - extracts template code blocks into src/data/templates/<locale>/ for the template builder.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import GithubSlugger from 'github-slugger';
+
+const [, , sourceArg, locale] = process.argv;
+if (!sourceArg || !['it', 'en'].includes(locale)) {
+  console.error('Usage: node scripts/split-playbook.mjs <source.md> <it|en>');
+  process.exit(1);
+}
+
+const ROOT = process.cwd();
+const LAST_VERIFIED = '2026-11-12';
+const DOCS_DIR = path.join(ROOT, 'src/content/docs', locale === 'en' ? '' : locale);
+const TPL_DIR = path.join(ROOT, 'src/data/templates', locale);
+const URL_PREFIX = locale === 'en' ? '/' : `/${locale}/`;
+
+const src = fs.readFileSync(path.resolve(sourceArg), 'utf8').replace(/\r\n/g, '\n');
+const lines = src.split('\n');
+
+// ---------------------------------------------------------------------------
+// 1. Page map. `re` matches the heading text (IT or EN); `level` is its depth.
+// ---------------------------------------------------------------------------
+/** @typedef {{re: RegExp, level: number, slug?: string, drop?: boolean, order?: number, phase?: string, alias?: string}} Rule */
+/** @type {Rule[]} */
+const RULES = [
+  { re: /^The AI-Assisted Build Playbook$/, level: 1, drop: true },
+  { re: /^(Indice|Contents)$/, level: 2, drop: true },
+  { re: /^(Prima di iniziare|Before you start)/, level: 2, slug: 'start/how-to-use', order: 1 },
+  { re: /^(Parte|Part) I ·/, level: 1, drop: true, alias: 'method/overview' },
+  { re: /^(Capitolo|Chapter) 1 ·/, level: 2, slug: 'method/overview', order: 1 },
+  { re: /^(Capitolo|Chapter) 2 ·/, level: 2, slug: 'method/workflow', order: 2 },
+  { re: /^(Capitolo|Chapter) 3 ·/, level: 2, slug: 'method/roles', order: 3 },
+  { re: /^(Parte|Part) II ·/, level: 1, drop: true, alias: 'phases/f0-setup' },
+  { re: /^(Fase|Phase) 0 ·/, level: 2, slug: 'phases/f0-setup', phase: 'F0' },
+  { re: /^(Fase|Phase) 1 ·/, level: 2, slug: 'phases/f1-preliminary-spec', phase: 'F1' },
+  { re: /^(Fase|Phase) 2 ·/, level: 2, slug: 'phases/f2-discovery', phase: 'F2' },
+  { re: /^(Fase|Phase) 3 ·/, level: 2, slug: 'phases/f3-spec-architecture', phase: 'F3' },
+  { re: /^(Fase|Phase) 4 ·/, level: 2, slug: 'phases/f4-build-phases', phase: 'F4' },
+  { re: /^(Fase|Phase) 5 ·/, level: 2, slug: 'phases/f5-build-loop', phase: 'F5' },
+  // Build-loop sub-pages (level 3 inside phase 5).
+  { re: /^(Prima di ogni sessione|Before every session)/, level: 3, slug: 'phases/f5/preflight', phase: 'F5' },
+  ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({
+    re: new RegExp(`^(Passo|Step) ${n} —`),
+    level: 3,
+    slug: `phases/f5/step-${n}`,
+    phase: 'F5',
+    onlyIn: 'phases/f5-build-loop',
+  })),
+  { re: /^(Dopo l'ultima build phase|After the last build phase)/, level: 3, slug: 'phases/f5/after-the-loop', phase: 'F5' },
+  { re: /^(Fase|Phase) 6 ·/, level: 2, slug: 'phases/f6-integration', phase: 'F6' },
+  { re: /^(Fase|Phase) 7 ·/, level: 2, slug: 'phases/f7-deploy', phase: 'F7' },
+  { re: /^(Fase|Phase) 8 ·/, level: 2, slug: 'phases/f8-post-launch', phase: 'F8' },
+  { re: /^(Parte|Part) III ·/, level: 1, drop: true, alias: 'templates' },
+  { re: /^Template ·/, level: 2, slug: 'templates', order: 0 },
+  ...Array.from({ length: 16 }, (_, n) => ({
+    re: new RegExp(`^T${n} ·`),
+    level: 3,
+    slug: `templates/t${n}`,
+    order: n + 1,
+  })),
+  { re: /^B1–B4/, level: 3, slug: 'templates/bonus', order: 20 },
+  { re: /^(Parte|Part) IV ·/, level: 1, drop: true, alias: 'toolkit/tools' },
+  { re: /^Toolkit · (Strumenti|Tools)/, level: 2, slug: 'toolkit/tools', order: 1 },
+  { re: /^Toolkit · .*Matt Pocock/, level: 2, slug: 'toolkit/pocock-skills', order: 2 },
+  { re: /^Toolkit · (Comandi|Claude Code commands)/, level: 2, slug: 'toolkit/commands', order: 3 },
+  { re: /^(Parte|Part) V ·/, level: 1, drop: true, alias: 'reference/checklist' },
+  { re: /^Checklist ·/, level: 2, slug: 'reference/checklist', order: 1 },
+  { re: /^(Riferimento|Reference) ·/, level: 2, slug: 'reference/quick-reference', order: 2 },
+  { re: /^(Appendici|Appendices)$/, level: 1, drop: true, alias: 'reference/glossary' },
+  { re: /^(Appendice|Appendix) A ·/, level: 2, slug: 'reference/glossary', order: 3 },
+  { re: /^(Appendice|Appendix) B ·/, level: 2, slug: 'reference/sources', order: 4 },
+];
+
+const ROLE_MARKERS = {
+  CLAUDE: 'claude',
+  TU: 'you',
+  YOU: 'you',
+  'BUILT-IN': 'builtin',
+  'BUNDLED SKILL': 'bundled',
+  'SKILL MATT POCOCK': 'pocock',
+  'MATT POCOCK SKILL': 'pocock',
+  INTEGRAZIONE: 'integration',
+  INTEGRATION: 'integration',
+};
+const ASIDES = { NOTE: 'note', WARNING: 'caution', TIP: 'tip', CAUTION: 'danger' };
+
+// ---------------------------------------------------------------------------
+// 2. Walk the source: find headings outside fences, assign every line to a page.
+// ---------------------------------------------------------------------------
+const slugger = new GithubSlugger();
+/** anchor (github slug in the source) -> { slug, anchor|null } */
+const anchorMap = new Map();
+const unresolvedLinks = new Set();
+/** @type {{rule: Rule, title: string, body: string[]}[]} */
+const pages = [];
+let current = null;
+let inFence = false;
+let currentTop = null; // slug of the current level-2 page, for `onlyIn`
+
+for (const line of lines) {
+  if (/^```/.test(line)) inFence = !inFence;
+  const h = !inFence && /^(#{1,6}) (.+)$/.exec(line);
+  if (h) {
+    const level = h[1].length;
+    const text = h[2].trim();
+    const sourceAnchor = slugger.slug(text);
+    const rule = RULES.find(
+      (r) => r.level === level && r.re.test(text) && (!r.onlyIn || r.onlyIn === currentTop),
+    );
+    if (rule) {
+      if (level <= 2) currentTop = rule.slug ?? null;
+      if (rule.drop) {
+        current = { rule, title: text, body: [] }; // swallowed
+        if (rule.alias) anchorMap.set(sourceAnchor, { slug: rule.alias, anchor: null });
+        continue;
+      }
+      current = { rule, title: text, body: [] };
+      pages.push(current);
+      anchorMap.set(sourceAnchor, { slug: rule.slug, anchor: null });
+      continue;
+    }
+    if (current && !current.rule.drop) {
+      // In-page heading: anchors are regenerated by Astro with the same slugger,
+      // so the in-page anchor is the slug of the text (unique per page).
+      anchorMap.set(sourceAnchor, { slug: current.rule.slug, anchor: null, text });
+    }
+  }
+  if (current) current.body.push(line);
+}
+if (inFence) throw new Error('Unbalanced code fence in source');
+
+// Resolve in-page anchors with a per-page slugger (mirrors what Astro will do).
+for (const page of pages) {
+  const s = new GithubSlugger();
+  let f = false;
+  for (const line of page.body) {
+    if (/^```/.test(line)) f = !f;
+    const h = !f && /^(#{1,6}) (.+)$/.exec(line);
+    if (!h) continue;
+    const text = h[2].trim();
+    const pageAnchor = s.slug(stripInline(text));
+    for (const v of anchorMap.values()) {
+      if (v.text === text && v.slug === page.rule.slug && v.anchor === null) {
+        v.anchor = pageAnchor;
+        break;
+      }
+    }
+  }
+}
+
+// Footnote definitions, collected globally.
+const footnotes = new Map();
+{
+  let f = false;
+  for (let i = 0; i < lines.length; i++) {
+    if (/^```/.test(lines[i])) f = !f;
+    const m = !f && /^\[\^([^\]]+)\]: /.exec(lines[i]);
+    if (m) footnotes.set(m[1], lines[i]);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 3. Transform each page and write it.
+// ---------------------------------------------------------------------------
+fs.mkdirSync(DOCS_DIR, { recursive: true });
+fs.rmSync(TPL_DIR, { recursive: true, force: true });
+fs.mkdirSync(TPL_DIR, { recursive: true });
+const manifest = [];
+const report = [];
+
+for (const page of pages) {
+  const { rule } = page;
+  const isTemplate = rule.slug.startsWith('templates/') && rule.slug !== 'templates';
+  const shift = rule.level - 1; // page title becomes h1; next level becomes h2
+  let body = page.body;
+
+  body = trimBlank(body);
+  body = shiftHeadings(body, shift);
+  body = convertCallouts(body);
+  const tpl = isTemplate ? extractTemplates(body, rule.slug) : { body, blocks: [] };
+  body = tpl.body;
+  manifest.push(...tpl.blocks);
+  body = transformText(body);
+  body = addMissingFootnotes(body);
+  if (rule.slug === 'phases/f0-setup') body = addOsTabs(body);
+
+  const used = new Set();
+  const joined = body.join('\n');
+  if (joined.includes('<Tabs ')) used.add("import { Tabs, TabItem } from '@astrojs/starlight/components';");
+  if (joined.includes('<Role ')) used.add("import Role from '~/components/Role.astro';");
+  if (joined.includes('<TemplateBlock ')) used.add("import TemplateBlock from '~/components/TemplateBlock.astro';");
+  for (const b of tpl.blocks) used.add(`import ${b.importName} from '~/data/templates/${locale}/${b.file}?raw';`);
+
+  const fm = [
+    '---',
+    `title: ${yaml(cleanTitle(page.title))}`,
+    `description: ${yaml(describe(page.body))}`,
+    `lastVerified: ${LAST_VERIFIED}`,
+    rule.phase ? `phase: ${rule.phase}` : null,
+    rule.order !== undefined ? `sidebar:\n  order: ${rule.order}` : null,
+    '---',
+  ].filter(Boolean);
+
+  const out = [...fm, '', ...(used.size ? [...used, ''] : []), ...body, ''].join('\n');
+  const file = path.join(DOCS_DIR, rule.slug === 'templates' ? 'templates/index.mdx' : `${rule.slug}.mdx`);
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, out);
+  report.push(`${rule.slug.padEnd(32)} ${String(body.length).padStart(4)} lines${tpl.blocks.length ? `, ${tpl.blocks.length} template blocks` : ''}`);
+}
+
+fs.writeFileSync(path.join(TPL_DIR, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
+console.log(report.join('\n'));
+console.log(`\n${pages.length} pages written to ${path.relative(ROOT, DOCS_DIR) || '.'}; ${manifest.length} template blocks.`);
+const unresolved = [...unresolvedLinks];
+if (unresolved.length) {
+  console.warn(`\nUnresolved anchors (${unresolved.length}):\n  ${unresolved.join('\n  ')}`);
+  process.exitCode = 1;
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+function trimBlank(arr) {
+  let a = 0;
+  let b = arr.length;
+  while (a < b && !arr[a].trim()) a++;
+  while (b > a && !arr[b - 1].trim()) b--;
+  // Drop the italic tagline that follows part headings and trailing horizontal rules.
+  const out = arr.slice(a, b);
+  while (out.length && /^(-{3,}|\*{3,})$/.test(out[out.length - 1].trim())) out.pop();
+  return trimTrailingBlank(out);
+}
+function trimTrailingBlank(arr) {
+  while (arr.length && !arr[arr.length - 1].trim()) arr.pop();
+  return arr;
+}
+
+function shiftHeadings(arr, shift) {
+  let f = false;
+  return arr.map((l) => {
+    if (/^```/.test(l)) f = !f;
+    if (f || !shift) return l;
+    const m = /^(#{1,6}) (.+)$/.exec(l);
+    if (!m) return l;
+    const lvl = Math.max(2, m[1].length - shift);
+    return `${'#'.repeat(lvl)} ${m[2]}`;
+  });
+}
+
+/** > [!NOTE]\n> **Title**\n>\n> body  ->  :::note[Title]\nbody\n::: */
+function convertCallouts(arr) {
+  const out = [];
+  for (let i = 0; i < arr.length; i++) {
+    const m = /^> \[!(NOTE|WARNING|TIP|CAUTION)\]\s*$/.exec(arr[i]);
+    if (!m) {
+      out.push(arr[i]);
+      continue;
+    }
+    const block = [];
+    i++;
+    while (i < arr.length && /^>/.test(arr[i])) {
+      block.push(arr[i].replace(/^> ?/, ''));
+      i++;
+    }
+    i--;
+    let title = '';
+    const t = /^\*\*(.+)\*\*\s*$/.exec(block[0] ?? '');
+    if (t) {
+      title = t[1];
+      block.shift();
+    }
+    while (block.length && !block[0].trim()) block.shift();
+    out.push(`:::${ASIDES[m[1]]}${title ? `[${title.replace(/[[\]]/g, '')}]` : ''}`, ...block, ':::');
+  }
+  return out;
+}
+
+/** Move fenced blocks of template pages to data files; leave <TemplateBlock /> behind. */
+function extractTemplates(arr, slug) {
+  const id = slug.split('/')[1];
+  const out = [];
+  const blocks = [];
+  for (let i = 0; i < arr.length; i++) {
+    const open = /^```(\w*)\s*$/.exec(arr[i]);
+    if (!open || open[1] === 'mermaid') {
+      out.push(arr[i]);
+      continue;
+    }
+    const lang = open[1] || 'text';
+    const code = [];
+    i++;
+    while (i < arr.length && !/^```\s*$/.test(arr[i])) code.push(arr[i++]);
+    // A bold line right before the fence is the block title.
+    let title = '';
+    let k = out.length - 1;
+    while (k >= 0 && !out[k].trim()) k--;
+    const tm = k >= 0 && /^\*\*(.+)\*\*\s*$/.exec(out[k]);
+    if (tm) {
+      title = tm[1];
+      out.splice(k);
+      trimTrailingBlank(out);
+      out.push('');
+    }
+    const n = blocks.length + 1;
+    const blockId = `${id}-${n}`;
+    const file = `${blockId}.txt`;
+    const importName = `tpl${id.replace(/\W/g, '')}_${n}`;
+    const text = code.join('\n') + '\n';
+    fs.writeFileSync(path.join(TPL_DIR, file), text);
+    blocks.push({ id: blockId, page: slug, file, title, lang, importName, placeholders: placeholders(text) });
+    out.push(`<TemplateBlock id="${blockId}" code={${importName}} lang="${lang}"${title ? ` title=${jsxString(title)}` : ''} />`);
+  }
+  return { body: out, blocks };
+}
+
+function placeholders(text) {
+  const found = new Set();
+  for (const m of text.matchAll(/<([^<>\n]{2,80})>/g)) {
+    const inner = m[1];
+    if (/^\/?[a-z][a-z0-9-]*(\s|$)/.test(inner) && !/[\s'"]/.test(inner.trim().slice(0, 1))) {
+      // Looks like an HTML tag (<details>, </summary>) or a URL: skip lowercase single-word tags.
+      if (/^\/?(details|summary|br|img|a|div|span|p|!--.*)$/i.test(inner.trim())) continue;
+    }
+    if (inner.startsWith('!--') || /^https?:/.test(inner)) continue;
+    found.add(`<${inner}>`);
+  }
+  return [...found];
+}
+
+
+/** Line-level transforms outside code fences and inline code. */
+function transformText(arr) {
+  let f = false;
+  return arr.map((line) => {
+    if (/^```/.test(line)) {
+      f = !f;
+      return line;
+    }
+    if (f || line.startsWith('<TemplateBlock ') || /^:::/.test(line)) return line;
+    return mapOutsideCode(line, (seg) => {
+      let s = seg;
+      // MDX: escape characters that would start JSX / expressions.
+      s = s.replace(/<(https?:\/\/[^>\s]+)>/g, '[$1]($1)');
+      s = s.replace(/\\</g, '<'); // source escapes like \<YYYY-WW> are re-escaped below
+      s = s.replace(/<br\s*\/?>/gi, '\u0000BR\u0000');
+      s = s.replace(/</g, '&lt;').replace(/\{/g, '\\{').replace(/\}/g, '\\}');
+      s = s.replace(/\u0000BR\u0000/g, '<br />');
+      // Role markers.
+      s = s.replace(/\*\*\[GATE G(\d)\]\*\*/g, (_, n) => `<Role as="gate" n={${n}} />`);
+      s = s.replace(/\*\*\[GATE Gn\]\*\*/g, '<Role as="gate" />');
+      s = s.replace(/\*\*\[([A-Z][A-Z -]+)\]\*\*/g, (all, k) =>
+        ROLE_MARKERS[k] ? `<Role as="${ROLE_MARKERS[k]}" />` : all,
+      );
+      // In-document anchors.
+      s = s.replace(/\]\(#([^)\s]+)\)/g, (all, a) => {
+        const target = anchorMap.get(a);
+        if (!target) {
+          unresolvedLinks.add(a);
+          return all;
+        }
+        const base = target.slug === 'templates' ? 'templates/' : `${target.slug}/`;
+        return `](${URL_PREFIX}${base}${target.anchor ? `#${target.anchor}` : ''})`;
+      });
+      return s;
+    });
+  });
+}
+
+/**
+ * F0 section 0.3: the source is written for Windows and mentions macOS/Linux in a note.
+ * Turn it into Windows / macOS / Linux tabs (syncKey "os", so the choice is shared across
+ * pages). The Windows tab keeps the source text verbatim; the other tabs are authored here.
+ */
+function osTabStrings() {
+  return {
+  en: {
+    winAlt:
+      'As an alternative, Claude Code can also be installed with `winget install Anthropic.ClaudeCode`: in that case it does not update itself and you update it with `winget upgrade Anthropic.ClaudeCode`.',
+    mac: [
+      'Open the Terminal app. With [Homebrew](https://brew.sh) install Git, the GitHub CLI, Node.js and VS Code; the last command installs Claude Code with the native installer.',
+      '',
+      '**Terminal · install**',
+      '```bash',
+      'brew install git gh node',
+      'brew install --cask visual-studio-code',
+      'curl -fsSL https://claude.ai/install.sh | bash',
+      '```',
+    ],
+    linux: [
+      'Open a terminal. With Homebrew on Linux the commands are the same as on macOS, except for VS Code: `--cask` works only on macOS, so install VS Code from code.visualstudio.com or with your distribution\'s package manager.',
+      '',
+      '**Terminal · install**',
+      '```bash',
+      'brew install git gh node',
+      'curl -fsSL https://claude.ai/install.sh | bash',
+      '```',
+    ],
+    check: ['Close and reopen the terminal, then check: every command must print a version number.', '', '**Terminal · check**'],
+  },
+  it: {
+    winAlt:
+      'In alternativa, Claude Code si installa anche con `winget install Anthropic.ClaudeCode`: in quel caso non si aggiorna da solo e va aggiornato con `winget upgrade Anthropic.ClaudeCode`.',
+    mac: [
+      "Apri l'app Terminale. Con [Homebrew](https://brew.sh) installa Git, la GitHub CLI, Node.js e VS Code; l'ultimo comando installa Claude Code con l'installer nativo.",
+      '',
+      '**Terminale · installazione**',
+      '```bash',
+      'brew install git gh node',
+      'brew install --cask visual-studio-code',
+      'curl -fsSL https://claude.ai/install.sh | bash',
+      '```',
+    ],
+    linux: [
+      'Apri un terminale. Con Homebrew su Linux i comandi sono gli stessi di macOS, tranne VS Code: `--cask` funziona solo su macOS, quindi installa VS Code da code.visualstudio.com o con il gestore di pacchetti della tua distribuzione.',
+      '',
+      '**Terminale · installazione**',
+      '```bash',
+      'brew install git gh node',
+      'curl -fsSL https://claude.ai/install.sh | bash',
+      '```',
+    ],
+    check: ['Chiudi e riapri il terminale, poi verifica: ogni comando deve stampare un numero di versione.', '', '**Terminale · verifica**'],
+  },
+  };
+}
+
+function addOsTabs(arr) {
+  const t = osTabStrings()[locale];
+  const h = arr.findIndex((l) => /^## 0\.3 /.test(l));
+  const noteStart = arr.findIndex((l, i) => i > h && /^:::note\[/.test(l));
+  const noteEnd = arr.findIndex((l, i) => i > noteStart && l === ':::');
+  const next = arr.findIndex((l, i) => i > h && /^## /.test(l));
+  if (h < 0 || noteStart < 0 || noteEnd < 0 || (next >= 0 && noteEnd > next)) {
+    throw new Error('addOsTabs: F0 section 0.3 no longer has the expected shape; update the script.');
+  }
+  const windows = trimBlank(arr.slice(h + 1, noteStart));
+  const check = ['```bash', 'git --version', 'gh --version', 'node --version', 'npm --version', 'claude --version', '```'];
+  const tab = (label, lines) => [`<TabItem label="${label}">`, '', ...lines, '', '</TabItem>'];
+  const tabs = [
+    '<Tabs syncKey="os">',
+    ...tab('Windows', [...windows, '', t.winAlt]),
+    ...tab('macOS', [...t.mac, '', ...t.check, ...check]),
+    ...tab('Linux', [...t.linux, '', ...t.check, ...check]),
+    '</Tabs>',
+  ];
+  return [...arr.slice(0, h + 1), '', ...tabs, ...arr.slice(noteEnd + 1)];
+}
+
+/** Apply fn to the parts of a line that are not inside `inline code`. */
+function mapOutsideCode(line, fn) {
+  let out = '';
+  let i = 0;
+  while (i < line.length) {
+    const tick = line.indexOf('`', i);
+    if (tick === -1) {
+      out += fn(line.slice(i));
+      break;
+    }
+    out += fn(line.slice(i, tick));
+    let run = 1;
+    while (line[tick + run] === '`') run++;
+    const fence = '`'.repeat(run);
+    const close = line.indexOf(fence, tick + run);
+    if (close === -1) {
+      out += fn(line.slice(tick));
+      break;
+    }
+    out += line.slice(tick, close + run);
+    i = close + run;
+  }
+  return out;
+}
+
+function addMissingFootnotes(arr) {
+  const text = arr.join('\n');
+  const refs = new Set([...text.matchAll(/\[\^([^\]]+)\](?!:)/g)].map((m) => m[1]));
+  const defined = new Set([...text.matchAll(/^\[\^([^\]]+)\]: /gm)].map((m) => m[1]));
+  const missing = [...refs].filter((r) => !defined.has(r) && footnotes.has(r));
+  if (!missing.length) return arr;
+  return [...arr, '', ...missing.flatMap((r) => [transformText([footnotes.get(r)])[0], ''])].slice(0, -1);
+}
+
+function stripInline(s) {
+  return s.replace(/`([^`]*)`/g, '$1').replace(/\*\*|__/g, '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1');
+}
+
+function cleanTitle(t) {
+  return stripInline(t).trim();
+}
+
+/** Description: the phase "Obiettivo/Goal" row if present, else the first prose paragraph. */
+function describe(body) {
+  const goal = body.find((l) => /^\| \*\*(Obiettivo|Goal|Quando|When)\*\* \|/.test(l));
+  let text = goal ? goal.split('|')[2] : '';
+  if (!text) {
+    let f = false;
+    for (const l of body) {
+      if (/^```/.test(l)) {
+        f = !f;
+        continue;
+      }
+      if (f || !l.trim() || /^[#|>:<\-*\d!]/.test(l.trim()) || /^\[\^/.test(l)) continue;
+      text = l;
+      break;
+    }
+  }
+  text = stripInline(text).replace(/\[\^[^\]]+\]/g, '').replace(/\*/g, '').replace(/\s+/g, ' ').trim();
+  if (text.length > 160) text = text.slice(0, 157).replace(/\s+\S*$/, '') + '…';
+  return text || 'Build with Claude Code';
+}
+
+function yaml(s) {
+  return JSON.stringify(s);
+}
+function jsxString(s) {
+  return JSON.stringify(stripInline(s));
+}

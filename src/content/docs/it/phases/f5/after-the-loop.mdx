@@ -1,0 +1,52 @@
+---
+title: "Dopo l'ultima build phase"
+description: "Quando tutte le issue del traguardo sono chiuse, STATUS.md lo dichiara e si passa alla Fase 6."
+lastVerified: 2026-11-12
+phase: F5
+---
+
+import Role from '~/components/Role.astro';
+
+Quando tutte le issue del traguardo sono chiuse, `STATUS.md` lo dichiara e si passa alla Fase 6.
+
+:::tip[Definition of Done · ogni build phase]
+- [ ] Tutti i criteri di accettazione verificati, con evidenza nella pull request.
+- [ ] Test scritti e verdi in locale e in CI; nessuna regressione.
+- [ ] Controllo dei tipi e lint puliti; la build di produzione riesce.
+- [ ] Review eseguita (standard e spec); rilievi risolti; `/security-review` se la fase tocca dati sensibili.
+- [ ] Anteprima provata da te.
+- [ ] Documentazione aggiornata: `STATUS.md`, ADR, glossario, README, CHANGELOG, `.env.example`.
+- [ ] Pull request unita in `main`, branch eliminato, issue chiusa con commento di riepilogo.
+:::
+
+## Errori comuni
+
+- Approvare il piano senza leggerlo: il gate G5 è il punto più economico per correggere la rotta.
+- Due build phase nella stessa sessione o nello stesso branch.
+- Lasciare arrivare il contesto alla compattazione automatica invece di fare handoff.
+- Non provare l'anteprima: i test verdi non garantiscono un'esperienza buona.
+- Accettare dipendenze o servizi nuovi senza un ADR.
+- «Sistemare» codice non correlato durante una fase: va in una issue separata.
+
+## Modalità avanzate (dopo due o tre progetti)
+
+- `/implement-spec` <Role as="pocock" />: implementa un'intera spec su un branch di integrazione, eseguendo in parallelo con subagent tutte le issue pronte della frontiera, e chiude con una review. Richiede una suite di test matura.
+- `/batch` <Role as="bundled" />: per grandi modifiche meccaniche in tutto il codice, suddivise in unità indipendenti eseguite in parallelo in worktree[^36] separati.
+- `/goal` <Role as="builtin" />: Claude continua a lavorare su più turni finché una condizione non è soddisfatta (per esempio «all tests in tests/e2e pass»).
+- Claude Code sul web e `/remote-control`: avviare o seguire una sessione dal telefono; `/teleport` riporta una sessione cloud nel terminale.
+
+[^29]: **TDD** (*test-driven development*): prima si scrive un test che descrive il comportamento atteso e che fallisce (*red*), poi il codice minimo per farlo passare (*green*), infine si migliora il codice mantenendo i test verdi (*refactor*). Dà a Claude un segnale oggettivo di «funziona».
+
+[^30]: **Conventional Commits**: una convenzione per i messaggi di commit con un prefisso che dice il tipo di modifica: `feat:` (funzionalità), `fix:` (correzione), `docs:`, `test:`, `refactor:`, `chore:` (manutenzione). Rende la storia leggibile e permette di generare il changelog.
+
+[^31]: **Webhook**: una notifica automatica che un servizio esterno (per esempio Stripe dopo un pagamento) invia alla tua applicazione chiamando un suo indirizzo web.
+
+[^32]: **Unit test**: verifica un pezzo piccolo isolato, è veloce. **Integration test**: verifica che più pezzi funzionino insieme (per esempio API e database). **End-to-end (E2E)**: simula un utente reale nel browser dall'inizio alla fine. Servono molti unit test, un buon numero di test di integrazione e pochi E2E sui percorsi critici.
+
+[^33]: **Regressione**: un difetto in qualcosa che prima funzionava, introdotto da una modifica successiva.
+
+[^34]: **Squash merge**: unisce tutti i commit della pull request in un unico commit su `main`. La storia principale resta pulita: un commit per build phase.
+
+[^35]: **Token**: l'unità con cui il modello misura il testo (in media circa tre quarti di parola in inglese). **Finestra di contesto**: quanti token il modello può considerare insieme: istruzioni, file letti, output dei comandi, conversazione. Quando si riempie, i dettagli vecchi vengono riassunti e si perde precisione.
+
+[^36]: **Worktree**: una seconda cartella di lavoro collegata allo stesso repository, con il proprio branch. Permette a più sessioni di lavorare in parallelo senza pestarsi i piedi.

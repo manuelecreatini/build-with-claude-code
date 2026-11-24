@@ -1,0 +1,4 @@
+/clear
+/wayfinder <map URL or number>
+# oppure, per un ticket specifico:
+/wayfinder <map URL> <ticket title>

@@ -1,0 +1,128 @@
+---
+title: "Fase 3 · Specifica finale e architettura tecnica"
+description: "Trasformare decisioni e spec preliminare in un'unica fonte di verità: cosa costruiamo, come, con quali limiti e cosa resta fuori."
+lastVerified: 2026-11-12
+phase: F3
+---
+
+import Role from '~/components/Role.astro';
+
+| Voce | Dettaglio |
+|---|---|
+| **Obiettivo** | Trasformare decisioni e spec preliminare in un'unica fonte di verità: cosa costruiamo, come, con quali limiti e cosa resta fuori. |
+| **Input** | Mappa `/wayfinder` chiusa, ADR, `GLOSSARY.md`, `docs/01-preliminary-spec.md`, prototipi e ricerche. |
+| **Output** | `docs/02-product-spec.md` (v1.0), `docs/03-architecture.md`, ADR completi, spec issue su GitHub, `README.md` aggiornato. |
+| **Strumenti** | `/to-spec` <Role as="pocock" />, template T4 e T5, subagent per la revisione critica, Claude Design o `/prototype` per l'interfaccia. |
+| **Gate** | <Role as="gate" n={3} /> approvi spec e architettura. |
+| **Tempo tipico** | 2–4 ore, più il tempo di lettura. |
+
+## I documenti di questa fase e dove vivono
+
+| Documento | Percorso | Contenuto | Creato con |
+|---|---|---|---|
+| Spec issue (epic) | Issue GitHub con label `ready-for-agent` | Sintesi delle decisioni nel formato di `/to-spec`; diventa la issue madre delle build phase. | `/to-spec` |
+| Product spec | `docs/02-product-spec.md` | Spec completa (template T4). **Fonte di verità.** | Prompt T4 |
+| Architettura | `docs/03-architecture.md` | Architettura tecnica (template T5). | Prompt T5 |
+| ADR | `docs/adr/NNNN-titolo.md` | Una decisione difficile da invertire per file. | Skill di grilling, template B1 |
+| Glossario | `GLOSSARY.md` | Termini del dominio e loro significato. | `domain-modeling` |
+| README | `README.md` | Cos'è il progetto e come si avvia. | Claude |
+
+**Perché la fonte di verità è un file e non la issue.** Un file nel repository è versionato insieme al codice, Claude lo legge senza chiamate a GitHub, ogni modifica passa da una pull request con la sua storia, e sopravvive a qualsiasi cambio di strumento. La spec issue creata da `/to-spec` resta utile come issue madre e rimanda al file.
+
+## Passo 1 — Sintetizza le decisioni con /to-spec
+
+**Claude Code**
+```text
+/clear
+/to-spec <URL della mappa wayfinder>
+```
+
+`/to-spec` <Role as="pocock" /> non fa interviste: sintetizza ciò che è già stato deciso (la mappa e i ticket collegati). In ordine:
+
+1. esplora il repository e usa il vocabolario di `GLOSSARY.md`, rispettando gli ADR;
+2. individua i *seam* in cui verranno testate le funzionalità[^22] e ti chiede di confermarli;
+3. scrive la spec con sezioni fisse: *Problem Statement*, *Solution*, *User Stories* (un elenco lungo e numerato), *Implementation Decisions* (senza percorsi di file, che invecchiano in fretta), *Testing Decisions*, *Out of Scope*, *Further Notes*;
+4. la pubblica come issue con la label `ready-for-agent`.
+
+## Passo 2 — Espandi nella spec completa
+
+Il formato di `/to-spec` è eccellente per gli agenti ma non copre tutto ciò che serve a un prodotto: obiettivi, requisiti non funzionali, interfaccia, sicurezza, criteri di successo. Incolla il prompt del template T4: Claude scrive `docs/02-product-spec.md` unendo la spec issue, la mappa, gli ADR e la spec preliminare, con identificativi stabili (`US-001` per le user story[^23], `FR-001` per i requisiti funzionali) che useremo per la tracciabilità fino ai test.
+
+## Passo 3 — Scrivi l'architettura tecnica
+
+Incolla il prompt del template T5. Claude scrive `docs/03-architecture.md` con diagrammi testuali Mermaid[^24], l'elenco delle tecnologie con il rimando all'ADR di ciascuna, il modello dei dati, i flussi di autenticazione, gli ambienti, la strategia di test e i limiti di costo.
+
+### Lo stack di default di questo playbook
+
+Per chi non è ingegnere conviene uno stack noioso, molto diffuso e ben conosciuto da Claude. È un punto di partenza da confermare (o smentire) con un ADR in Fase 2, non un obbligo. I due pilastri sono Next.js[^25] per l'applicazione e Supabase[^26] per dati e accessi.
+
+| Esigenza | Default | Alternativa | Quando scegliere l'alternativa |
+|---|---|---|---|
+| Web app o SaaS | Next.js + TypeScript + Tailwind CSS + shadcn/ui | Astro | Sito di contenuti o vetrina con poche parti interattive. |
+| Backend | Funzioni server di Next.js + Supabase | FastAPI (Python) | Logica pesante di dati o AI scritta in Python. |
+| Database, login, file | Supabase (Postgres, Auth, Storage) | Neon + un servizio di autenticazione dedicato | Database che si spegne quando inattivo, o requisiti di autenticazione aziendali. |
+| Hosting | Vercel | Netlify, Cloudflare, Railway, Render, Fly.io | Processi sempre attivi, container, backend Python. |
+| App mobile | Expo (React Native) + Supabase | Flutter | Team che conosce già Flutter. |
+| Pagamenti | Stripe | Piattaforme *merchant of record* | Vuoi delegare la gestione dell'IVA internazionale. |
+| Email transazionali | Resend | Postmark | — |
+| Funzioni AI | SDK di Anthropic o Vercel AI SDK | — | — |
+| Test | Vitest + Playwright | Jest | Progetto esistente già su Jest. |
+| Monitoring | Sentry + PostHog + Vercel Analytics | — | — |
+
+## Passo 4 — Interfaccia: mockup e prototipi (quando servono)
+
+Se l'aspetto o il comportamento dell'interfaccia sono ancora incerti, chiudili prima del gate G3:
+
+- **Mockup visivi**: `/design <brief>` <Role as="bundled" /> in Claude Code (o la funzione Design nell'app Claude) crea schermate e flussi come tavole modificabili, esportabili in PNG o PDF. Richiede una sessione in cui gli artifact sono disponibili.
+- **Prototipi di comportamento**: `/prototype` <Role as="pocock" /> costruisce un prototipo usa-e-getta, un singolo file HTML per domande di stato e logica oppure varianti di interfaccia molto diverse tra loro, alternabili da una sola pagina (quest'ultima modalità richiede che esista già il codice dell'app).
+
+Allega i risultati alla spec (sezione UI/UX) o alla issue pertinente.
+
+## Passo 5 — Revisione critica indipendente
+
+Prima di approvare, fai criticare la spec da un revisore che non ha seguito le conversazioni: un subagent con contesto pulito vede ciò che chi ha scritto dà per scontato.
+
+**Prompt (EN) · red team della spec**
+```text
+Use a fresh subagent that has not seen our conversation to review docs/02-product-spec.md and
+docs/03-architecture.md. It must answer, in three separate sections:
+1. As a skeptical senior engineer: what is infeasible, underspecified, risky or missing
+   (non-functional requirements, security, data migration, failure modes, costs)?
+2. As the target user (<persona>): what is confusing, missing or not worth paying for?
+3. As an early-stage investor: is the MVP scope the smallest that tests the core hypothesis?
+Return a ranked list of issues (critical / important / minor) with a proposed fix for each.
+Then, in Italian, summarise for me the 5 most important changes and wait for my decision.
+```
+
+## Passo 6 — Approva e congela la versione 1.0
+
+Applica le correzioni che accetti, poi chiedi a Claude di impostare lo stato della spec su `APPROVED` con la data, fare il commit (`docs: product spec v1.0`) e aggiornare `docs/STATUS.md`. Da qui in avanti la spec cambia solo tramite pull request, con una riga nel suo *change log*.
+
+:::danger[GATE G3 · Approvi spec e architettura]
+Approva quando: ogni user story ha criteri verificabili; requisiti non funzionali, sicurezza e privacy sono espliciti; lo stack è motivato da ADR; la sezione *Out of scope* elenca ciò che consapevolmente non farai; la revisione critica non ha lasciato problemi critici aperti.
+:::
+
+:::tip[Definition of Done · Fase 3]
+- [ ] Spec issue pubblicata da `/to-spec`, con link al file.
+- [ ] `docs/02-product-spec.md` completo secondo T4, stato `APPROVED v1.0`.
+- [ ] `docs/03-architecture.md` completo secondo T5, con diagrammi Mermaid.
+- [ ] Un ADR per ogni scelta di stack, hosting, autenticazione, dati e pagamenti.
+- [ ] Revisione critica eseguita e problemi critici risolti; commit fatto.
+:::
+
+### Errori comuni
+
+- Lasciare che la spec «decida» cose mai discusse: se `/to-spec` inventa, manca un decision ticket.
+- Spec piena di percorsi di file e codice: invecchiano subito. Bastano moduli e interfacce.
+- Nessuna sezione *Out of scope*: è la principale difesa contro lo scope creep.
+- Approvare senza leggere i requisiti non funzionali (prestazioni, privacy, accessibilità, costi).
+
+[^22]: **Seam** (punto di aggancio): un confine nel codice da cui una funzionalità si può testare dall'esterno, senza guardare i dettagli interni. Pochi seam ben scelti, il più in alto possibile, rendono i test stabili anche quando il codice cambia.
+
+[^23]: **User story**: un requisito scritto dal punto di vista di chi usa il prodotto, nella forma «Come *ruolo*, voglio *capacità*, così che *beneficio*». Gli identificativi (US-001…) permettono di collegare ogni requisito ai test e alle build phase.
+
+[^24]: **Mermaid**: un linguaggio che descrive diagrammi (flussi, componenti, schemi del database) come testo. GitHub li disegna automaticamente nei file Markdown, quindi restano versionati con il codice.
+
+[^25]: **Next.js** è un *framework* (un'impalcatura di codice con regole e strumenti già pronti) per costruire web app con React. **TypeScript** è JavaScript con i *tipi*: dichiara la forma dei dati e permette di trovare molti errori prima di eseguire il codice. **Tailwind CSS** e **shadcn/ui** forniscono stile e componenti grafici pronti.
+
+[^26]: **Database**: dove l'applicazione salva i dati in modo strutturato. **Postgres** è il database relazionale open source più diffuso. **Supabase** offre Postgres gestito più autenticazione (*Auth*) e archiviazione di file (*Storage*).

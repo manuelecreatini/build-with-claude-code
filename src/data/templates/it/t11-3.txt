@@ -1,0 +1,3 @@
+/clear
+Read the handoff document at <path>. Then read docs/STATUS.md and issue #<n> with its comments.
+Summarise in Italian, in 5 lines, where we are and what you will do next. Wait for my go.

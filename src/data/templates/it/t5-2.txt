@@ -1,0 +1,24 @@
+# <Product> — Technical Architecture
+Version 1.0 · YYYY-MM-DD · Related: docs/02-product-spec.md, docs/adr/
+
+## 1. System context (who uses it, which external systems) — Mermaid diagram
+## 2. Containers (frontend, backend/API, database, storage, auth, third parties) — Mermaid
+## 3. Technology stack
+| Layer | Choice | Why (one line) | ADR |
+## 4. Repository structure (top-level folders and what lives where)
+## 5. Frontend (routing, state, components, design system, forms and validation)
+## 6. Backend (API style, business modules, background jobs, webhooks)
+## 7. Data (entity-relationship diagram, tables, constraints, migrations policy,
+##    seed data, Row Level Security policies)
+## 8. Authentication and authorisation (provider, flows, sessions, roles -> policies)
+## 9. Integrations
+| Service | Purpose | Auth | Limits | Failure mode | Cost |
+## 10. Environments (local, preview, production): URLs, env var names, secrets location
+## 11. Security (top risks and mitigations, OWASP checklist, secrets, dependency policy)
+## 12. Observability (logging, error tracking, analytics, alerts)
+## 13. Testing strategy (unit / integration / E2E, tools, seams, CI gates)
+## 14. Performance and scalability budget
+## 15. Deployment and CI/CD pipeline
+## 16. Backup and recovery (RPO / RTO targets, restore procedure)
+## 17. Monthly running cost estimate
+## 18. Known trade-offs and accepted technical debt

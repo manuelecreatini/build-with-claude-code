@@ -1,0 +1,20 @@
+---
+title: "T9 · Istruzioni per l'intervento umano"
+description: "Ogni volta che Claude ha bisogno di te (Fasi 5–7). Il formato è già nel CLAUDE.md (T0)."
+lastVerified: 2026-11-12
+sidebar:
+  order: 10
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt9_1 from '~/data/templates/it/t9-1.txt?raw';
+
+| Voce | Dettaglio |
+|---|---|
+| **Quando** | Ogni volta che Claude ha bisogno di te (Fasi 5–7). Il formato è già nel `CLAUDE.md` (T0). |
+| **Cosa fornisci** | La tua azione o decisione, poi una risposta: «done», un'opzione o una domanda. |
+| **Output e posizione** | Il blocco in chat; se l'azione slitta, un commento sulla issue e la label `ready-for-human`. |
+
+<TemplateBlock id="t9-1" code={tplt9_1} lang="text" title="Formato · HUMAN ACTION REQUIRED" />
+
+**Regole per Claude** (già nel `CLAUDE.md`): non inventare valori; non proseguire con segnaposto; non chiedere segreti in chat; se l'azione non è possibile subito, commentare la issue, applicare `ready-for-human` e passare a un'altra fase sbloccata. Per procedure lunghe, proporre `/wizard`.

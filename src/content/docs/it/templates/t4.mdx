@@ -1,0 +1,25 @@
+---
+title: "T4 · Spec finale di prodotto"
+description: "Fase 3, dopo /to-spec. Di nuovo, in forma ridotta, per ogni nuovo traguardo dopo il lancio."
+lastVerified: 2026-11-12
+sidebar:
+  order: 5
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt4_1 from '~/data/templates/it/t4-1.txt?raw';
+import tplt4_2 from '~/data/templates/it/t4-2.txt?raw';
+
+| Voce | Dettaglio |
+|---|---|
+| **Quando** | Fase 3, dopo `/to-spec`. Di nuovo, in forma ridotta, per ogni nuovo traguardo dopo il lancio. |
+| **Cosa fornisci** | URL della spec issue e della mappa. |
+| **Output e posizione** | `docs/02-product-spec.md`: fonte di verità, modificabile solo via pull request. |
+
+## Prompt
+
+<TemplateBlock id="t4-1" code={tplt4_1} lang="text" title="Prompt (EN) · scrivere la spec finale" />
+
+## Template
+
+<TemplateBlock id="t4-2" code={tplt4_2} lang="markdown" title="docs/02-product-spec.md" />

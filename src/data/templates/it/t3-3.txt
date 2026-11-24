@@ -1,0 +1,4 @@
+Check whether the map <map URL> is complete. List: open tickets; anything still in
+"Not yet specified"; items of the coverage list in the map's Notes without a closed ticket;
+closed decisions that should have an ADR but do not. If nothing is missing, answer
+"Map clear" and give me the exact /to-spec command to run next.

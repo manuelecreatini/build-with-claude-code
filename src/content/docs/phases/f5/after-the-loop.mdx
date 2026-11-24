@@ -1,0 +1,52 @@
+---
+title: "After the last build phase"
+description: "When all the milestone's issues are closed, STATUS.md says so and you move on to Phase 6."
+lastVerified: 2026-11-12
+phase: F5
+---
+
+import Role from '~/components/Role.astro';
+
+When all the milestone's issues are closed, `STATUS.md` says so and you move on to Phase 6.
+
+:::tip[Definition of Done · every build phase]
+- [ ] All acceptance criteria verified, with evidence in the pull request.
+- [ ] Tests written and green locally and in CI; no regressions.
+- [ ] Type check and lint clean; the production build succeeds.
+- [ ] Review done (standards and spec); findings resolved; `/security-review` if the phase touches sensitive data.
+- [ ] Preview tried by you.
+- [ ] Documentation updated: `STATUS.md`, ADRs, glossary, README, CHANGELOG, `.env.example`.
+- [ ] Pull request merged into `main`, branch deleted, issue closed with a summary comment.
+:::
+
+## Common mistakes
+
+- Approving the plan without reading it: gate G5 is the cheapest point to correct course.
+- Two build phases in the same session or on the same branch.
+- Letting the context reach automatic compaction instead of doing a handoff.
+- Not trying the preview: green tests don't guarantee a good experience.
+- Accepting new dependencies or services without an ADR.
+- "Tidying up" unrelated code during a phase: it goes in a separate issue.
+
+## Advanced modes (after two or three projects)
+
+- `/implement-spec` <Role as="pocock" />: implements a whole spec on an integration branch, running all the ready issues on the frontier in parallel with subagents, and finishes with a review. It requires a mature test suite.
+- `/batch` <Role as="bundled" />: for large mechanical changes across the codebase, split into independent units run in parallel in separate worktrees[^36].
+- `/goal` <Role as="builtin" />: Claude keeps working over several turns until a condition is met (for example "all tests in tests/e2e pass").
+- Claude Code on the web and `/remote-control`: start or follow a session from your phone; `/teleport` brings a cloud session back into the terminal.
+
+[^29]: **TDD** (*test-driven development*): first you write a test that describes the expected behaviour and fails (*red*), then the minimum code to make it pass (*green*), finally you improve the code while keeping the tests green (*refactor*). It gives Claude an objective "it works" signal.
+
+[^30]: **Conventional Commits**: a convention for commit messages with a prefix that states the type of change: `feat:` (feature), `fix:` (fix), `docs:`, `test:`, `refactor:`, `chore:` (maintenance). It makes the history readable and lets you generate the changelog.
+
+[^31]: **Webhook**: an automatic notification that an external service (for example Stripe after a payment) sends to your application by calling one of its web addresses.
+
+[^32]: **Unit test**: checks a small isolated piece, and is fast. **Integration test**: checks that several pieces work together (for example API and database). **End-to-end (E2E)**: simulates a real user in the browser from start to finish. You need many unit tests, a good number of integration tests and a few E2E tests on the critical journeys.
+
+[^33]: **Regression**: a defect in something that used to work, introduced by a later change.
+
+[^34]: **Squash merge**: combines all the pull request's commits into a single commit on `main`. The main history stays clean: one commit per build phase.
+
+[^35]: **Token**: the unit the model uses to measure text (on average about three quarters of a word in English). **Context window**: how many tokens the model can consider at once: instructions, files read, command output, conversation. When it fills up, old details are summarised and precision is lost.
+
+[^36]: **Worktree**: a second working folder linked to the same repository, with its own branch. It lets several sessions work in parallel without stepping on each other's toes.

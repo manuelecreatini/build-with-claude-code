@@ -1,0 +1,74 @@
+---
+title: "Appendice A · Glossario minimo"
+description: "I termini tecnici del playbook in una riga. Le note numerate li spiegano più a fondo la prima volta che compaiono."
+lastVerified: 2026-11-12
+sidebar:
+  order: 3
+---
+
+I termini tecnici del playbook in una riga. Le note numerate li spiegano più a fondo la prima volta che compaiono.
+
+- **ADR** — Architecture Decision Record: documento breve che registra una decisione importante e il suo perché.
+- **AFK / HITL** — Lavoro svolto dall'agente da solo / lavoro che richiede te presente.
+- **API** — L'insieme di «porte» con cui due programmi si scambiano dati.
+- **Autenticazione / autorizzazione** — Chi sei (login) / cosa puoi fare (permessi per ruolo).
+- **Branch** — Linea di sviluppo parallela; si unisce a `main` con una pull request.
+- **Build phase (BP)** — Fetta verticale del prodotto: una issue, un branch, una pull request.
+- **CI/CD** — Controlli automatici su ogni modifica e pubblicazione automatica.
+- **CLAUDE.md** — File di istruzioni permanenti che Claude Code carica a ogni sessione.
+- **CLI / terminale** — Programmi che si usano scrivendo comandi in una finestra di testo.
+- **Commit** — Salvataggio descritto di un insieme di modifiche nella storia Git.
+- **Compattazione** — Riassunto della conversazione per liberare contesto (`/compact`).
+- **Conventional Commits** — Messaggi di commit con prefisso: `feat:`, `fix:`, `docs:`…
+- **Database** — Archivio strutturato dei dati dell'applicazione (qui Postgres).
+- **Debito tecnico** — Scorciatoie che rendono più costose le modifiche future.
+- **Decision ticket** — Issue della mappa di `/wayfinder` che contiene una domanda da decidere.
+- **Deploy** — Pubblicazione di una versione dell'app su un server.
+- **Dipendenza** — Libreria esterna usata dal progetto, installata con npm.
+- **DNS** — Sistema che collega un nome di dominio al server.
+- **E2E (end-to-end)** — Test che simula un utente reale nel browser.
+- **Feature flag** — Interruttore che attiva una funzione solo per alcuni utenti.
+- **Finestra di contesto** — Quanti token il modello considera insieme.
+- **Framework** — Impalcatura di codice con regole e strumenti pronti (es. Next.js).
+- **Frontend / backend** — Ciò che l'utente vede / il codice che gira sul server.
+- **Gate** — Punto in cui Claude si ferma e aspetta la tua approvazione.
+- **Git / GitHub** — Storia delle modifiche / servizio online che ospita i progetti Git.
+- **Handoff** — Documento di passaggio tra una sessione e la successiva (`/handoff`).
+- **Integration test** — Test di più moduli insieme (es. API e database).
+- **Issue** — Scheda di lavoro su GitHub con label, assegnatario e commenti.
+- **Label** — Etichetta su una issue (es. `build-phase`, `ready-for-agent`).
+- **Lint** — Controllo automatico di errori comuni e stile del codice.
+- **Mappa** — Issue `wayfinder:map` che indicizza le decisioni di un progetto.
+- **Markdown** — Formato di testo con simboli semplici per titoli ed elenchi (`.md`).
+- **MCP** — Standard con cui Claude si collega a strumenti e servizi esterni.
+- **Merge** — Unione di un branch in un altro, di solito in `main`.
+- **Migrazione** — File versionato che modifica la struttura del database.
+- **Node.js / npm / npx** — Ambiente JavaScript / gestore delle librerie / esecutore di strumenti.
+- **OWASP Top 10** — Le dieci categorie di vulnerabilità web più diffuse.
+- **PATH** — Cartelle in cui il sistema cerca i programmi.
+- **Permission mode** — Cosa Claude può fare senza chiedere (`default`, `acceptEdits`, `plan`…).
+- **Plan mode** — Claude pianifica senza modificare i file, finché non approvi.
+- **Plugin** — Pacchetto che distribuisce skill e altre estensioni di Claude Code.
+- **Preview** — URL di anteprima creato per ogni pull request.
+- **Pull request (PR)** — Richiesta di unire un branch, con controlli e revisione.
+- **Regressione** — Difetto in qualcosa che prima funzionava.
+- **Repository** — Cartella di progetto con tutta la sua storia Git.
+- **RICE** — Punteggio di priorità: Reach × Impact × Confidence ÷ Effort.
+- **RLS** — Row Level Security: regole del database su chi vede quali righe.
+- **Seam** — Confine da cui una funzionalità si testa dall'esterno.
+- **Segreto** — Valore riservato (chiave, password) che non va mai pubblicato.
+- **SemVer** — Versioni MAGGIORE.MINORE.CORREZIONE.
+- **Skill** — Pacchetto di istruzioni che insegna a Claude una procedura (`/nome`).
+- **Squash merge** — Unione di una PR in un solo commit su `main`.
+- **Subagent** — Istanza di Claude con contesto separato a cui delegare un compito.
+- **TDD** — Prima il test che fallisce, poi il codice, poi il miglioramento.
+- **Token** — Unità di misura del testo per il modello.
+- **Tracer bullet** — Porzione minima ma completa che attraversa tutti gli strati.
+- **TypeScript** — JavaScript con i tipi, per trovare errori prima dell'esecuzione.
+- **Unit test** — Test di una singola funzione o modulo isolato.
+- **User story** — Requisito nella forma «Come… voglio… così che…».
+- **Variabile d'ambiente** — Configurazione fornita all'app dall'esterno del codice.
+- **WCAG** — Linee guida internazionali per l'accessibilità web.
+- **Webhook** — Notifica automatica che un servizio invia alla tua app.
+- **winget** — Gestore di pacchetti di Windows.
+- **Worktree** — Seconda cartella di lavoro dello stesso repository, per lavorare in parallelo.

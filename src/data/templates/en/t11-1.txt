@@ -1,0 +1,3 @@
+Before the handoff: commit the work in progress on this branch (prefix "wip:" if incomplete)
+and push it; add a short progress comment on issue #<n> (done / in progress / next / blockers);
+update docs/STATUS.md. Then tell me when it is done.

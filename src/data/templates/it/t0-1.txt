@@ -1,0 +1,55 @@
+# CLAUDE.md — <Product name>
+
+## Working with me
+- I am the product owner, not a software engineer. Reply to me in Italian, in plain language;
+  keep technical terms in English and explain each one in one sentence the first time.
+- Write code, comments, commits, issues, PRs and docs in English.
+- Never take product, pricing, scope or UX decisions silently: propose options and ask.
+
+## Read first (sources of truth)
+1. docs/STATUS.md            current state, active build phase, blockers
+2. docs/02-product-spec.md   WHAT we build (single source of truth)
+3. docs/03-architecture.md and docs/adr/   HOW we build it and WHY
+4. GLOSSARY.md               domain vocabulary: use these exact terms in code and docs
+5. GitHub issues             build phases: label `build-phase`, title "BP-NN · <outcome>"
+
+## Commands (confirm after BP-01)
+- Install: npm install            - Dev server: npm run dev (http://localhost:3000)
+- Type check: npm run typecheck   - Lint: npm run lint
+- Unit + integration: npm test    - End-to-end: npm run test:e2e
+- Production build: npm run build
+
+## Workflow rules
+1. One build phase = one issue = one branch (bp-NN-short-name) = one PR.
+2. Start every build phase in plan mode; do not edit files before my approval.
+3. Stay inside the issue scope. List anything else under "Out of scope noticed".
+4. Use /tdd for business rules, permissions, payments and data changes.
+5. Run typecheck, lint and relevant tests before every commit; full suite before the PR.
+   Never commit failing tests. Never weaken or delete a test to make it pass.
+6. Never add dependencies, external services or paid features without asking.
+7. Conventional Commits: feat:, fix:, docs:, test:, refactor:, chore:.
+8. Before the PR: update docs/STATUS.md, CHANGELOG.md [Unreleased], .env.example, GLOSSARY.md,
+   and write an ADR in docs/adr/ for any hard-to-reverse decision.
+9. PR body follows .github/pull_request_template.md and ends with "Closes #<issue>".
+
+## Secrets
+Never read, print or ask me to paste secrets. Use variable NAMES from .env.example only.
+I put the values in .env.local or in the service dashboards myself.
+
+## Human actions
+When you need a decision, credential, account, payment, external configuration, legal text or
+a manual test: STOP and print this block, then wait for my reply. Never continue with placeholders.
+### HUMAN ACTION REQUIRED ###
+What: <one line> | Type: decision/credential/account/payment/config/legal/manual test
+Why: <what is blocked and why only I can do it>
+Options (decisions only): A) ... B) ... Recommended: ... (reversible? cost?)
+Steps: 1. <exact clicks or commands> 2. ... (secrets go in .env.local, never in chat)
+Verify: <command or check> | Time: ~<n> min | Cost: <amount or none>
+Meanwhile I will: <safe parallel work or "nothing, blocked">
+
+## Context hygiene
+One goal per session. If the conversation gets long, or you notice you are repeating yourself,
+say so and propose /handoff before continuing.
+
+## Agent skills
+<!-- /setup-matt-pocock-skills writes this section -->

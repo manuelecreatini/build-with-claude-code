@@ -1,0 +1,33 @@
+---
+title: "Passo 3 — Intervento umano (quando serve)"
+description: "Claude deve fermarsi ogni volta che serve qualcosa che solo tu puoi fare o decidere:"
+lastVerified: 2026-11-12
+phase: F5
+---
+
+import Role from '~/components/Role.astro';
+
+Claude deve fermarsi ogni volta che serve qualcosa che solo tu puoi fare o decidere:
+
+- una decisione di prodotto;
+- una credenziale o chiave API;
+- la creazione di un account;
+- un pagamento o un piano a pagamento;
+- una configurazione esterna (DNS, app OAuth, webhook[^31]);
+- un testo legale;
+- un test su un dispositivo reale.
+
+**Il protocollo.** Claude stampa un blocco `HUMAN ACTION REQUIRED` (template T9) con cosa serve, perché, i passi esatti, come verificare, tempo e costo, cosa farà nel frattempo. Tu esegui e rispondi «done» (o scegli un'opzione); Claude verifica e prosegue. Non inventa valori e non prosegue con segnaposto silenziosi.
+
+:::caution[Segreti: la regola senza eccezioni]
+Non incollare mai chiavi o password nella chat. Inseriscile tu nel file `.env.local` (aperto in VS Code) o nel pannello del servizio. Claude conosce solo i *nomi* delle variabili, da `.env.example`; le regole `deny` di `.claude/settings.json` gli impediscono di leggere i file con i valori.
+:::
+
+**Strumenti utili in questo passo**
+
+- `/wizard` <Role as="pocock" />: per configurazioni lunghe genera una procedura guidata interattiva in Bash che ti accompagna passo per passo (credenziali, segreti della CI, pannelli di servizi esterni). Su Windows eseguila in Git Bash.
+- `/to-questionnaire` <Role as="pocock" />: trasforma una decisione che non puoi prendere da solo (socio, cliente, consulente) in un questionario Markdown da inviare.
+- `/wait-what` <Role as="pocock" /> e `/teach` <Role as="pocock" />: il primo rispiega in parole semplici un messaggio che non hai capito; il secondo ti insegna un concetto in più sessioni.
+- Se l'azione non si può fare subito, Claude etichetta la issue `ready-for-human`, commenta cosa manca e passa a un'altra fase sbloccata.
+
+[^31]: **Webhook**: una notifica automatica che un servizio esterno (per esempio Stripe dopo un pagamento) invia alla tua applicazione chiamando un suo indirizzo web.

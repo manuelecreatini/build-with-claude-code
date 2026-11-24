@@ -1,0 +1,4 @@
+/handoff Next session: continue BP-<NN> (issue #<n>) from "<where we are>". Cover, by reference
+where an artifact already holds it: project status and current build phase; what is implemented
+(commits); files touched; decisions taken (ADR links); tests run and results; open problems and
+blockers; exact next steps; relevant docs and GitHub links; suggested skills. Redact secrets.

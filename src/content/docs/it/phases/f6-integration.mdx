@@ -1,0 +1,123 @@
+---
+title: "Fase 6 · Integrazione e validazione end-to-end"
+description: "Verificare che il prodotto funzioni come un tutto coerente e rispetti la spec: percorsi completi, integrazioni, sicurezza, qualità."
+lastVerified: 2026-11-12
+phase: F6
+---
+
+import Role from '~/components/Role.astro';
+
+| Voce | Dettaglio |
+|---|---|
+| **Obiettivo** | Verificare che il prodotto funzioni come un tutto coerente e rispetti la spec: percorsi completi, integrazioni, sicurezza, qualità. |
+| **Input** | Tutte le build phase del traguardo chiuse; `main` verde; spec e architettura. |
+| **Output** | `docs/testing/traceability.md`, `docs/testing/integration-review.md`, issue per ogni problema grave, decisione Go/No-Go. |
+| **Strumenti** | Prompt T13, test E2E, `/security-review`, `/code-review`, Supabase advisors, collaudo con utenti reali. |
+| **Gate** | <Role as="gate" n={7} /> Go/No-Go per il lancio. |
+| **Tempo tipico** | Da mezza giornata a due giorni. |
+
+## Cosa verifichi e perché
+
+Ogni build phase è stata testata da sola. L'integrazione cerca i problemi che emergono solo mettendo insieme i pezzi: un percorso che attraversa cinque fasi, dati creati da un ruolo e letti da un altro, un servizio esterno che risponde lento, una migrazione che funziona sul tuo database ma non su uno vuoto.
+
+## Passo 1 — Congela lo scope
+
+Nessuna nuova funzionalità finché il gate G7 non è superato. `main` deve essere verde in CI. Le idee nuove diventano issue con label `needs-triage` per dopo il lancio.
+
+## Passo 2 — Review di integrazione con Claude
+
+**Claude Code**
+```text
+/clear
+<incolla il prompt T13>
+```
+
+Claude lavora prima in plan mode e ti mostra il piano di verifica; poi produce:
+
+- una **matrice di tracciabilità**[^37] in `docs/testing/traceability.md`;
+- i test E2E mancanti per ogni percorso utente della spec;
+- il rapporto `docs/testing/integration-review.md` con i problemi classificati per gravità S1–S4 e una raccomandazione Go/No-Go;
+- una issue per ogni problema S1 e S2 (label `bug` e `ready-for-agent`). Nessuna correzione prima della tua approvazione: le correzioni passano dal build loop.
+
+| Gravità | Definizione | Esempio | Effetto sul lancio |
+|---|---|---|---|
+| S1 | Blocca un percorso critico, perde dati o espone dati. | Un utente vede i dati di un altro club. | Blocca. Correggere subito. |
+| S2 | Funzione importante rotta, senza alternativa ragionevole. | Il reset del piano di allenamento non salva. | Blocca, salvo accettazione esplicita. |
+| S3 | Problema reale con alternativa o impatto limitato. | Ordinamento sbagliato in una lista. | Prossima release. |
+| S4 | Cosmetico. | Spaziatura irregolare su un pulsante. | Backlog. |
+
+## Passo 3 — Sicurezza
+
+- [ ] `/security-review` sul branch di release (serve un remote `origin`).
+- [ ] Test di autorizzazione con due utenti e ruoli diversi: nessuno vede o modifica dati altrui.
+- [ ] Se usi Supabase: Row Level Security[^38] attiva su tutte le tabelle; controlla gli avvisi di sicurezza e prestazioni (*advisors*) dal pannello o tramite il connettore MCP.
+- [ ] `npm audit` per le vulnerabilità note delle dipendenze; nessun segreto nel codice o nella storia Git.
+- [ ] Le dieci categorie di rischio OWASP Top 10[^39] passate in rassegna con Claude.
+- [ ] Validazione degli input lato server, limiti di frequenza su login e form pubblici.
+
+## Passo 4 — Review profonda (consigliata per i SaaS)
+
+`/code-review ultra` <Role as="bundled" /> avvia una review multi-agente in un ambiente cloud, su una pull request o un branch. Con Pro e Max include 3 esecuzioni gratuite, poi richiede crediti di utilizzo: usala una volta prima del lancio, sulla pull request di release.
+
+## Passo 5 — Collaudo con utenti (UAT)
+
+1. Prepara dati dimostrativi realistici sull'anteprima (mai dati personali reali).
+2. <Role as="you" /> Percorri tu tutti i percorsi della spec su desktop e smartphone.
+3. Fai provare il prodotto a 2–3 persone del target, con un compito per ciascuno e senza istruzioni («organizza l'allenamento di giovedì»). Osserva dove si bloccano.
+4. Un'ora di *bug bash*: tutti cercano problemi, Claude li trasforma in issue con gravità.
+
+## Checklist finale di test e validazione
+
+Ogni voce va spuntata prima del gate G7. Per l'accessibilità il riferimento è WCAG 2.2 livello AA[^40].
+
+#### Funzionale
+
+- [ ] Ogni requisito *Must* della spec è implementato e testato.
+- [ ] Tutti i percorsi utente passano in E2E.
+- [ ] Stati vuoti, errori e caricamenti gestiti.
+- [ ] Email e notifiche arrivano e sono corrette.
+
+#### Dati e integrazioni
+
+- [ ] Migrazioni applicabili da un database vuoto; dati di esempio funzionanti.
+- [ ] API esterne: gestiti errori, timeout e limiti.
+- [ ] Webhook verificati, anche se ricevuti due volte.
+
+#### Sicurezza
+
+- [ ] `/security-review` senza rilievi aperti.
+- [ ] Autorizzazioni testate con due ruoli.
+- [ ] RLS attiva; segreti solo nei pannelli.
+
+#### Qualità
+
+- [ ] Accessibilità: tastiera, contrasto, etichette (WCAG 2.2 AA).
+- [ ] Prestazioni: Lighthouse sulle pagine chiave; LCP sotto 2,5 secondi.
+- [ ] Layout mobile verificati su dispositivi reali.
+- [ ] Testi rivisti; nessun «lorem ipsum».
+
+#### Regressioni e processo
+
+- [ ] Suite completa verde da installazione pulita.
+- [ ] Criteri di accettazione delle fasi chiuse ancora validi.
+- [ ] Nessun problema S1 o S2 aperto senza accettazione esplicita.
+- [ ] Matrice di tracciabilità senza buchi.
+
+:::danger[GATE G7 · Go/No-Go]
+**Go** se: zero S1; zero S2 aperti (o accettati per iscritto con un piano); tutti i requisiti *Must* verificati; E2E verdi; review di sicurezza pulita; monitoring e piano di rollback pronti (Fase 7, passi 7 e 8). Altrimenti **No-Go**: si correggono i problemi nel build loop e si ripete questa fase in forma ridotta.
+:::
+
+:::tip[Definition of Done · Fase 6]
+- [ ] Matrice di tracciabilità e integration review nel repository.
+- [ ] Tutte le issue S1/S2 chiuse o accettate esplicitamente.
+- [ ] Collaudo con utenti svolto e problemi registrati.
+- [ ] Gate G7 superato e decisione annotata in `STATUS.md`.
+:::
+
+[^37]: **Matrice di tracciabilità**: una tabella che collega ogni requisito (US-xxx, FR-xxx) al codice che lo implementa, al test che lo verifica e al suo stato. Mostra subito cosa manca.
+
+[^38]: **Row Level Security (RLS)**: regole nel database che stabiliscono quali righe di una tabella ogni utente può leggere o modificare. In Supabase è la protezione principale dei dati: una tabella senza RLS può essere leggibile da chiunque abbia la chiave pubblica dell'app.
+
+[^39]: **OWASP Top 10**: l'elenco, curato dalla fondazione OWASP, delle dieci categorie di vulnerabilità più diffuse nelle applicazioni web (controllo degli accessi, iniezioni, configurazioni insicure e altre). È la checklist di riferimento per una prima revisione di sicurezza.
+
+[^40]: **WCAG**: le linee guida internazionali per l'accessibilità dei contenuti web. Il livello AA è lo standard di riferimento richiesto da molte normative.

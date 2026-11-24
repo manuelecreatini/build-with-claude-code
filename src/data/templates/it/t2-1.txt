@@ -1,0 +1,23 @@
+# <Product name> — Preliminary Spec
+Version 0.1 · YYYY-MM-DD · Status: DRAFT (input for discovery, not a technical spec)
+
+## 1. One-liner
+## 2. Problem
+- Who has it / when / current workaround / cost of the problem today
+## 3. Target users
+| Persona | Role | Goal | Main pain | Tech savviness | Pays? |
+## 4. Value proposition and differentiation
+## 5. Core user capabilities
+- U1: As a <persona>, I can <action> so that <benefit>.
+## 6. Key user journey (narrative, step by step)
+## 7. Look and feel
+- Platforms and devices · style and tone · languages · accessibility needs
+- Reference products and what we borrow from each
+## 8. Data and integrations (what comes in, what goes out, from/to which tools)
+## 9. Business model (hypotheses)
+## 10. Constraints (budget, deadline, legal/GDPR, must / must-not)
+## 11. Success metrics (3-5, measurable, with a time horizon)
+## 12. MVP candidate scope / Not now
+## 13. Assumptions ([ASSUMPTION] items, numbered)
+## 14. Contradictions found
+## 15. Open questions (ranked by impact)

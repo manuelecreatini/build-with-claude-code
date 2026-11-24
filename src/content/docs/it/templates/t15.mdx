@@ -1,0 +1,21 @@
+---
+title: "T15 · Manutenzione post-lancio"
+description: "Fase 8, ogni settimana (30–45 minuti), con Claude che raccoglie i dati e tu che decidi."
+lastVerified: 2026-11-12
+sidebar:
+  order: 16
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt15_1 from '~/data/templates/it/t15-1.txt?raw';
+import tplt15_2 from '~/data/templates/it/t15-2.txt?raw';
+
+| Voce | Dettaglio |
+|---|---|
+| **Quando** | Fase 8, ogni settimana (30–45 minuti), con Claude che raccoglie i dati e tu che decidi. |
+| **Cosa fornisci** | Accesso ai connettori o ai pannelli (Sentry, PostHog, Vercel); le tue impressioni dai feedback. |
+| **Output e posizione** | `docs/ops/YYYY-WW.md` (un file per settimana). |
+
+<TemplateBlock id="t15-1" code={tplt15_1} lang="text" title="Prompt (EN) · weekly ops review" />
+
+<TemplateBlock id="t15-2" code={tplt15_2} lang="markdown" title="docs/ops/YYYY-WW.md" />

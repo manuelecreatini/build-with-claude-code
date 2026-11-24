@@ -1,0 +1,21 @@
+---
+title: "T15 · Post-launch maintenance"
+description: "Phase 8, every week (30–45 minutes), with Claude gathering the data and you deciding."
+lastVerified: 2026-11-12
+sidebar:
+  order: 16
+---
+
+import TemplateBlock from '~/components/TemplateBlock.astro';
+import tplt15_1 from '~/data/templates/en/t15-1.txt?raw';
+import tplt15_2 from '~/data/templates/en/t15-2.txt?raw';
+
+| Item | Detail |
+|---|---|
+| **When** | Phase 8, every week (30–45 minutes), with Claude gathering the data and you deciding. |
+| **What you provide** | Access to the connectors or dashboards (Sentry, PostHog, Vercel); your impressions from the feedback. |
+| **Output and location** | `docs/ops/YYYY-WW.md` (one file per week). |
+
+<TemplateBlock id="t15-1" code={tplt15_1} lang="text" title="Prompt · weekly ops review" />
+
+<TemplateBlock id="t15-2" code={tplt15_2} lang="markdown" title="docs/ops/YYYY-WW.md" />

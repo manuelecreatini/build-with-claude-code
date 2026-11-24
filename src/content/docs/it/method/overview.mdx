@@ -1,0 +1,75 @@
+---
+title: "Capitolo 1 · Executive overview"
+description: "Lavorare con un agente di coding senza metodo produce quattro fallimenti ricorrenti. I primi tre coincidono con problemi che Matt Pocock indica come…"
+lastVerified: 2026-11-12
+sidebar:
+  order: 1
+---
+
+import Role from '~/components/Role.astro';
+
+**Il metodo in una frase.** Trasformi un'idea vaga in un prodotto in produzione attraverso nove fasi che separano nettamente quattro attività: *definire* (F0–F3), *pianificare* (F4), *costruire* (F5) e *consegnare* (F6–F8). Claude esegue quasi tutto il lavoro; tu prendi le decisioni in sette punti di non ritorno, i *gate*.
+
+## Perché serve un metodo
+
+Lavorare con un agente di coding senza metodo produce quattro fallimenti ricorrenti. I primi tre coincidono con problemi che Matt Pocock indica come motivazione delle sue skill (il suo elenco include anche la verbosità dell'agente, che il playbook affronta con il glossario di dominio); il quarto è specifico delle sessioni lunghe con un modello linguistico.
+
+| Rischio | Sintomo | Contromisura nel playbook | Fase |
+|---|---|---|---|
+| Disallineamento | Claude costruisce qualcosa di diverso da quello che avevi in mente. | Discovery strutturata con `/wayfinder`: domande una alla volta, decisioni registrate prima di scrivere codice. | F1–F3 |
+| Codice che non funziona | Funzionalità che sembrano finite ma si rompono al primo uso reale. | Feedback loop forti: tipi, test scritti prima del codice dove conta, CI, review, preview deploy. | F5–F6 |
+| Palla di fango | Ogni modifica diventa più lenta e rischiosa: l'entropia accelera con l'AI. | Architettura documentata, ADR, glossario di dominio, fette verticali piccole, revisioni periodiche dell'architettura. | F3, F8 |
+| Perdita di contesto | Claude dimentica decisioni prese, ripete errori, peggiora a fine sessione. | Il repository come memoria, `STATUS.md`, `/handoff` tra sessioni, budget di contesto a 200.000 token. | F5 |
+
+## I sette principi
+
+1. **Il repository è la memoria.** Ciò che conta vive in Git e GitHub[^1], non nella chat: spec, decisioni, piano, stato. Una conversazione si può perdere; un file versionato no.
+2. **Decidere prima di costruire.** Nessuna riga di codice finché le decisioni di prodotto e di architettura non sono prese e scritte. Costa ore all'inizio, risparmia settimane dopo.
+3. **Fette verticali piccole.** Ogni *build phase* attraversa tutti gli strati[^2] (dati, logica, interfaccia, test), produce un risultato dimostrabile e sta in una sessione, un branch, una pull request.
+4. **Feedback loop forti.** Claude lavora bene solo se può verificare da solo il proprio lavoro: controllo dei tipi, test automatici, build, review e un'anteprima navigabile[^3].
+5. **L'umano nei punti di non ritorno.** Claude propone, tu decidi: scope, priorità, costi, credenziali, merge e lancio passano sempre da te.
+6. **Igiene del contesto.** Una sessione, un obiettivo. Budget prudente di 200.000 token, `/handoff` e `/clear` tra un lavoro e l'altro.
+7. **Tecnologia noiosa e documentata.** Stack standard, molto conosciuti dal modello e ben documentati, salvo ragioni forti scritte in un ADR.
+
+## Le nove fasi in una tabella
+
+| Fase | Obiettivo | Output principale | Strumenti chiave | Gate | Tempo tipico\* |
+|---|---|---|---|---|---|
+| F0 Setup | Ambiente pronto, repo creato | Repo GitHub, `CLAUDE.md`, skill configurate | winget, Claude Code, gh, plugin skill | — | 1–2 h la prima volta, poi 15 min |
+| F1 Spec preliminare | Catturare l'idea senza filtri | `docs/01-preliminary-spec.md` | Wispr Flow, T1, T2 | G1 | 30–90 min |
+| F2 Discovery | Prendere e registrare le decisioni | Mappa `/wayfinder` chiusa, ADR, glossario | `/wayfinder` | G2 | 3–15 sessioni |
+| F3 Spec finale | Una sola fonte di verità | `02-product-spec.md`, `03-architecture.md` | `/to-spec`, T4, T5 | G3 | 2–4 h |
+| F4 Build phase | Piano eseguibile e ordinato | 10–50 issue BP-NN | `/to-tickets`, T6, T7 | G4 | 1–2 h |
+| F5 Build loop | Costruire una fase alla volta | Pull request integrate, test verdi | plan mode, `/implement`, `/tdd`, `/handoff` | G5, G6 | 1–3 h del tuo tempo per fase |
+| F6 Integrazione | Prodotto coerente e conforme alla spec | Integration review, Go/No-Go | T13, `/security-review` | G7 | 0,5–2 giorni |
+| F7 Deploy | Produzione stabile e monitorata | App online, monitoring, rollback | Vercel, Supabase, T14 | G7 | 0,5–1 giorno |
+| F8 Post-lancio | Migliorare senza rompere | Release, changelog, nuove issue | `/triage`, T15 | G5–G6 | Continuo |
+
+\* Euristica del playbook per un MVP di complessità media; i primi progetti richiedono più tempo.
+
+## I quattro artefatti cardine
+
+Tutto il metodo ruota attorno a quattro artefatti. Se sono aggiornati, chiunque (tu, Claude in una nuova sessione, un collaboratore) può riprendere il lavoro in pochi minuti.
+
+- `docs/02-product-spec.md` — **cosa** costruiamo. È la fonte di verità del prodotto.
+- `docs/03-architecture.md` e `docs/adr/` — **come** lo costruiamo e **perché** abbiamo scelto così.
+- **GitHub Issues** — il **lavoro**: la mappa delle decisioni (Fase 2) e le build phase `BP-NN` (Fase 4).
+- `docs/STATUS.md` — **dove siamo adesso**. È la prima cosa che Claude legge a ogni sessione.
+
+## I sette gate di approvazione
+
+| Gate | Quando | Cosa approvi | Se dici no |
+|---|---|---|---|
+| <Role as="gate" n={1} /> | Fine F1 | La spec preliminare rappresenta davvero la tua idea. | Correggi a voce o per iscritto; Claude aggiorna. |
+| <Role as="gate" n={2} /> | Fine F2 | La mappa non ha più decisioni aperte; scope e destinazione sono chiari. | Nascono nuovi decision ticket. |
+| <Role as="gate" n={3} /> | Fine F3 | Spec finale, stack, scope dell'MVP ed esclusioni. | Revisione della spec prima di pianificare. |
+| <Role as="gate" n={4} /> | F4, prima di pubblicare | Numero, ordine e dipendenze delle build phase. | Claude rivede la suddivisione. |
+| <Role as="gate" n={5} /> | Inizio di ogni build phase | Il piano di implementazione della fase. | Claude ripianifica; nessun file viene toccato. |
+| <Role as="gate" n={6} /> | Fine di ogni build phase | Definition of Done soddisfatta, merge su `main`. | La fase resta aperta finché non è conforme. |
+| <Role as="gate" n={7} /> | Fine F6 | Go/No-Go per il lancio in produzione. | Si correggono i problemi gravi e si ripete la verifica. |
+
+[^1]: **Git** è il sistema che registra la storia di ogni modifica ai file di un progetto. **GitHub** è il servizio online che ospita i progetti Git e aggiunge issue, pull request e automazioni.
+
+[^2]: Gli strati tipici di un'applicazione: l'interfaccia (**frontend**, ciò che l'utente vede nel browser o nell'app), la logica sul server (**backend**) esposta tramite **API**, cioè le «porte» con cui due programmi si scambiano dati, il **database** e i test.
+
+[^3]: **Deploy**: la pubblicazione di una versione dell'applicazione su un server. Un **preview deployment** (anteprima) è un deploy temporaneo, con un indirizzo web proprio, creato automaticamente per ogni pull request: puoi provare la modifica prima che arrivi agli utenti.
