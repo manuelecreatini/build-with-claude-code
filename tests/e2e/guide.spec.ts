@@ -29,7 +29,7 @@ test('the Terminal / Desktop switch swaps the steps and survives a reload', asyn
 
 test('the customize panel shows pros, cons and a recommended option, and its choices apply at once', async ({ page }) => {
   await page.goto(F0);
-  const hardened = page.locator('.bcc-only[data-only-security="hardened"]');
+  const hardened = page.locator('.bcc-only[data-only-security="hardened"]').first();
   await expect(hardened).toBeHidden();
 
   await page.locator('header [data-open-guide]').click();
@@ -71,6 +71,19 @@ test('a tool choice can be switched in the page and shows the alternative when s
   await card.locator('[data-choose-tool="github"][data-on="false"]').click();
   await expect(instead).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-tool-github', 'off');
+});
+
+test('turning on AI features in the customize panel shows their steps', async ({ page }) => {
+  await page.goto('/phases/f7-deploy/');
+  const block = page.locator('.bcc-only[data-only-tool="ai"]');
+  await expect(block).toBeHidden();
+  await page.locator('header [data-open-guide]').click();
+  const panel = page.locator('#bcc-guide-panel');
+  await panel.locator('label.bcc-option', { has: page.locator('input[data-tool="ai"][value="on"]') }).click();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('html')).toHaveAttribute('data-tool-ai', 'on');
+  await expect(block).toBeVisible();
+  await expect(block).toContainText('NEXT_PUBLIC_');
 });
 
 test('without JavaScript the recommended steps show', async ({ browser }) => {

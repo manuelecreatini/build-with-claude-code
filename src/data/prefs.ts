@@ -175,6 +175,13 @@ const en: Texts = {
       skip: { pros: ['Simpler setup: managed services do the work', 'Nothing extra running on your computer'], cons: ['Local and production can differ slightly'] },
       instead: 'This is the playbook\'s default: use managed services for the database and hosting. Turn Docker on if your product needs a self-hosted service or you deploy to your own server.',
     },
+    ai: {
+      name: 'AI features',
+      role: 'Your product itself calls an AI model: a chatbot, summaries, extraction, an agent.',
+      use: { pros: ['Features that were out of reach a few years ago', 'The guide adds evals, key safety and spend limits'], cons: ['Answers vary: you need an eval set, not just unit tests', 'Every call costs money and can be abused'] },
+      skip: { pros: ['No model costs, no prompt injection, no evals to maintain', 'Behaviour is predictable and easy to test'], cons: ['Nothing, if your product does not need it'] },
+      instead: 'Build without AI features: Claude still writes the code. If you add one later, turn this on and the extra steps appear in Phases 3, 5, 7 and 8.',
+    },
   },
 };
 
@@ -318,6 +325,13 @@ const it: Texts = {
       use: { pros: ['Lo stesso ambiente ovunque', 'Un database locale senza installarlo'], cons: ['Pesante su Windows e macOS', 'Un livello in più da imparare e da correggere'] },
       skip: { pros: ['Configurazione più semplice: lavorano i servizi gestiti', 'Niente di extra in esecuzione sul tuo computer'], cons: ['Ambiente locale e produzione possono differire un po\''] },
       instead: 'È la scelta predefinita del playbook: usa servizi gestiti per database e hosting. Attiva Docker se il prodotto richiede un servizio self-hosted o se pubblichi su un tuo server.',
+    },
+    ai: {
+      name: 'Funzioni di IA',
+      role: 'Il prodotto stesso chiama un modello di IA: un chatbot, riassunti, estrazione di dati, un agente.',
+      use: { pros: ['Funzioni impensabili fino a pochi anni fa', 'La guida aggiunge eval, protezione delle chiavi e limiti di spesa'], cons: ['Le risposte variano: serve un set di eval, non bastano i test unitari', 'Ogni chiamata costa e può essere abusata'] },
+      skip: { pros: ['Nessun costo di modello, nessuna prompt injection, nessuna eval da mantenere', 'Comportamento prevedibile e facile da testare'], cons: ['Nessuno, se il prodotto non ne ha bisogno'] },
+      instead: 'Costruisci senza funzioni di IA: il codice lo scrive comunque Claude. Se ne aggiungi una più avanti, attiva questa opzione e i passi in più compaiono nelle Fasi 3, 5, 7 e 8.',
     },
   },
 };

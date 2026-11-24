@@ -3,13 +3,13 @@
 title: "Passo 4 — Review e test"
 description: "I test non sono opzionali per le funzionalità critiche. Ogni fase si chiude solo con tutti i controlli verdi."
 lastVerified: 2026-11-12
-editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L1237
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L1241
 phase: F5
 ---
 
 import Term from '~/components/Term.astro';
-import WhyThisStep from '~/components/WhyThisStep.astro';
 import Only from '~/components/guide/Only.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
 import Role from '~/components/Role.astro';
 
 <WhyThisStep>Test e review trovano ciò che il piano non aveva previsto, finché la modifica è ancora piccola e recente. I controlli verdi sono ciò che ti permette di fare merge senza leggere ogni riga.</WhyThisStep>
@@ -66,9 +66,17 @@ Avvia l'app in locale (`npm run dev`, poi [http://localhost:3000](http://localho
 
 Prova sempre: il percorso felice, tre casi limite (dato vuoto, dato non valido, rete lenta), il formato mobile, la navigazione solo da tastiera, la leggibilità dei messaggi di errore.
 
+<Only level="guided">
+
+**Che cosa fa un clic.** Quando premi un pulsante nella tua app, il browser invia una richiesta al server (una *API route*). Il server controlla chi sei e se puoi fare quell'operazione, legge o scrive nel database e restituisce una risposta che la pagina mostra. Tutto ciò che sta nel browser può essere letto e modificato da chi lo usa. Per questo le chiavi segrete e i controlli dei permessi stanno sul server: un controllo che esiste solo nella pagina non è un controllo.
+
+</Only>
+
 ## Verifica dei criteri di accettazione
 
 Claude compila nella pull request la tabella *criterio → evidenza* (nome del test o screenshot) prevista dal template T10. Un criterio senza evidenza non è soddisfatto.
+
+Un'evidenza è qualcosa che puoi controllare: l'output dei test, uno screenshot, il comando eseguito e ciò che ha stampato. «Fatto» o «dovrebbe funzionare» non sono evidenze, e una schermata curata non dimostra che la logica dietro funzioni. Prima di aggiungere una <Term id="dipendenza">dipendenza</Term> suggerita da Claude, controlla su npmjs.com che il pacchetto esista, sia quello che ti aspetti e sia mantenuto: i nomi di pacchetto simili a quelli noti sono un attacco conosciuto.
 
 ## Livello di test per tipo di progetto
 
@@ -81,6 +89,17 @@ Claude compila nella pull request la tabella *criterio → evidenza* (nome del t
 | App con funzioni AI | Test con il modello simulato; un set di valutazione (*eval*) per i prompt. | `/claude-api build-eval` per costruire il set di valutazione. |
 
 **TDD sì**: regole di business, calcoli, permessi, pagamenti, trasformazioni di dati, correzione di bug. **TDD facoltativo**: layout puramente visivi, prototipi, script usa-e-getta.
+
+<Only tool="ai">
+
+**Testare le funzioni di IA.** Un modello non dà mai due volte la stessa risposta, quindi i soli test unitari non possono dirti se la funzione va.
+
+- Tieni i prompt nel repository (per esempio in `prompts/`), non incollati dentro un componente, e rivedi le loro modifiche nelle pull request come il codice.
+- Costruisci un set di eval prima di ottimizzare: circa 10 casi tipici con una risposta buona, 5 in cui la risposta giusta è *«non lo so»* o *«non trovato»*, e 3 che la funzione deve rifiutare (una richiesta fuori dal suo compito, un tentativo di estrarre il prompt di sistema, dati personali che non deve rivelare). `/claude-api build-eval` ti aiuta a scriverlo.
+- Rompilo apposta: indebolisci il prompt o togli una regola e controlla che le eval falliscano. Eval che passano sempre non dimostrano nulla.
+- Nei test end-to-end sostituisci il modello con una risposta fissa, così i test sono veloci, gratuiti e ripetibili.
+
+</Only>
 
 [^32]: **Unit test**: verifica un pezzo piccolo isolato, è veloce. **Integration test**: verifica che più pezzi funzionino insieme (per esempio API e database). **End-to-end (E2E)**: simula un utente reale nel browser dall'inizio alla fine. Servono molti unit test, un buon numero di test di integrazione e pochi E2E sui percorsi critici.
 

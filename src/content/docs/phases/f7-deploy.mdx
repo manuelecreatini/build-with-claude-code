@@ -3,7 +3,7 @@
 title: "Phase 7 · Deploy and launch"
 description: "Take the product from the local environment to production in a safe, observable and reversible way."
 lastVerified: 2026-11-12
-editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L1568
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L1575
 phase: F7
 ---
 
@@ -78,6 +78,17 @@ Rules: variables with the `NEXT_PUBLIC_` prefix end up in the browser, so never 
 Environment variables are values the hosting platform hands to your app when it starts. Because keys live there and not in the repository, the same code can run in preview with test keys and in production with real ones, and a leaked repository does not leak your keys. More in [Deploy and environments](/concepts/deploy-and-environments/).
 
 </UnderTheHood>
+
+<Only tool="ai">
+
+AI features in production:
+
+- [ ] The model's API key is a server environment variable, never `NEXT_PUBLIC_*`: the browser calls your API route, and only the route calls the model.
+- [ ] A monthly spend limit in the model provider's console (for the Claude API: *Settings → Limits* in the Claude Console), plus an alert well below it.
+- [ ] A per-user rate limit on every endpoint that calls the model.
+- [ ] A person approves before the AI sends a message, makes a payment or publishes anything on someone's behalf.
+
+</Only>
 
 ## Step 3 — Production database
 
@@ -166,7 +177,7 @@ Hardened security, before launch:
 
 ## Step 9 — Launch day
 
-Follow checklist T14. In short: last merge to `main`, automatic deploy, smoke tests in production (sign-up, main journey, email, test payment if there is one), two hours watching Sentry and the logs, then the announcement. Over the following 24–72 hours check errors and metrics twice a day.
+Follow checklist T14. In short: last merge to `main`, automatic deploy, smoke tests in production (sign-up, main journey, email, test payment if there is one) in a private window and on a real phone, so that no saved login or cache hides a problem, two hours watching Sentry and the logs, then the announcement. Over the following 24–72 hours check errors and metrics twice a day.
 
 :::tip[Definition of Done · Phase 7]
 - [ ] App online on the domain with HTTPS; previews and automatic deploys active.

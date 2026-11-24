@@ -3,11 +3,12 @@
 title: "Dopo l'ultima build phase"
 description: "Quando tutte le issue del traguardo sono chiuse, STATUS.md lo dichiara e si passa alla Fase 6."
 lastVerified: 2026-11-12
-editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L1402
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L1408
 phase: F5
 ---
 
 import Term from '~/components/Term.astro';
+import Only from '~/components/guide/Only.astro';
 import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
@@ -38,6 +39,19 @@ Quando tutte le <Term id="issue">issue</Term> del traguardo sono chiuse, `STATUS
 - `/batch` <Role as="bundled" />: per grandi modifiche meccaniche in tutto il codice, suddivise in unità indipendenti eseguite in parallelo in <Term id="worktree">worktree</Term>[^36] separati.
 - `/goal` <Role as="builtin" />: Claude continua a lavorare su più turni finché una condizione non è soddisfatta (per esempio «all tests in tests/e2e pass»).
 - Claude Code sul web e `/remote-control`: avviare o seguire una sessione dal telefono; `/teleport` riporta una sessione cloud nel <Term id="cli-terminale">terminale</Term>.
+
+<Only level="standard expert">
+
+**Prima di un'esecuzione autonoma** (`/goal`, `/implement-spec`, `/batch`, uno script headless con `claude -p`), decidi per iscritto:
+
+- **Quando si ferma**: la condizione che significa «finito», e un tetto ai giri e alla spesa. Nelle esecuzioni headless li fissano `--max-turns` e `--max-budget-usd`; il budget è una stima, quindi trattalo come un tetto da tenere ben lontano.
+- **Cosa succede se un controllo fallisce**: fermarsi e riferire, o riprovare un numero massimo di volte.
+- **Che cosa ottimizza, e come si potrebbe aggirare**: «tutti i test passano» si ottiene anche cancellando un test. Tieni i file di test fuori dal compito, o rivedi prima il loro diff.
+- **Chi approva**: una persona rivede e fa il merge; niente di autonomo arriva in produzione.
+
+I costi crescono in fretta: Anthropic ha misurato che gli agenti usano circa 4 volte i token di una chat, e i sistemi multi-agente circa 15 volte. Controlla `/usage` dopo la prima esecuzione, prima di pianificarne altre.
+
+</Only>
 
 <QuizBlock phase="F5" />
 

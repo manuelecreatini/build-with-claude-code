@@ -21,7 +21,8 @@ export type Axis = keyof typeof AXES;
 export type AxisValue<A extends Axis> = (typeof AXES)[A]['values'][number];
 
 /** Optional tools the playbook uses. `true` = recommended to use it. */
-export const TOOLS = { github: true, vercel: true, supabase: true, sentry: true, docker: false } as const;
+/** `ai` = the product itself calls an AI model (a chatbot, summaries, extraction...). */
+export const TOOLS = { github: true, vercel: true, supabase: true, sentry: true, docker: false, ai: false } as const;
 export type Tool = keyof typeof TOOLS;
 
 export type Prefs = { [A in Axis]: AxisValue<A> } & { tools: Record<Tool, boolean> };

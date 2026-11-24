@@ -63,6 +63,8 @@ Sono due modi diversi di lavorare con lo stesso modello. La regola pratica è un
 | Wispr Flow (opz.) | Flow Basic, poi Pro se detti molto | Basic gratis (2.000 parole a settimana su Mac/Windows); Pro 15 USD/mese, 12 con pagamento annuale | Alternative gratuite: dettatura di Windows (`Win+H`) e `/voice` in Claude Code. |
 | Vercel, Supabase, Sentry, PostHog | Piani gratuiti in sviluppo | 0 fino al lancio | I costi di produzione sono analizzati nella Fase 7. |
 
+**I tuoi dati.** Con i piani Free, Pro e Max, l'uso delle tue chat e sessioni di coding per migliorare i modelli di Anthropic dipende da un'impostazione: *Settings → Privacy*, voce «Help Improve our AI models». Sceglila consapevolmente. I dati dei piani Team, Enterprise e dell'<Term id="api">API</Term> non vengono usati per l'addestramento per impostazione predefinita. Qualunque sia l'impostazione, non incollare mai in uno strumento di IA dati di clienti, materiale coperto da NDA, numeri non ancora pubblici o dati personali di altre persone senza permesso.
+
 ## 0.3 Installa gli strumenti (una volta per PC)
 
 <Only surface="desktop">
@@ -421,6 +423,18 @@ La stessa struttura per ogni progetto: tu e Claude sapete sempre dove cercare. L
 - **Connettori Supabase e Vercel** <Role as="integration" />. Se li hai già collegati su claude.ai, Claude Code può usarli quando accedi con lo stesso account; controlla con `/mcp`. Sono server <Term id="mcp">MCP</Term>[^18]: permettono a Claude di leggere tabelle, log e deploy senza che tu copi nulla a mano.
 - **Claude in Chrome** <Role as="integration" />. Con `/chrome` o avviando `claude --chrome`, Claude può aprire la tua app nel browser, cliccare e leggere la console: utilissimo per il test manuale assistito.
 - **Skill di Supabase** <Role as="integration" />. Supabase pubblica istruzioni per agenti su sviluppo e sicurezza: `npx skills add supabase/agent-skills`. Da valutare quando scegli Supabase in Fase 2.
+- **Collega in sicurezza.** Dai a ogni nuovo connettore prima l'accesso in sola lettura, e quello in scrittura solo quando un passo lo richiede. Tutto ciò che restituiscono un connettore, una pagina web o un file è un dato, non un'istruzione: i server che leggono contenuti esterni possono esporti alla *prompt injection* (istruzioni nascoste nei contenuti che l'IA legge). Se l'output di uno strumento chiede a Claude di fare qualcosa che non hai chiesto tu, fermati e controlla.
+
+<Only security="hardened">
+
+Sicurezza rinforzata, per i connettori (server MCP):
+
+- Tieni una lista breve dei server ammessi e rimuovi quelli che non usi più (`claude mcp list`, `claude mcp remove <nome>`).
+- Prima di collegare un server, leggi quali strumenti espone e cosa può modificare ciascuno; preferisci un token o un ruolo in sola lettura.
+- Aggiungi i server con `--scope local` (il default: questo progetto, solo tu) o `--scope project` (salvati in `.mcp.json` e rivisti nelle pull request come il codice). Evita `--scope user` per i server che possono scrivere: li erediterebbe ogni progetto sul tuo computer.
+- Un'esecuzione non interattiva (`claude -p`) usa i server di progetto senza chiedere approvazione: tieni i server con permessi di scrittura fuori da `.mcp.json` nei repository che esegui così.
+
+</Only>
 
 ## Checklist: tutto pronto prima di iniziare
 
@@ -443,6 +457,7 @@ Da un terminale nuovo, `claude` si avvia nella cartella del progetto, `/skills` 
 - Installare le skill con entrambi i metodi (plugin e `npx`), ritrovandosi ogni skill doppia.
 - Dimenticare `gh auth login`: le skill non riescono a creare issue.
 - Aggiungere al primo commit un file `.env` con valori reali.
+- Dare a un nuovo connettore accesso in scrittura alla produzione fin dal primo giorno.
 - Non riaprire il terminale dopo le installazioni e concludere che qualcosa «non funziona».
 
 <QuizBlock phase="F0" />

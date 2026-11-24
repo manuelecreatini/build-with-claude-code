@@ -3,11 +3,12 @@
 title: "Phase 8 · Post-launch: improve without breaking"
 description: "Turn bugs, feedback and requests into continuous improvements, while protecting architecture and quality."
 lastVerified: 2026-11-12
-editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L1716
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L1723
 phase: F8
 ---
 
 import Term from '~/components/Term.astro';
+import Only from '~/components/guide/Only.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
@@ -92,6 +93,12 @@ gh release create v1.1.0 --generate-notes
 
 For risky features use a *<Term id="feature-flag">feature flag</Term>*[^48] (PostHog offers them): release to a few users first, then to everyone. Recommended cadence: one release every one or two weeks, always through the build loop.
 
+<Only tool="ai">
+
+**AI features:** before you change the model or a prompt, run the eval set on both versions and compare quality, response time and cost per correct answer. Ship the change behind a feature flag, and keep the old version one switch away.
+
+</Only>
+
 ## The operating rhythm
 
 | Frequency | Activity |
@@ -107,6 +114,12 @@ For risky features use a *<Term id="feature-flag">feature flag</Term>*[^48] (Pos
 - [ ] Release tagged, CHANGELOG updated, notes published.
 - [ ] Weekly operational review saved in `docs/ops/`.
 :::
+
+<Only level="standard expert">
+
+**Turn repeated work into a skill.** The third time you type the same instructions (a release, the weekly review, a pre-deploy check), package them as a project skill: a folder `.claude/skills/<name>/` with a `SKILL.md` file and any reference files beside it. The `description` field decides when Claude loads it on its own; `/<name>` runs it directly. Commit the folder so it travels with the repository, then try a few different requests to check that it triggers when it should, and only then.
+
+</Only>
 
 <QuizBlock phase="F8" />
 

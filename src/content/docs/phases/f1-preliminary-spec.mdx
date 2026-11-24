@@ -3,11 +3,12 @@
 title: "Phase 1 · Preliminary spec from dictation"
 description: "Capture the idea completely and without technical filters, then turn it into a first structured draft."
 lastVerified: 2026-11-12
-editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L593
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L597
 phase: F1
 ---
 
 import Term from '~/components/Term.astro';
+import Only from '~/components/guide/Only.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
@@ -49,6 +50,19 @@ Save the file, open Claude Code in the project folder and paste the prompt from 
 3. marks what it infers as `[ASSUMPTION]` and what it proposes as `[SUGGESTION]`, keeping it apart from what you said;
 4. lists contradictions and open questions, ordered by impact;
 5. gives you back a ten-line summary and the five most important questions.
+
+<Only level="guided">
+
+**How to brief Claude.** A good request works like a good brief to a colleague. Say:
+
+1. **the situation**: what the project is and where you are;
+2. **the audience**: who will read or use the result;
+3. **the format**: a list, a table, a one-page document;
+4. **an example** of a result you would like, if you have one.
+
+End with *"Before you start, ask me anything you still need to know."* Claude's questions show you what it understood. When the answer comes back, check names, numbers and links yourself: Claude writes them with confidence even when they are wrong.
+
+</Only>
 
 ## Step 4 — Review, answer, approve
 

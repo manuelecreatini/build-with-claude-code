@@ -3,13 +3,13 @@
 title: "Step 4 — Review and tests"
 description: "Tests are not optional for critical features. Every phase closes only with all checks green."
 lastVerified: 2026-11-12
-editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L1237
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L1241
 phase: F5
 ---
 
 import Term from '~/components/Term.astro';
-import WhyThisStep from '~/components/WhyThisStep.astro';
 import Only from '~/components/guide/Only.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
 import Role from '~/components/Role.astro';
 
 <WhyThisStep>Tests and review catch what the plan missed while the change is still small and fresh. Green checks are what lets you merge without reading every line.</WhyThisStep>
@@ -66,9 +66,17 @@ Start the app locally (`npm run dev`, then [http://localhost:3000](http://localh
 
 Always try: the happy path, three edge cases (empty data, invalid data, slow network), the mobile layout, keyboard-only navigation, the readability of error messages.
 
+<Only level="guided">
+
+**What a click does.** When you press a button in your app, the browser sends a request to the server (an *API route*). The server checks who you are and whether you are allowed to do that, reads or writes the database, and sends back an answer that the page shows. Everything in the browser can be read and changed by whoever is using it. That is why secret keys and permission checks live on the server: a check that exists only in the page is not a check.
+
+</Only>
+
 ## Checking the acceptance criteria
 
 In the pull request Claude fills in the *criterion → evidence* table (test name or screenshot) required by template T10. A criterion without evidence is not met.
+
+Evidence is something you can check: test output, a screenshot, the command that was run and what it printed. "Done" or "should work" is not evidence, and a polished screen does not prove the logic behind it works. Before adding a <Term id="dependency">dependency</Term> Claude suggests, check on npmjs.com that the package exists, is the one you expect and is maintained: look-alike package names are a known attack.
 
 ## Test level by project type
 
@@ -81,6 +89,17 @@ In the pull request Claude fills in the *criterion → evidence* table (test nam
 | App with AI features | Tests with a mocked model; an evaluation set (*eval*) for the prompts. | `/claude-api build-eval` to build the evaluation set. |
 
 **TDD yes**: business rules, calculations, permissions, payments, data transformations, bug fixes. **TDD optional**: purely visual layouts, prototypes, throwaway scripts.
+
+<Only tool="ai">
+
+**Testing AI features.** A model does not give the same answer twice, so unit tests alone cannot tell you whether the feature works.
+
+- Keep prompts in the repository (for example in `prompts/`), not pasted inside a component, and review changes to them in pull requests like code.
+- Build an eval set before you tune: about 10 typical cases with a good answer, 5 where the right answer is *"I don't know"* or *"not found"*, and 3 the feature must refuse (a request outside its job, an attempt to extract the system prompt, personal data it must not reveal). `/claude-api build-eval` helps you write it.
+- Break it on purpose: weaken the prompt or remove a rule and check that the evals fail. Evals that always pass prove nothing.
+- In end-to-end tests, replace the model with a fixed response so the tests are fast, free and repeatable.
+
+</Only>
 
 [^32]: **Unit test**: checks a small isolated piece, and is fast. **Integration test**: checks that several pieces work together (for example API and database). **End-to-end (E2E)**: simulates a real user in the browser from start to finish. You need many unit tests, a good number of integration tests and a few E2E tests on the critical journeys.
 
