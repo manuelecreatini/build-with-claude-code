@@ -56,6 +56,7 @@ npm run dev          # http://localhost:4321
 | `npm test` | Unit tests (Vitest). |
 | `npm run test:e2e` | End-to-end tests (Playwright, against `npm run preview`; build first). |
 | `node scripts/check-mdx.mjs` | Compiles every MDX page and reports the ones that fail. |
+| `npm run check:freshness` | Lists pages whose `lastVerified` date is more than 90 days old. A weekly GitHub Action runs it and keeps one "freshness" issue up to date. |
 | `npm run audit:content` | Checks that the generated pages still hold every heading, checkbox, callout, code block and glossary term of the sources, and that English and Italian match. |
 
 ## How it is built

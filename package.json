@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "split": "node scripts/split-playbook.mjs",
-    "audit:content": "node scripts/content-audit.mjs"
+    "audit:content": "node scripts/content-audit.mjs",
+    "check:freshness": "node scripts/check-freshness.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.12.0",
