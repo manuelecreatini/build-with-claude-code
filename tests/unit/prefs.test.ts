@@ -27,6 +27,7 @@ describe('prefs', () => {
     expect(attrs['data-surface']).toBe('desktop');
     expect(attrs['data-tool-github']).toBe('off');
     expect(attrs['data-tool-docker']).toBe('off');
+    expect(attrs['data-tool-ai']).toBe('off');
     expect(attrs['data-level']).toBe('standard');
   });
 

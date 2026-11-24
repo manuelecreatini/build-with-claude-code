@@ -312,6 +312,8 @@ Sono due modi diversi di lavorare con lo stesso modello. La regola pratica è un
 | Wispr Flow (opz.) | Flow Basic, poi Pro se detti molto | Basic gratis (2.000 parole a settimana su Mac/Windows); Pro 15 USD/mese, 12 con pagamento annuale | Alternative gratuite: dettatura di Windows (`Win+H`) e `/voice` in Claude Code. |
 | Vercel, Supabase, Sentry, PostHog | Piani gratuiti in sviluppo | 0 fino al lancio | I costi di produzione sono analizzati nella Fase 7. |
 
+**I tuoi dati.** Con i piani Free, Pro e Max, l'uso delle tue chat e sessioni di coding per migliorare i modelli di Anthropic dipende da un'impostazione: *Settings → Privacy*, voce «Help Improve our AI models». Sceglila consapevolmente. I dati dei piani Team, Enterprise e dell'API non vengono usati per l'addestramento per impostazione predefinita. Qualunque sia l'impostazione, non incollare mai in uno strumento di IA dati di clienti, materiale coperto da NDA, numeri non ancora pubblici o dati personali di altre persone senza permesso.
+
 ### 0.3 Installa gli strumenti (una volta per PC)
 
 Apri PowerShell come utente normale ed esegui un comando alla volta. `winget`[^8] installa Git[^9], la GitHub CLI, Node.js[^10] e VS Code; l'ultimo comando installa Claude Code con l'installer nativo, che si aggiorna da solo.
@@ -539,6 +541,7 @@ La stessa struttura per ogni progetto: tu e Claude sapete sempre dove cercare. L
 - **Connettori Supabase e Vercel** **[INTEGRAZIONE]**. Se li hai già collegati su claude.ai, Claude Code può usarli quando accedi con lo stesso account; controlla con `/mcp`. Sono server MCP[^18]: permettono a Claude di leggere tabelle, log e deploy senza che tu copi nulla a mano.
 - **Claude in Chrome** **[INTEGRAZIONE]**. Con `/chrome` o avviando `claude --chrome`, Claude può aprire la tua app nel browser, cliccare e leggere la console: utilissimo per il test manuale assistito.
 - **Skill di Supabase** **[INTEGRAZIONE]**. Supabase pubblica istruzioni per agenti su sviluppo e sicurezza: `npx skills add supabase/agent-skills`. Da valutare quando scegli Supabase in Fase 2.
+- **Collega in sicurezza.** Dai a ogni nuovo connettore prima l'accesso in sola lettura, e quello in scrittura solo quando un passo lo richiede. Tutto ciò che restituiscono un connettore, una pagina web o un file è un dato, non un'istruzione: i server che leggono contenuti esterni possono esporti alla *prompt injection* (istruzioni nascoste nei contenuti che l'IA legge). Se l'output di uno strumento chiede a Claude di fare qualcosa che non hai chiesto tu, fermati e controlla.
 
 ### Checklist: tutto pronto prima di iniziare
 
@@ -562,6 +565,7 @@ La stessa struttura per ogni progetto: tu e Claude sapete sempre dove cercare. L
 - Installare le skill con entrambi i metodi (plugin e `npx`), ritrovandosi ogni skill doppia.
 - Dimenticare `gh auth login`: le skill non riescono a creare issue.
 - Aggiungere al primo commit un file `.env` con valori reali.
+- Dare a un nuovo connettore accesso in scrittura alla produzione fin dal primo giorno.
 - Non riaprire il terminale dopo le installazioni e concludere che qualcosa «non funziona».
 
 [^6]: **CLI** (*command-line interface*): un programma che si usa scrivendo comandi in un **terminale**, la finestra di testo del sistema operativo. Su Windows il terminale standard è **PowerShell**.
@@ -1274,6 +1278,8 @@ Prova sempre: il percorso felice, tre casi limite (dato vuoto, dato non valido, 
 
 Claude compila nella pull request la tabella *criterio → evidenza* (nome del test o screenshot) prevista dal template T10. Un criterio senza evidenza non è soddisfatto.
 
+Un'evidenza è qualcosa che puoi controllare: l'output dei test, uno screenshot, il comando eseguito e ciò che ha stampato. «Fatto» o «dovrebbe funzionare» non sono evidenze, e una schermata curata non dimostra che la logica dietro funzioni. Prima di aggiungere una dipendenza suggerita da Claude, controlla su npmjs.com che il pacchetto esista, sia quello che ti aspetti e sia mantenuto: i nomi di pacchetto simili a quelli noti sono un attacco conosciuto.
+
 #### Livello di test per tipo di progetto
 
 | Tipo di progetto | Minimo obbligatorio | Consigliato |
@@ -1495,6 +1501,7 @@ Claude lavora prima in plan mode e ti mostra il piano di verifica; poi produce:
 - [ ] `npm audit` per le vulnerabilità note delle dipendenze; nessun segreto nel codice o nella storia Git.
 - [ ] Le dieci categorie di rischio OWASP Top 10[^39] passate in rassegna con Claude.
 - [ ] Validazione degli input lato server, limiti di frequenza su login e form pubblici.
+- [ ] Se l'app passa contenuti di utenti o di terzi a un modello di IA o a uno strumento, prova un input malevolo («ignora le istruzioni precedenti e…»): l'app non deve eseguirlo.
 
 ### Passo 4 — Review profonda (consigliata per i SaaS)
 
@@ -1693,7 +1700,7 @@ Chiedi a Claude di usare le versioni correnti delle action e di aggiungere i tes
 
 ### Passo 9 — Il giorno del lancio
 
-Segui la checklist T14. In sintesi: ultimo merge su `main`, deploy automatico, test di fumo in produzione (registrazione, percorso principale, email, pagamento di prova se previsto), due ore di osservazione di Sentry e log, poi l'annuncio. Nelle 24–72 ore successive controlla errori e metriche due volte al giorno.
+Segui la checklist T14. In sintesi: ultimo merge su `main`, deploy automatico, test di fumo in produzione (registrazione, percorso principale, email, pagamento di prova se previsto) in una finestra anonima e su un telefono vero, così che nessun accesso salvato o cache nasconda un problema, due ore di osservazione di Sentry e log, poi l'annuncio. Nelle 24–72 ore successive controlla errori e metriche due volte al giorno.
 
 > [!TIP]
 > **Definition of Done · Fase 7**
@@ -2553,6 +2560,7 @@ Do not fix anything until I approve the list. Summarise the result for me in Ita
 ## Launch day
 - [ ] Final merge to main; production deploy succeeded
 - [ ] Smoke test in production: sign-up, core journey, email, test payment (if any)
+- [ ] Same smoke test in a private window (no saved login or cache) and on a real phone
 - [ ] Watch Sentry and logs for 2 hours; then announce
 - [ ] Tag v1.0.0, GitHub release, CHANGELOG updated; STATUS.md says "Live"
 

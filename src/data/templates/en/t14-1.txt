@@ -43,6 +43,7 @@
 ## Launch day
 - [ ] Final merge to main; production deploy succeeded
 - [ ] Smoke test in production: sign-up, core journey, email, test payment (if any)
+- [ ] Same smoke test in a private window (no saved login or cache) and on a real phone
 - [ ] Watch Sentry and logs for 2 hours; then announce
 - [ ] Tag v1.0.0, GitHub release, CHANGELOG updated; STATUS.md says "Live"
 

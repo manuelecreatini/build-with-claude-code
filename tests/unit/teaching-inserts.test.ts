@@ -66,6 +66,7 @@ describe('applyInserts', () => {
     '## 0.5 Settings', 'x',
     '## 0.6 Skills', 's',
     '## 0.7 Project', '### Step 2 — CLAUDE.md', 'y', '### Step 3 — GitHub', 'z',
+    '## 0.9 Integrations', 'i',
   ];
 
   it('puts top inserts after the summary table and section inserts at the end of the section', () => {

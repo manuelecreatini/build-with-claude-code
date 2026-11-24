@@ -3,11 +3,12 @@
 title: "Fase 8 · Post-lancio: migliorare senza rompere"
 description: "Trasformare bug, feedback e richieste in miglioramenti continui, proteggendo architettura e qualità."
 lastVerified: 2026-11-12
-editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L1716
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L1723
 phase: F8
 ---
 
 import Term from '~/components/Term.astro';
+import Only from '~/components/guide/Only.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
@@ -92,6 +93,12 @@ gh release create v1.1.0 --generate-notes
 
 Per le funzionalità rischiose usa un *<Term id="feature-flag">feature flag</Term>*[^48] (PostHog lo offre): rilasci prima a pochi utenti, poi a tutti. Cadenza consigliata: una release ogni una o due settimane, sempre attraverso il build loop.
 
+<Only tool="ai">
+
+**Funzioni di IA:** prima di cambiare il modello o un prompt, esegui il set di eval su entrambe le versioni e confronta qualità, tempo di risposta e costo per risposta corretta. Rilascia il cambiamento dietro un feature flag, e tieni la versione precedente a un interruttore di distanza.
+
+</Only>
+
 ## Il ritmo operativo
 
 | Frequenza | Attività |
@@ -107,6 +114,12 @@ Per le funzionalità rischiose usa un *<Term id="feature-flag">feature flag</Ter
 - [ ] Release taggata, CHANGELOG aggiornato, note pubblicate.
 - [ ] Review operativa settimanale salvata in `docs/ops/`.
 :::
+
+<Only level="standard expert">
+
+**Trasforma il lavoro ripetuto in una skill.** La terza volta che scrivi le stesse istruzioni (un rilascio, la review settimanale, un controllo prima del deploy), impacchettale in una skill di progetto: una cartella `.claude/skills/<nome>/` con un file `SKILL.md` e gli eventuali file di riferimento accanto. Il campo `description` decide quando Claude la carica da solo; `/<nome>` la esegue direttamente. Fai il commit della cartella così viaggia con il repository, poi prova qualche richiesta diversa per controllare che si attivi quando deve, e solo allora.
+
+</Only>
 
 <QuizBlock phase="F8" />
 

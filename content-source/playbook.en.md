@@ -312,6 +312,8 @@ They are two different ways of working with the same model. There is only one pr
 | Wispr Flow (opt.) | Flow Basic, then Pro if you dictate a lot | Basic free (2,000 words per week on Mac/Windows); Pro 15 USD/month, 12 billed annually | Free alternatives: Windows dictation (`Win+H`) and `/voice` in Claude Code. |
 | Vercel, Supabase, Sentry, PostHog | Free plans during development | 0 until launch | Production costs are analysed in Phase 7. |
 
+**Your data.** On the Free, Pro and Max plans, whether your chats and coding sessions are used to improve Anthropic's models depends on one setting: *Settings → Privacy*, the "Help Improve our AI models" option. Choose it on purpose. Team, Enterprise and API data are not used for training by default. Whatever the setting, never paste client data, material under NDA, unreleased figures or other people's personal data into an AI tool without permission.
+
 ### 0.3 Install the tools (once per computer)
 
 Open PowerShell as a normal user and run one command at a time. `winget`[^8] installs Git[^9], the GitHub CLI, Node.js[^10] and VS Code; the last command installs Claude Code with the native installer, which updates itself.
@@ -539,6 +541,7 @@ The same structure for every project: you and Claude always know where to look. 
 - **Supabase and Vercel connectors** **[INTEGRATION]**. If you have already connected them on claude.ai, Claude Code can use them when you log in with the same account; check with `/mcp`. They are MCP servers[^18]: they let Claude read tables, logs and deploys without you copying anything by hand.
 - **Claude in Chrome** **[INTEGRATION]**. With `/chrome` or by starting `claude --chrome`, Claude can open your app in the browser, click around and read the console: very useful for assisted manual testing.
 - **Supabase skills** **[INTEGRATION]**. Supabase publishes agent instructions on development and security: `npx skills add supabase/agent-skills`. Worth considering when you choose Supabase in Phase 2.
+- **Connect safely.** Give each new connector read-only access first, and write access only when a step needs it. Anything a connector, a web page or a file returns is data, not instructions: servers that fetch outside content can expose you to *prompt injection* (instructions hidden in content the AI reads). If tool output tells Claude to do something you did not ask for, stop and check.
 
 ### Checklist: everything ready before you start
 
@@ -562,6 +565,7 @@ The same structure for every project: you and Claude always know where to look. 
 - Installing the skills with both methods (plugin and `npx`) and ending up with every skill twice.
 - Forgetting `gh auth login`: the skills cannot create issues.
 - Adding a `.env` file with real values to the first commit.
+- Giving a new connector write access to production on day one.
 - Not reopening the terminal after the installs and concluding that something "doesn't work".
 
 [^6]: **CLI** (*command-line interface*): a program you use by typing commands in a **terminal**, the operating system's text window. On Windows the standard terminal is **PowerShell**.
@@ -1274,6 +1278,8 @@ Always try: the happy path, three edge cases (empty data, invalid data, slow net
 
 In the pull request Claude fills in the *criterion → evidence* table (test name or screenshot) required by template T10. A criterion without evidence is not met.
 
+Evidence is something you can check: test output, a screenshot, the command that was run and what it printed. "Done" or "should work" is not evidence, and a polished screen does not prove the logic behind it works. Before adding a dependency Claude suggests, check on npmjs.com that the package exists, is the one you expect and is maintained: look-alike package names are a known attack.
+
 #### Test level by project type
 
 | Project type | Mandatory minimum | Recommended |
@@ -1495,6 +1501,7 @@ Claude works in plan mode first and shows you the verification plan; then it pro
 - [ ] `npm audit` for known vulnerabilities in dependencies; no secrets in the code or the Git history.
 - [ ] The ten OWASP Top 10[^39] risk categories reviewed with Claude.
 - [ ] Server-side input validation, rate limits on login and public forms.
+- [ ] If the app passes user or third-party content to an AI model or a tool, try a malicious input ("ignore the previous instructions and…"): the app must not obey it.
 
 ### Step 4 — Deep review (recommended for SaaS)
 
@@ -1693,7 +1700,7 @@ Ask Claude to use the current versions of the actions and to add the E2E tests o
 
 ### Step 9 — Launch day
 
-Follow checklist T14. In short: last merge to `main`, automatic deploy, smoke tests in production (sign-up, main journey, email, test payment if there is one), two hours watching Sentry and the logs, then the announcement. Over the following 24–72 hours check errors and metrics twice a day.
+Follow checklist T14. In short: last merge to `main`, automatic deploy, smoke tests in production (sign-up, main journey, email, test payment if there is one) in a private window and on a real phone, so that no saved login or cache hides a problem, two hours watching Sentry and the logs, then the announcement. Over the following 24–72 hours check errors and metrics twice a day.
 
 > [!TIP]
 > **Definition of Done · Phase 7**
@@ -2553,6 +2560,7 @@ Do not fix anything until I approve the list. Summarise the result for me in pla
 ## Launch day
 - [ ] Final merge to main; production deploy succeeded
 - [ ] Smoke test in production: sign-up, core journey, email, test payment (if any)
+- [ ] Same smoke test in a private window (no saved login or cache) and on a real phone
 - [ ] Watch Sentry and logs for 2 hours; then announce
 - [ ] Tag v1.0.0, GitHub release, CHANGELOG updated; STATUS.md says "Live"
 

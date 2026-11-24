@@ -3,11 +3,12 @@
 title: "After the last build phase"
 description: "When all the milestone's issues are closed, STATUS.md says so and you move on to Phase 6."
 lastVerified: 2026-11-12
-editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L1402
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L1408
 phase: F5
 ---
 
 import Term from '~/components/Term.astro';
+import Only from '~/components/guide/Only.astro';
 import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
@@ -38,6 +39,19 @@ When all the milestone's <Term id="issue">issues</Term> are closed, `STATUS.md` 
 - `/batch` <Role as="bundled" />: for large mechanical changes across the codebase, split into independent units run in parallel in separate <Term id="worktree">worktrees</Term>[^36].
 - `/goal` <Role as="builtin" />: Claude keeps working over several turns until a condition is met (for example "all tests in tests/e2e pass").
 - Claude Code on the web and `/remote-control`: start or follow a session from your phone; `/teleport` brings a cloud session back into the <Term id="cli-terminal">terminal</Term>.
+
+<Only level="standard expert">
+
+**Before an autonomous run** (`/goal`, `/implement-spec`, `/batch`, a headless `claude -p` script), decide in writing:
+
+- **When it stops**: the condition that means done, and a cap on rounds and spend. In headless runs `--max-turns` and `--max-budget-usd` set them; the budget is an estimate, so treat it as a ceiling to stay well under.
+- **What happens when a check fails**: stop and report, or retry at most a set number of times.
+- **What it optimises, and how that could be gamed**: "all tests pass" can also be reached by deleting a test. Keep the test files out of the task, or review their diff first.
+- **Who signs off**: a person reviews and merges; nothing autonomous deploys to production.
+
+Cost grows fast: Anthropic measured agents using about 4× the tokens of a chat, and multi-agent systems about 15×. Check `/usage` after the first run before you schedule more.
+
+</Only>
 
 <QuizBlock phase="F5" />
 

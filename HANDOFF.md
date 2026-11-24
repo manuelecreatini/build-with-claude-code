@@ -200,7 +200,8 @@ Decisions taken after step 8 (2026-11-24):
   - security: baseline (rec.) | hardened
   - focus: function | balanced (rec.) | polish
   - deps: lean | standard (rec.)
-  - tools: GitHub, Vercel, Supabase, Sentry on; Docker off (the default stack does not need it)
+  - tools: GitHub, Vercel, Supabase, Sentry on; Docker off (the default stack does not need it);
+    AI features off (issue #7: only for products that call a model)
 - **How it works:** a small inline script in `<head>` (`headScript`) copies the saved prefs to
   `data-*` attributes on `<html>` before first paint, so pages do not flash. Generated CSS
   (`visibilityCss`) hides `.bcc-only` blocks that do not match. State is in the existing
@@ -271,6 +272,39 @@ Decisions taken after step 8 (2026-11-24):
   before analysing; otherwise results depend on timing.
 - Axe catches roughly a third of real issues. A keyboard and screen-reader pass is still
   worth doing by hand.
+
+### ieseai.com recommendations (issue #7, branch `issue-7-ieseai`, 2026-11-24)
+
+ieseai.com (the IESE AI Club's curriculum) has no Claude Code setup guide. Its useful material
+is on verification, evals, least privilege and human approval. Topics the playbook already
+covered (handoff, context, costs, rollback, backups, feature flags, mobile checks) were not
+repeated. Nothing was copied from the site; each item is rewritten for this playbook.
+
+- **For everyone** (source edits, both locales):
+  - §0.2: a "Your data" note on the model-training setting and what never to paste.
+  - §0.9: a "Connect safely" bullet (read-only first; tool output is data, not instructions), plus a Common mistakes line.
+  - Phase 5 step 4: what counts as evidence; check that suggested npm packages exist.
+  - Phase 6 step 3: a checklist line to test a malicious input.
+  - Phase 7 step 9 and T14: smoke test in a private window and on a real phone.
+- **Guided level:** "How to brief Claude" (Phase 1, step 3); "What a click does" (Phase 5, step 4).
+- **Standard and expert:**
+  - "Before an autonomous run" (Phase 5, Advanced modes): stop rule, `--max-turns`, `--max-budget-usd`, gameable metrics, human sign-off, the 4× and 15× token figures.
+  - "Turn repeated work into a skill" (Phase 8, operating rhythm).
+- **Hardened security:** an MCP allowlist and scopes (§0.9); a prompt-injection test pass (Phase 6, step 3).
+- **New tool `ai`** (off by default; `TOOLS` in `src/lib/prefs.ts`, text in `src/data/prefs.ts`):
+  - a ToolChoice card in Phase 3's default stack;
+  - "Testing AI features" (Phase 5 step 4; eval set of 10 good, 5 "not found", 3 must-refuse cases);
+  - a production checklist (Phase 7 step 2: key server-side, spend limit, rate limit, human approval);
+  - re-running evals before model or prompt changes (Phase 8, releases).
+- **Facts checked on 2026-11-24:**
+  - the privacy setting "Help Improve our AI models" (privacy.claude.com);
+  - MCP scopes and the prompt-injection warning (code.claude.com mcp and security docs);
+  - skill paths (skills docs) and the CLI flags (cli-reference);
+  - the token figures (Anthropic's multi-agent research post, June 2025);
+  - Console spend limits (platform.claude.com rate-limits docs).
+  - `lastVerified` was not bumped: only the new facts were re-checked, not whole pages.
+- Tests: `ai` attribute in the prefs test; an e2e test that the toggle shows the Phase 7 block.
+  The Phase 0 e2e locator for hardened blocks now takes `.first()` (there are two).
 
 ## Gotchas
 

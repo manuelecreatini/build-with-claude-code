@@ -3,7 +3,7 @@
 title: "Fase 7 · Deploy e lancio"
 description: "Portare il prodotto dall'ambiente locale alla produzione in modo sicuro, osservabile e reversibile."
 lastVerified: 2026-11-12
-editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L1568
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L1575
 phase: F7
 ---
 
@@ -78,6 +78,17 @@ Regole: le variabili con prefisso `NEXT_PUBLIC_` finiscono nel browser, quindi m
 Le variabili d'ambiente sono valori che la piattaforma di hosting passa alla tua app quando parte. Dato che le chiavi stanno lì e non nel repository, lo stesso codice può girare in preview con chiavi di test e in produzione con quelle vere, e un repository esposto non espone le tue chiavi. Approfondisci in [Deploy e ambienti](/it/concepts/deploy-and-environments/).
 
 </UnderTheHood>
+
+<Only tool="ai">
+
+Funzioni di IA in produzione:
+
+- [ ] La chiave API del modello è una variabile d'ambiente del server, mai `NEXT_PUBLIC_*`: il browser chiama la tua API route, e solo la route chiama il modello.
+- [ ] Un limite di spesa mensile nella console del fornitore del modello (per la Claude API: *Settings → Limits* nella Claude Console), più un avviso ben al di sotto.
+- [ ] Un limite di frequenza per utente su ogni endpoint che chiama il modello.
+- [ ] Una persona approva prima che l'IA invii un messaggio, faccia un pagamento o pubblichi qualcosa per conto di qualcuno.
+
+</Only>
 
 ## Passo 3 — Database di produzione
 
@@ -166,7 +177,7 @@ Sicurezza rinforzata, prima del lancio:
 
 ## Passo 9 — Il giorno del lancio
 
-Segui la checklist T14. In sintesi: ultimo merge su `main`, deploy automatico, test di fumo in produzione (registrazione, percorso principale, email, pagamento di prova se previsto), due ore di osservazione di Sentry e log, poi l'annuncio. Nelle 24–72 ore successive controlla errori e metriche due volte al giorno.
+Segui la checklist T14. In sintesi: ultimo merge su `main`, deploy automatico, test di fumo in produzione (registrazione, percorso principale, email, pagamento di prova se previsto) in una finestra anonima e su un telefono vero, così che nessun accesso salvato o cache nasconda un problema, due ore di osservazione di Sentry e log, poi l'annuncio. Nelle 24–72 ore successive controlla errori e metriche due volte al giorno.
 
 :::tip[Definition of Done · Fase 7]
 - [ ] App online sul dominio con HTTPS; anteprime e deploy automatici attivi.

@@ -3,11 +3,12 @@
 title: "Fase 1 · Spec preliminare dalla dettatura"
 description: "Catturare l'idea in modo completo e senza filtri tecnici, poi trasformarla in una prima bozza strutturata."
 lastVerified: 2026-11-12
-editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L593
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L597
 phase: F1
 ---
 
 import Term from '~/components/Term.astro';
+import Only from '~/components/guide/Only.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
@@ -49,6 +50,19 @@ Salva il file, apri Claude Code nella cartella del progetto e incolla il prompt 
 3. marca `[ASSUMPTION]` ciò che deduce e `[SUGGESTION]` ciò che propone, separandolo da ciò che hai detto;
 4. elenca contraddizioni e domande aperte, ordinate per impatto;
 5. ti restituisce in italiano un riassunto di dieci righe e le cinque domande più importanti.
+
+<Only level="guided">
+
+**Come dare istruzioni a Claude.** Una buona richiesta funziona come un buon brief a un collega. Indica:
+
+1. **la situazione**: di che progetto si tratta e a che punto sei;
+2. **il pubblico**: chi leggerà o userà il risultato;
+3. **il formato**: un elenco, una tabella, un documento di una pagina;
+4. **un esempio** di risultato che ti piacerebbe, se ne hai uno.
+
+Chiudi con *«Prima di iniziare, chiedimi tutto quello che ti serve ancora sapere.»* Le domande di Claude ti mostrano che cosa ha capito. Quando arriva la risposta, controlla tu nomi, numeri e link: Claude li scrive con sicurezza anche quando sono sbagliati.
+
+</Only>
 
 ## Passo 4 — Rivedi, rispondi, approva
 
