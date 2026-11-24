@@ -1,0 +1,62 @@
+name: Bug report
+description: Something on the site or in an interactive tool doesn't work. / Qualcosa nel sito o in uno strumento non funziona.
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Found a problem that could expose a visitor's API key? Don't file it here: use [private reporting](https://github.com/manuelecreatini/build-with-claude-code/security/advisories/new) instead (see SECURITY.md).
+
+        Never paste an API key into an issue.
+  - type: input
+    id: page
+    attributes:
+      label: Page
+      placeholder: https://build-with-claude-code-playbook.vercel.app/tools/tracker/
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where
+      options:
+        - Start wizard
+        - Checklist tracker
+        - Template builder
+        - Build loop companion
+        - Context meter
+        - AI coach
+        - Search, navigation or language switch
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to ...
+        2. Click ...
+        3. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and operating system
+      placeholder: Firefox 140 on Windows 11
+    validations:
+      required: true
+  - type: textarea
+    id: console
+    attributes:
+      label: Errors in the browser console (optional)
+      description: Remove anything that looks like a key (sk-ant-...) before pasting.
+      render: text

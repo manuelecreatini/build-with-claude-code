@@ -1,0 +1,26 @@
+name: Idea or improvement
+description: Suggest a new section, tool or change to the method. / Proponi una nuova sezione, uno strumento o una modifica al metodo.
+title: "[Idea] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would it solve?
+      description: Who is it for, and what is hard for them today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What do you suggest?
+    validations:
+      required: true
+  - type: checkboxes
+    id: fit
+    attributes:
+      label: Project fit
+      options:
+        - label: It works without a backend, accounts, analytics or trackers (this is a static site).
+          required: true
+        - label: I can help write it in Italian as well as English, or I'm fine with it being flagged as "translation needed".

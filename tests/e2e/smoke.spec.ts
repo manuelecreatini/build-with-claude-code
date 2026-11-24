@@ -2,8 +2,15 @@ import { expect, test } from '@playwright/test';
 
 test('English homepage renders', async ({ page }) => {
   await page.goto('/');
-  await expect(page).toHaveTitle(/Build with Claude Code/);
+  await expect(page).toHaveTitle('Build with Claude Code · An interactive playbook');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.locator('title')).toHaveCount(1);
+});
+
+test('Italian homepage has its own title', async ({ page }) => {
+  await page.goto('/it/');
+  await expect(page).toHaveTitle('Build with Claude Code · Un playbook interattivo');
+  await expect(page.locator('title')).toHaveCount(1);
 });
 
 test('Italian phase page renders with sidebar', async ({ page }) => {
@@ -67,6 +74,21 @@ test('end-of-phase quiz gives feedback and a score', async ({ page }) => {
   await expect(quiz.getByText(/[0-3] risposte giuste su 3\./)).toBeVisible();
   await quiz.getByRole('button', { name: 'Riprova' }).click();
   await expect(quiz.getByRole('radio', { checked: true })).toHaveCount(0);
+});
+
+test('pages do not scroll sideways at phone width', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  for (const url of ['/', '/start/how-to-use/', '/it/phases/f0-setup/', '/method/workflow/', '/reference/checklist/', '/tools/coach/']) {
+    await page.goto(url);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(overflow, url).toBeLessThanOrEqual(0);
+  }
+  // An open glossary tip stays on screen too.
+  await page.goto('/phases/f5/step-1/');
+  const term = page.locator('.bcc-term').first();
+  await term.locator('a').focus();
+  const box = await term.locator('[role="tooltip"]').boundingBox();
+  expect(box && box.x >= 0 && box.x + box.width <= 375).toBe(true);
 });
 
 test('concept pages exist in both locales', async ({ page }) => {

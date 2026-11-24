@@ -1,0 +1,50 @@
+name: Content correction
+description: A step, fact or explanation is wrong, outdated or unclear. / Un passo, un'informazione o una spiegazione è sbagliata, superata o poco chiara.
+title: "[Content] "
+labels: [documentation]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks! Issues are welcome in English or Italian. / Grazie! Puoi scrivere in inglese o in italiano.
+  - type: input
+    id: page
+    attributes:
+      label: Page
+      description: Link to the page (and the section, if you can).
+      placeholder: https://build-with-claude-code-playbook.vercel.app/phases/f0-setup/#...
+    validations:
+      required: true
+  - type: dropdown
+    id: locale
+    attributes:
+      label: Language of the page
+      options:
+        - English
+        - Italiano
+        - Both / Entrambe
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of problem?
+      options:
+        - Outdated or wrong (Claude Code changed, a command no longer works...)
+        - Unclear or confusing explanation
+        - Translation problem
+        - Typo or formatting
+        - Broken link
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong, and what should it say?
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: For facts about Claude Code, a link to the official docs (code.claude.com/docs) or another primary source that shows the right version.

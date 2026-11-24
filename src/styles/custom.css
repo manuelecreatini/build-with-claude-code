@@ -79,15 +79,26 @@
   font-style: normal;
   line-height: 1.4;
   box-shadow: var(--sl-shadow-md);
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.12s;
+  /* display, not visibility: a hidden tip must not take up space, or tips near the right edge
+     widen the page on phones. */
+  display: none;
   pointer-events: none;
 }
 .bcc-term:hover > .bcc-term__tip,
 .bcc-term:focus-within > .bcc-term__tip {
-  visibility: visible;
-  opacity: 1;
+  display: block;
+}
+/* On narrow screens a tip anchored to the word can run off the edge: show it as a panel
+   pinned to the bottom of the viewport instead. */
+@media (max-width: 50rem) {
+  .bcc-term__tip {
+    position: fixed;
+    inset-inline: 1rem;
+    top: auto;
+    bottom: 1rem;
+    width: auto;
+    max-width: none;
+  }
 }
 dfn {
   font-style: normal;

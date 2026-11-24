@@ -141,17 +141,47 @@ The `group()` helper in `astro.config.mjs` already does this.
     - Playwright: 16 in total. `coach.spec.ts` mocks api.anthropic.com and covers: no request
       goes out without a key; the key goes only to api.anthropic.com; streaming; refusal; 401.
     - 127 pages built.
+- **Open-source docs (step 7):**
+  - New files: `README.md` (with a short Italian section), `CONTRIBUTING.md` (a table of
+    where each kind of change goes), `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1),
+    `SECURITY.md`, `.github/ISSUE_TEMPLATE/` (bug, content correction, idea, config) and
+    `.github/PULL_REQUEST_TEMPLATE.md`.
+  - Generated pages now carry a `# Generated from <source> by scripts/split-playbook.mjs`
+    comment in their frontmatter (96 pages, both locales).
+  - `LICENSE-CONTENT` now also covers `content-source/`.
+  - GitHub settings: private vulnerability reporting enabled; homepage set to the -playbook
+    domain (it pointed to `build-with-claude-code-iota.vercel.app`); topics added.
+  - Italian text fixes: the IT source stays unchanged, so CONTRIBUTING asks for an issue and
+    the maintainer decides how to apply it. Policy still open.
+- **Verification (step 8):**
+  - `scripts/content-audit.mjs` (`npm run audit:content`, read-only). For each locale it splits
+    the source with the same page map and compares headings, checkboxes, callouts, code blocks
+    and glossary terms per page. It also checks the template manifest and `.txt` files, the
+    glossary JSON and the tracker checklist against the source, flags stale generated pages,
+    and requires EN and IT to match. The only expected difference is Phase 0 (OS tabs: one
+    callout fewer, four code blocks more), listed in `EXPECTED`. It exits 1 on any problem.
+  - The page map moved to `scripts/lib/page-map.mjs`, shared by the split script and the
+    audit. The split output is unchanged.
+  - CI now re-runs the split script for both locales and fails on any diff, then runs the
+    audit.
+  - Homepage `<title>` fixed through a `head` override in both `index.mdx` files.
+  - Glossary tooltips widened pages on phones (hidden but still laid out). They now use
+    `display: none` when hidden and show as a bottom panel below 50rem.
+  - Checks: audit passes (142 headings, 187 checkboxes, 64 terms per locale); 126 MDX files
+    compile; `astro check` 0 errors; 127 pages built; Vitest 75; Playwright 18 (new: both
+    homepage titles, no sideways scroll at 375px); split script idempotent.
+  - Chrome walkthrough of the production build: both homepages, a phase page, the tools,
+    tracker persistence across reloads, the coach page loading only same-origin resources,
+    no console errors. 19 sampled pages fit at 375px.
 
 ## Next steps (in order)
 
-1–6. Done (CI, English translation + OS tabs, homepages, teaching layer, interactive tools,
-   AI coach). See above.
-7. **Open source:** README, CONTRIBUTING, code of conduct, issue and PR templates. (The repo and
-   the Vercel project already exist.)
-8. **Verification:** build, check, link validator, `npm run audit:content` (script still to be
-   written: compare heading, template, checklist and glossary counts between the source and the
-   output), a Chrome walkthrough, and Playwright. Also fix the duplicated homepage `<title>`
-   ("Build with Claude Code | Build with Claude Code").
+1–8. Done (CI, English translation + OS tabs, homepages, teaching layer, interactive tools,
+   AI coach, open-source docs, verification). See above.
+
+Open points for the maintainer: a contact address for the code of conduct (currently the
+GitHub profile), the policy for applying Italian text fixes, and whether to turn on GitHub
+Discussions. The playbook says "15 templates" but has T0–T15 (sixteen); left as in the source.
 
 ## Gotchas
 

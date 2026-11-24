@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security problem (private)
+    url: https://github.com/manuelecreatini/build-with-claude-code/security/advisories/new
+    about: Anything that could expose a visitor's API key or inject scripts. Please report it privately.
+  - name: Claude Code questions and bugs
+    url: https://code.claude.com/docs
+    about: This is a community playbook. For Claude Code itself, see the official documentation.
