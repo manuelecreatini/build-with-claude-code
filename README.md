@@ -12,6 +12,10 @@ An open-source, interactive playbook that guides anyone through building a digit
 
 - **The method.** Nine phases, from setting up your computer to running the product after
   launch. Each step is marked with who acts (Claude, you, or a quality gate you must pass).
+- **A guide that adapts to you.** Choose terminal or desktop app, your level (guided, standard,
+  expert), baseline or hardened security, and the tools you use (including whether your product
+  calls an AI model). The pages show the steps that fit those choices; every option lists its
+  pros and cons and which one is recommended.
 - **Templates.** Ready-to-paste prompts and documents (T0–T15), plus a bonus set.
 - **A teaching layer.** Glossary tooltips, "why this step" notes, "under the hood" panels,
   concept pages (context window, CLAUDE.md, permissions, Git, tests, deploy…) and a short quiz
@@ -33,7 +37,9 @@ pages.
 The coach is optional and uses **your own Anthropic API key**, billed to your Anthropic account.
 The key and your questions go from your browser straight to `api.anthropic.com`, and to nowhere
 else. The key is kept for the current tab only, unless you choose to remember it on your device.
-It is never logged and never included in exports. The code is in [`src/islands/Coach.tsx`](src/islands/Coach.tsx),
+It is never logged and never included in exports. The site's Content-Security-Policy
+(`vercel.json`) only lets pages connect to the site itself and `api.anthropic.com`, so the
+browser enforces this too. The code is in [`src/islands/Coach.tsx`](src/islands/Coach.tsx),
 [`src/lib/coach.ts`](src/lib/coach.ts) and [`src/lib/coachKey.ts`](src/lib/coachKey.ts).
 
 ## Run it locally
@@ -54,7 +60,7 @@ npm run dev          # http://localhost:4321
 | `npm run preview` | Serves the production build. |
 | `npm run check` | Type check and content-schema check (`astro check`). |
 | `npm test` | Unit tests (Vitest). |
-| `npm run test:e2e` | End-to-end tests (Playwright, against `npm run preview`; build first). |
+| `npm run test:e2e` | End-to-end tests (Playwright, against `npm run preview`; build first), including axe accessibility checks and the Content-Security-Policy. |
 | `node scripts/check-mdx.mjs` | Compiles every MDX page and reports the ones that fail. |
 | `npm run check:freshness` | Lists pages whose `lastVerified` date is more than 90 days old. A weekly GitHub Action runs it and keeps one "freshness" issue up to date. |
 | `npm run audit:content` | Checks that the generated pages still hold every heading, checkbox, callout, code block and glossary term of the sources, and that English and Italian match. |
