@@ -246,10 +246,39 @@ Decisions taken after step 8 (2026-11-24):
 - **e2e on a busy machine:** with the default workers, some tests can hit the 30s timeout
   while the browsers start. `npx playwright test --workers=2` passes all of them.
 
+### Accessibility checks (branch `a11y-audit`, 2026-11-24)
+
+- `tests/e2e/a11y.spec.ts` runs axe-core (`@axe-core/playwright`) against WCAG 2.1 AA on 10
+  pages (both locales, every page type, the coach and the 404). The light pass runs every
+  rule; the dark pass runs colour contrast only, since nothing else depends on the theme.
+  It is part of `npm run test:e2e`, so CI runs it too.
+- **Fixed:** Markdown task-list checkboxes (`- [ ]` in phase checklists and templates) had
+  no label. `src/lib/task-list-labels.mjs` is a Sätteri hast plugin that wraps the checkbox
+  and its text in a `<label>`. It is wired as `markdown.processor` in `astro.config.mjs`,
+  which MDX shares.
+- **Accepted:** Starlight's search button fails axe's label-in-name rule (name "Search",
+  visible "Search" + "Ctrl K"). The label is the start of the name and the shortcut is in
+  `aria-keyshortcuts`, so the test excludes only that rule on only that element.
+- **Fixed:** Expressive Code makes sideways-scrolling code blocks focusable, but only re-checks
+  when a block's box resizes. When web fonts arrive late, a block can start overflowing
+  without resizing and stays unreachable by keyboard. `src/scripts/code-scroll-focus.ts`
+  (loaded from the Head override) re-runs the check after `document.fonts.ready`. An e2e test
+  delays the fonts to cover it. CI showed this first as flaky axe failures.
+- **Fixed:** Mermaid's dark theme draws edge labels at 4.4:1 contrast. `custom.css` lightens
+  them (needs `!important`: Mermaid's styles sit in the SVG behind an id selector). All 12
+  diagram pages pass contrast in both themes.
+- The axe tests wait for fonts, Expressive Code and Mermaid (`pre.mermaid[data-processed]`)
+  before analysing; otherwise results depend on timing.
+- Axe catches roughly a third of real issues. A keyboard and screen-reader pass is still
+  worth doing by hand.
+
 ## Gotchas
 
 - Astro 7's MDX compiler is `satteri`, not `@mdx-js/mdx`. `check-mdx.mjs` resolves it from
   `node_modules/@astrojs/markdown-satteri/node_modules/satteri`.
+- Astro 7 rejects `markdown.rehypePlugins` / `remarkPlugins` unless `@astrojs/markdown-remark`
+  is installed. Add plugins as Sätteri `hastPlugins` / `mdastPlugins` instead (see
+  `src/lib/task-list-labels.mjs`).
 - Never edit `indicative-playbook/`. Text fixes go in `content-source/`; rendering fixes go in
   the scripts.
 - File names are English in both locales, so the language switcher can pair pages.

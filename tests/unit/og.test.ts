@@ -59,5 +59,6 @@ describe('ogTree', () => {
     const svg = await satori(ogTree(card) as unknown as Parameters<typeof satori>[0], { width: 1200, height: 630, fonts });
     const img = new Resvg(svg).render();
     expect([img.width, img.height]).toEqual([1200, 630]);
-  });
+    // satori's first render loads its layout engine, which can take several seconds on CI.
+  }, 30_000);
 });

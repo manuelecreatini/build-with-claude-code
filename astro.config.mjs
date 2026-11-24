@@ -4,6 +4,8 @@ import starlight from '@astrojs/starlight';
 import react from '@astrojs/react';
 import mermaid from 'astro-mermaid';
 import starlightLinksValidator from 'starlight-links-validator';
+import { satteri } from '@astrojs/markdown-satteri';
+import { taskListLabels } from './src/lib/task-list-labels.mjs';
 
 /**
  * Sidebar groups: same structure in both locales, labels translated.
@@ -19,6 +21,9 @@ const group = (label, it, directory) => ({
 
 export default defineConfig({
   site: 'https://build-with-claude-code-playbook.vercel.app',
+  // Label the checkboxes of Markdown task lists (`- [ ] item`) for screen readers.
+  // MDX pages share this processor (Sätteri, Astro's default).
+  markdown: { processor: satteri({ hastPlugins: [taskListLabels] }) },
   integrations: [
     // Must come before Starlight so ```mermaid fences are handled first.
     mermaid({ theme: 'default', autoTheme: true }),

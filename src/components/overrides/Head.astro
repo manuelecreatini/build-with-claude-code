@@ -3,7 +3,8 @@
  * Starlight's <head>, plus the guide preferences: an inline script that sets the data-* attributes
  * on <html> before the first paint, and the CSS that hides blocks not meant for those choices.
  * Both are generated from src/lib/prefs.ts. Also links the page's social preview image,
- * generated at build time by src/pages/og/[...slug].png.ts.
+ * generated at build time by src/pages/og/[...slug].png.ts, and the script that keeps
+ * scrolling code blocks focusable when fonts load late (src/scripts/code-scroll-focus.ts).
  */
 import Default from '@astrojs/starlight/components/Head.astro';
 import { headScript, visibilityCss } from '~/lib/prefs';
@@ -21,3 +22,6 @@ const image = new URL(ogPath(entry.id), Astro.site ?? Astro.url).href;
 <meta name="twitter:image" content={image} />
 <script is:inline set:html={headScript(STORE_KEY)} />
 <style is:global set:html={visibilityCss()} />
+<script>
+  import '~/scripts/code-scroll-focus';
+</script>
