@@ -2,12 +2,22 @@
 /**
  * Starlight's <head>, plus the guide preferences: an inline script that sets the data-* attributes
  * on <html> before the first paint, and the CSS that hides blocks not meant for those choices.
- * Both are generated from src/lib/prefs.ts.
+ * Both are generated from src/lib/prefs.ts. Also links the page's social preview image,
+ * generated at build time by src/pages/og/[...slug].png.ts.
  */
 import Default from '@astrojs/starlight/components/Head.astro';
 import { headScript, visibilityCss } from '~/lib/prefs';
 import { STORE_KEY } from '~/lib/store';
+import { ogPath } from '~/lib/og';
+
+const { entry } = Astro.locals.starlightRoute;
+const image = new URL(ogPath(entry.id), Astro.site ?? Astro.url).href;
 ---
 <Default />
+<meta property="og:image" content={image} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={entry.data.title} />
+<meta name="twitter:image" content={image} />
 <script is:inline set:html={headScript(STORE_KEY)} />
 <style is:global set:html={visibilityCss()} />

@@ -1,0 +1,278 @@
+/*
+ * "Workbench" theme: neutral greys, one teal accent, three role colors.
+ * Maps Starlight's variables onto the design tokens. Starlight's defaults live in a cascade layer,
+ * so these unlayered rules win; dark is set on :root and light on [data-theme='light'], the same
+ * way Starlight does it, so both explicit and system themes work.
+ * Fonts are self-hosted from @fontsource-variable (no external requests).
+ */
+
+:root {
+  --sl-font: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --sl-font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+  --bcc-font-display: 'Space Grotesk Variable', 'Space Grotesk', var(--__sl-font);
+  --sl-line-height: 1.65;
+  --sl-line-height-headings: 1.15;
+  --sl-content-width: 46rem;
+
+  /* Dark (Starlight's default branch) */
+  --bcc-bg: #0e1013;
+  --bcc-surface: #161a1f;
+  --bcc-ink: #eceef1;
+  --bcc-text: #d3d7dd;
+  --bcc-muted: #a0a7b2;
+  --bcc-line: #2a2f37;
+  --bcc-code: #1f242b;
+  --bcc-accent: #4fd1be;
+  --bcc-accent-soft: #12302c;
+  --bcc-on-accent: #0e1013;
+  --bcc-you: #8faeff;
+  --bcc-you-soft: #1a2440;
+  --bcc-gate: #f7a05a;
+  --bcc-gate-soft: #36230f;
+  --bcc-claude: var(--bcc-accent);
+  --bcc-claude-soft: var(--bcc-accent-soft);
+  --bcc-tool: var(--bcc-muted);
+  --bcc-tool-soft: var(--bcc-code);
+  --bcc-ok: #5fd38d;
+  --bcc-warn: #f2c94c;
+  --bcc-hot: #f7a05a;
+  --bcc-danger: #ff7b7b;
+  --bcc-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  --bcc-shadow-lg: 0 24px 64px rgb(0 0 0 / 0.55);
+  --bcc-scrim: rgb(0 0 0 / 0.6);
+
+  --sl-color-white: var(--bcc-ink);
+  --sl-color-gray-1: #dfe2e7;
+  --sl-color-gray-2: var(--bcc-text);
+  --sl-color-gray-3: var(--bcc-muted);
+  --sl-color-gray-4: #6b727e;
+  --sl-color-gray-5: var(--bcc-line);
+  --sl-color-gray-6: var(--bcc-surface);
+  --sl-color-gray-7: #13161a;
+  --sl-color-black: var(--bcc-bg);
+
+  --sl-color-accent-low: var(--bcc-accent-soft);
+  --sl-color-accent: var(--bcc-accent);
+  --sl-color-accent-high: #a8ede2;
+  --sl-color-text: var(--bcc-text);
+  --sl-color-text-accent: var(--bcc-accent);
+  --sl-color-text-invert: var(--bcc-on-accent);
+  --sl-color-bg: var(--bcc-bg);
+  --sl-color-bg-nav: var(--bcc-surface);
+  --sl-color-bg-sidebar: var(--bcc-bg);
+  --sl-color-bg-inline-code: var(--bcc-code);
+  --sl-color-bg-accent: var(--bcc-accent);
+  --sl-color-hairline-light: var(--bcc-line);
+  --sl-color-hairline: var(--bcc-line);
+  --sl-color-hairline-shade: var(--bcc-bg);
+  --sl-color-backdrop-overlay: var(--bcc-scrim);
+}
+
+:root[data-theme='light'] {
+  --bcc-bg: #f6f7f8;
+  --bcc-surface: #ffffff;
+  --bcc-ink: #14161b;
+  --bcc-text: #262a31;
+  --bcc-muted: #555b66;
+  --bcc-line: #e2e4e8;
+  --bcc-code: #eef0f2;
+  --bcc-accent: #0a6b63;
+  --bcc-accent-soft: #e2f1ee;
+  --bcc-on-accent: #ffffff;
+  --bcc-you: #2b57c8;
+  --bcc-you-soft: #e8eefc;
+  --bcc-gate: #b3470d;
+  --bcc-gate-soft: #fcede3;
+  --bcc-ok: #1b7a43;
+  --bcc-warn: #8a6100;
+  --bcc-hot: #b3470d;
+  --bcc-danger: #b42318;
+  --bcc-shadow: 0 1px 2px rgb(20 22 27 / 0.08);
+  --bcc-shadow-lg: 0 24px 64px rgb(20 22 27 / 0.22);
+  --bcc-scrim: rgb(20 22 27 / 0.45);
+
+  --sl-color-gray-1: #1f2228;
+  --sl-color-gray-3: var(--bcc-muted);
+  --sl-color-gray-4: #8a909a;
+  --sl-color-gray-6: var(--bcc-code);
+  --sl-color-gray-7: #fafbfb;
+  --sl-color-black: var(--bcc-surface);
+  --sl-color-accent-high: #064d47;
+  --sl-color-bg-nav: var(--bcc-surface);
+  --sl-color-bg-sidebar: var(--bcc-bg);
+  --sl-color-hairline-shade: var(--bcc-line);
+}
+
+/* ---------- Base type ---------- */
+body {
+  background: var(--bcc-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01';
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+.bcc-display {
+  font-family: var(--bcc-font-display);
+  letter-spacing: -0.02em;
+}
+h1 {
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+.sl-markdown-content :is(h2, h3, h4) {
+  font-weight: 600;
+  color: var(--bcc-ink);
+}
+.sl-markdown-content a:not([class]) {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+.sl-markdown-content a:not([class]):hover {
+  color: var(--bcc-ink);
+}
+.sl-markdown-content code:not(pre code) {
+  padding: 0.1em 0.35em;
+  border-radius: 0.35rem;
+  font-size: 0.875em;
+}
+.sl-markdown-content table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--bcc-line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.sl-markdown-content :is(th, td) {
+  border: 0;
+  border-bottom: 1px solid var(--bcc-line);
+}
+.sl-markdown-content :is(th, td):first-child {
+  padding-inline-start: 1rem;
+}
+.sl-markdown-content :is(th, td):last-child {
+  padding-inline-end: 1rem;
+}
+.sl-markdown-content tr:last-child td {
+  border-bottom: 0;
+}
+.sl-markdown-content th {
+  background: var(--bcc-code);
+  font-weight: 600;
+}
+
+/* ---------- Focus ---------- */
+:is(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--bcc-accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Header and site title ---------- */
+.header {
+  border-bottom-color: var(--bcc-line);
+}
+.site-title {
+  gap: 0.6rem;
+  font-family: var(--bcc-font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--bcc-ink);
+}
+.site-title::before {
+  content: '>_';
+  content: '>_' / '';
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--bcc-ink);
+  color: var(--bcc-bg);
+  font-family: var(--__sl-font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+/* ---------- Sidebar ---------- */
+#starlight__sidebar a[aria-current='page'],
+.sidebar-content a[aria-current='page'] {
+  background: var(--bcc-accent-soft);
+  color: var(--bcc-accent);
+  font-weight: 600;
+}
+.sidebar-content a {
+  border-radius: 8px;
+}
+.sidebar-content .large {
+  font-family: var(--bcc-font-display);
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Starlight cards and asides ---------- */
+.sl-link-card,
+.card {
+  border-radius: 14px;
+  border-color: var(--bcc-line);
+  background: var(--bcc-surface);
+  box-shadow: none;
+}
+.sl-link-card:hover {
+  border-color: var(--bcc-accent);
+  background: var(--bcc-surface);
+}
+.sl-link-card .title {
+  font-family: var(--bcc-font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.starlight-aside {
+  border: 0;
+  border-radius: 14px;
+}
+
+/* ---------- Pagination ---------- */
+.pagination-links a {
+  border-radius: 14px;
+  border-color: var(--bcc-line);
+  background: var(--bcc-surface);
+  box-shadow: none;
+}
+.pagination-links a:hover {
+  border-color: var(--bcc-accent);
+}
+.pagination-links .link-title {
+  font-family: var(--bcc-font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Hero (splash pages) ---------- */
+.hero h1 {
+  letter-spacing: -0.035em;
+}
+.sl-link-button {
+  border-radius: 12px;
+  font-weight: 600;
+}
+.sl-link-button.primary {
+  background: var(--bcc-ink);
+  border-color: var(--bcc-ink);
+  color: var(--bcc-bg);
+}
+.sl-link-button.secondary {
+  background: var(--bcc-surface);
+  border-color: var(--bcc-line);
+  color: var(--bcc-ink);
+}
+
+/* ---------- Search ---------- */
+site-search button[data-open-modal] {
+  border-radius: 10px;
+  border-color: var(--bcc-line);
+  background: var(--bcc-bg);
+}

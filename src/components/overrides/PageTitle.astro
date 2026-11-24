@@ -1,0 +1,115 @@
+---
+/**
+ * Page title with a phase header: on pages that belong to a phase (frontmatter `phase: F0`…`F8`)
+ * it adds a "Phase N of 8" kicker and a rail of nine links, one per phase.
+ * The "Phase N · " prefix is dropped from the visible heading there, since the kicker says it.
+ */
+import { getCollection } from 'astro:content';
+import { fmt, localeFrom, t } from '~/lib/i18n';
+
+const route = Astro.locals.starlightRoute;
+const { title, phase } = route.entry.data as { title: string; phase?: string };
+const locale = localeFrom(Astro.currentLocale);
+const n = phase ? Number(phase.slice(1)) : -1;
+
+const prefix = /^(?:Phase|Fase)\s+\d+\s*·\s*/;
+const shown = n >= 0 ? title.replace(prefix, '') : title;
+
+let rail: { href: string; label: string; state: 'done' | 'current' | 'todo' }[] = [];
+if (n >= 0) {
+  const base = locale === 'en' ? '' : `${locale}/`;
+  const pages = await getCollection('docs', (e) => {
+    const rest = e.id.startsWith(`${base}phases/`) ? e.id.slice(`${base}phases/`.length) : '';
+    return !!e.data.phase && /^f[0-8]-[a-z0-9-]+$/.test(rest);
+  });
+  rail = pages
+    .map((e) => ({ id: e.id.replace(/\.mdx?$/, ''), p: Number(e.data.phase!.slice(1)), title: e.data.title }))
+    .sort((a, b) => a.p - b.p)
+    .map(({ id, p, title }) => ({
+      href: `/${id}/`,
+      label: title,
+      state: p < n ? 'done' : p === n ? 'current' : 'todo',
+    }));
+}
+---
+{
+  n >= 0 ? (
+    <div class="bcc-phasehead">
+      <p class="bcc-phasehead__kicker">{fmt(t(locale, 'phase.kicker'), { n })}</p>
+      <h1 id="_top">{shown}</h1>
+      {rail.length === 9 && (
+        <nav class="bcc-rail" aria-label={t(locale, 'phase.rail')}>
+          <ol>
+            {rail.map((r) => (
+              <li data-state={r.state}>
+                <a href={r.href} aria-current={r.state === 'current' ? 'step' : undefined} title={r.label}>
+                  <span class="bcc-sr">{r.label}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
+    </div>
+  ) : (
+    <h1 id="_top">{title}</h1>
+  )
+}
+
+<style>
+  h1 {
+    margin-top: 1rem;
+    font-size: var(--sl-text-h1);
+    line-height: var(--sl-line-height-headings);
+    font-weight: 700;
+    color: var(--sl-color-white);
+  }
+  .bcc-phasehead h1 {
+    margin-top: 0.35rem;
+  }
+  .bcc-phasehead__kicker {
+    margin: 1rem 0 0;
+    color: var(--bcc-accent);
+    font-family: var(--__sl-font-mono);
+    font-size: var(--sl-text-xs);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .bcc-rail ol {
+    display: flex;
+    gap: 4px;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+    max-width: 22rem;
+  }
+  .bcc-rail li {
+    flex: 1;
+    margin: 0;
+  }
+  .bcc-rail a {
+    display: block;
+    padding-block: 8px; /* taller hit area than the visible bar */
+  }
+  .bcc-rail a::before {
+    content: '';
+    display: block;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--bcc-line);
+    transition: background-color 0.15s;
+  }
+  .bcc-rail [data-state='done'] a::before {
+    background: color-mix(in srgb, var(--bcc-accent) 45%, var(--bcc-line));
+  }
+  .bcc-rail [data-state='current'] a::before {
+    background: var(--bcc-accent);
+  }
+  .bcc-rail a:hover::before {
+    background: var(--bcc-muted);
+  }
+  .bcc-rail [data-state='current'] a:hover::before {
+    background: var(--bcc-accent);
+  }
+</style>

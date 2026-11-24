@@ -221,6 +221,31 @@ Decisions taken after step 8 (2026-11-24):
 - Tests: `tests/unit/prefs.test.ts`, the insert tests, `tests/e2e/guide.spec.ts` (switch,
   panel, tool choice, no-JS fallback).
 
+### Redesign "Workbench" and social previews (issues #4–#5, branch `issues-1-5`, 2026-11-24)
+
+- **Design:** the user's design system was empty, so the site has its own: "Workbench".
+  Tokens are in `src/styles/theme.css` (dark values on `:root`, light ones on
+  `:root[data-theme='light']`, unlayered so they beat Starlight's `@layer starlight.base`).
+  Teal accent, warm orange for gates, blue for "you". No Anthropic brand colours or logos.
+  The design canvas from the session is a private artifact; it is not part of the repo.
+- **Fonts:** self-hosted through fontsource, with no external requests: Inter (text),
+  Space Grotesk (headings), JetBrains Mono (code). Loaded via `customCss` in `astro.config.mjs`.
+- **Homepage:** a hero card showing a build-loop session, number-led "What's inside" stats
+  (`home/Stat.astro`), tinted role cards, numbered phase tiles (`home/PhaseTiles.astro`).
+  Styles in `src/styles/home.css`. Both `index.mdx` files are hand-written.
+- **Phase pages:** the `PageTitle` override adds a "Phase N of 8" kicker and a nine-segment
+  rail linking every phase. It strips "Phase N · " from the visible h1 (the kicker says it).
+  The sidebar and the `<title>` keep the full title.
+- **Components:** GateCard, WhyThisStep and UnderTheHood have icons; the Customize panel was
+  restyled (`src/styles/guide.css`).
+- **Social previews:** `src/pages/og/[...slug].png.ts` builds one 1200×630 PNG per page at
+  build time with satori + resvg (`src/lib/og.ts`, devDependencies). The Head override links
+  it as `og:image` / `twitter:image`; the 404 page uses the homepage card. Satori needs
+  `boxSizing: 'border-box'` on the root, and resvg does not draw radial-gradient patterns.
+- **Build time** is now about 3 minutes locally; the 126 images are part of that.
+- **e2e on a busy machine:** with the default workers, some tests can hit the 30s timeout
+  while the browsers start. `npx playwright test --workers=2` passes all of them.
+
 ## Gotchas
 
 - Astro 7's MDX compiler is `satteri`, not `@mdx-js/mdx`. `check-mdx.mjs` resolves it from
