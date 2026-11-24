@@ -18,7 +18,7 @@ const group = (label, it, directory) => ({
 });
 
 export default defineConfig({
-  site: 'https://build-with-claude-code.vercel.app',
+  site: 'https://build-with-claude-code-playbook.vercel.app',
   integrations: [
     // Must come before Starlight so ```mermaid fences are handled first.
     mermaid({ theme: 'default', autoTheme: true }),
