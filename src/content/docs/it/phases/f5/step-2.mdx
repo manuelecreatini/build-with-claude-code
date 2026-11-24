@@ -3,12 +3,14 @@
 title: "Passo 2 — Implementa (TDD dove conta)"
 description: "Dopo l'approvazione Claude:"
 lastVerified: 2026-11-12
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L1197
 phase: F5
 ---
 
 import Term from '~/components/Term.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import UnderTheHood from '~/components/UnderTheHood.astro';
+import Only from '~/components/guide/Only.astro';
 import Role from '~/components/Role.astro';
 
 <WhyThisStep>Un test che fallisce, scritto per primo, è una definizione precisa e verificabile di "fatto". Permette a Claude di controllare il proprio lavoro invece di chiederti di fidarti.</WhyThisStep>
@@ -18,6 +20,12 @@ import Role from '~/components/Role.astro';
 Un branch è una linea separata di commit. Lavorare su `bp-07-…` invece che su `main` significa che `main` contiene sempre una versione che ha superato i controlli: se la fase va male cancelli il branch e nient'altro viene toccato. Approfondisci in [Git, branch e pull request](/it/concepts/git-branches-and-pull-requests/) e [Test e CI](/it/concepts/tests-and-ci/).
 
 </UnderTheHood>
+
+<Only surface="desktop">
+
+**Nell'app desktop:** in modalità *Manual* ogni modifica compare come diff con i pulsanti per approvare o rifiutare. La scheda **Changes** mostra tutte le modifiche della sessione in una vista diff dove puoi lasciare a Claude un commento su una riga. Per provare l'app mentre la costruisci, apri il pannello **Browser** (`Ctrl+Shift+B` / `Cmd+Shift+B`); Claude configura come avviarla in `.claude/launch.json`.
+
+</Only>
 
 Dopo l'approvazione Claude:
 

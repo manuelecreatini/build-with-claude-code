@@ -1,0 +1,13 @@
+---
+/** A number-led card for the homepage "What's inside" strip. */
+interface Props {
+  value: string;
+  title: string;
+}
+const { value, title } = Astro.props;
+---
+<div class="bcc-stat">
+  <p class="bcc-stat__value" aria-hidden="true">{value}</p>
+  <p class="bcc-stat__title">{title}</p>
+  <div class="bcc-stat__body"><slot /></div>
+</div>

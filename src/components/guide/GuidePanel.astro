@@ -1,0 +1,129 @@
+---
+/**
+ * The "Customize guide" dialog, rendered once per page (from the Footer override). Every option
+ * shows its pros and cons; the recommended one carries a badge. Changes apply immediately.
+ */
+import { AXES, AXIS_NAMES, TOOL_NAMES, TOOLS } from '~/lib/prefs';
+import { prefsText } from '~/data/prefs';
+import { localeFrom, t, fmt } from '~/lib/i18n';
+import { inlineCode } from '~/lib/inline';
+
+const locale = localeFrom(Astro.currentLocale);
+const text = prefsText[locale];
+---
+<dialog id="bcc-guide-panel" class="bcc-panel" aria-labelledby="bcc-guide-panel-title">
+  <form method="dialog" class="bcc-panel__inner">
+    <header class="bcc-panel__head">
+      <h2 id="bcc-guide-panel-title">{t(locale, 'guide.title')}</h2>
+      <button type="submit" class="bcc-panel__close" aria-label={t(locale, 'guide.close')}>
+        <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+      </button>
+    </header>
+    <p class="bcc-panel__intro">{t(locale, 'guide.intro')}</p>
+
+    {AXIS_NAMES.map((axis) => {
+      const a = text.axes[axis];
+      return (
+        <fieldset class="bcc-axis">
+          <legend>
+            <span class="bcc-axis__label">{a.label}</span>
+            <span class="bcc-axis__q">{a.question}</span>
+          </legend>
+          <div class="bcc-options" data-count={AXES[axis].values.length}>
+            {(AXES[axis].values as readonly string[]).map((v) => {
+              const o = a.options[v];
+              return (
+                <label class="bcc-option">
+                  <input type="radio" name={`bcc-${axis}`} value={v} data-axis={axis} checked={v === AXES[axis].recommended} />
+                  <span class="bcc-option__top">
+                    <span class="bcc-option__label">{o.label}</span>
+                    {v === AXES[axis].recommended && <span class="bcc-badge">{t(locale, 'guide.recommended')}</span>}
+                  </span>
+                  <span class="bcc-option__summary" set:html={inlineCode(o.summary)} />
+                  <span class="bcc-pc">
+                    <span class="bcc-pc__h bcc-pc__h--pro">{t(locale, 'guide.pros')}</span>
+                    <ul class="bcc-pc__list bcc-pc__list--pro">{o.pros.map((x) => <li set:html={inlineCode(x)} />)}</ul>
+                    <span class="bcc-pc__h bcc-pc__h--con">{t(locale, 'guide.cons')}</span>
+                    <ul class="bcc-pc__list bcc-pc__list--con">{o.cons.map((x) => <li set:html={inlineCode(x)} />)}</ul>
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        </fieldset>
+      );
+    })}
+
+    <fieldset class="bcc-axis">
+      <legend>
+        <span class="bcc-axis__label">{t(locale, 'guide.tools')}</span>
+        <span class="bcc-axis__q">{t(locale, 'guide.toolsIntro')}</span>
+      </legend>
+      <div class="bcc-gtools">
+        {TOOL_NAMES.map((tool) => {
+          const x = text.tools[tool];
+          const rec = TOOLS[tool];
+          return (
+            <div class="bcc-gtool">
+              <div class="bcc-gtool__head">
+                <span class="bcc-gtool__name">{x.name}</span>
+                <span class="bcc-gtool__role">{x.role}</span>
+              </div>
+              <div class="bcc-gtool__choice" role="radiogroup" aria-label={x.name}>
+                {[true, false].map((on) => (
+                  <label class="bcc-option bcc-option--compact">
+                    <input type="radio" name={`bcc-gtool-${tool}`} value={on ? 'on' : 'off'} data-tool={tool} checked={on === rec} />
+                    <span class="bcc-option__top">
+                      <span class="bcc-option__label">{fmt(t(locale, on ? 'guide.ifUse' : 'guide.ifSkip'), { tool: x.name })}</span>
+                      {on === rec && <span class="bcc-badge">{t(locale, 'guide.recommended')}</span>}
+                    </span>
+                    <span class="bcc-pc">
+                      <ul class="bcc-pc__list bcc-pc__list--pro">{(on ? x.use : x.skip).pros.map((p) => <li set:html={inlineCode(p)} />)}</ul>
+                      <ul class="bcc-pc__list bcc-pc__list--con">{(on ? x.use : x.skip).cons.map((c) => <li set:html={inlineCode(c)} />)}</ul>
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </fieldset>
+
+    <footer class="bcc-panel__foot">
+      <button type="button" class="bcc-button bcc-button--ghost" data-reset-guide>{t(locale, 'guide.reset')}</button>
+      <button type="submit" class="bcc-button">{t(locale, 'guide.close')}</button>
+    </footer>
+  </form>
+</dialog>
+
+<script>
+  import type { Axis, Prefs, Tool } from '~/lib/prefs';
+  import { onPrefs, resetPrefs, startPrefs, updatePrefs } from '~/lib/prefs-client';
+
+  startPrefs();
+  const panel = document.querySelector<HTMLDialogElement>('#bcc-guide-panel');
+  if (panel) {
+    panel.addEventListener('change', (e) => {
+      const input = e.target as HTMLInputElement;
+      if (input.dataset.axis) {
+        const axis = input.dataset.axis as Axis;
+        updatePrefs((p) => ({ ...p, [axis]: input.value }) as Prefs);
+      } else if (input.dataset.tool) {
+        const tool = input.dataset.tool as Tool;
+        updatePrefs((p) => ({ ...p, tools: { ...p.tools, [tool]: input.value === 'on' } }));
+      }
+    });
+    panel.querySelector('[data-reset-guide]')?.addEventListener('click', resetPrefs);
+    // Close when the backdrop (the dialog element itself, outside the form) is clicked.
+    panel.addEventListener('click', (e) => {
+      if (e.target === panel) panel.close();
+    });
+    onPrefs((p) => {
+      for (const input of panel.querySelectorAll<HTMLInputElement>('input[type=radio]')) {
+        if (input.dataset.axis) input.checked = p[input.dataset.axis as Axis] === input.value;
+        else if (input.dataset.tool) input.checked = (p.tools[input.dataset.tool as Tool] ? 'on' : 'off') === input.value;
+      }
+    });
+  }
+</script>

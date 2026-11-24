@@ -8,6 +8,8 @@ head:
   - tag: title
     content: Build with Claude Code · An interactive playbook
 hero:
+  image:
+    html: '<div class="bcc-hero-card" aria-hidden="true"><div class="bcc-hero-card__bar"><i></i><i></i><i></i><b>Phase 5 · build loop</b></div><ol><li data-s="done">Start the build phase<kbd>G5</kbd></li><li data-s="done">Implement with tests</li><li data-s="now">Review and tests<kbd>/code-review</kbd></li><li data-s="todo">Update the docs</li><li data-s="gate">Close the phase<kbd>G6</kbd></li></ol></div>'
   tagline: A repeatable system for taking any digital product from idea to production with Claude, explained step by step so you know what is happening and why.
   actions:
     - text: Start here
@@ -18,47 +20,62 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+import PhaseTiles from '~/components/home/PhaseTiles.astro';
+import Stat from '~/components/home/Stat.astro';
 import Role from '~/components/Role.astro';
 
 ## What's inside
 
-<CardGrid>
-  <Card title="Nine phases" icon="rocket">
+<div class="bcc-stats not-content">
+  <Stat value="9" title="Nine phases">
     From the first idea you dictate to weekly improvements after launch, with a clear goal, inputs, outputs and approval gate for each phase.
-  </Card>
-  <Card title="An eight-step build loop" icon="random">
+  </Stat>
+  <Stat value="8" title="An eight-step build loop">
     The same routine for every slice of the product: plan, implement with tests, review, document, merge, hand off.
-  </Card>
-  <Card title="15 templates and prompts" icon="document">
+  </Stat>
+  <Stat value="15" title="Templates and prompts">
     Ready-to-use prompts, issue and PR templates and checklists you copy into your project.
-  </Card>
-  <Card title="A verified toolkit" icon="setting">
+  </Stat>
+  <Stat value="✓" title="A verified toolkit">
     Claude Code commands, Matt Pocock's skills and integrations, checked against the primary sources.
-  </Card>
-</CardGrid>
+  </Stat>
+</div>
 
 ## Who does what
 
 Every step is labelled, so you always know who is acting:
 
-- <Role as="claude" /> Claude does it on its own.
-- <Role as="you" /> You do it: a decision, an account, a payment or a final test.
-- <Role as="gate" /> Claude stops and waits for your explicit approval.
+<div class="bcc-roles not-content">
+  <div class="bcc-rolecard" data-role="claude">
+    <Role as="claude" />
+    <p>Claude does it on its own.</p>
+  </div>
+  <div class="bcc-rolecard" data-role="you">
+    <Role as="you" />
+    <p>You do it: a decision, an account, a payment or a final test.</p>
+  </div>
+  <div class="bcc-rolecard" data-role="gate">
+    <Role as="gate" />
+    <p>Claude stops and waits for your explicit approval.</p>
+  </div>
+</div>
 
 ## The path
 
-<CardGrid>
-  <LinkCard title="Phase 0 · Setup" description="Install the tools, connect GitHub, create the project." href="/phases/f0-setup/" />
-  <LinkCard title="Phase 1 · Preliminary spec" description="Dictate your idea and turn it into a first spec." href="/phases/f1-preliminary-spec/" />
-  <LinkCard title="Phase 2 · Discovery" description="Take every open decision with /wayfinder." href="/phases/f2-discovery/" />
-  <LinkCard title="Phase 3 · Spec and architecture" description="Final spec, architecture and costs." href="/phases/f3-spec-architecture/" />
-  <LinkCard title="Phase 4 · Build phases" description="Split the product into vertical slices." href="/phases/f4-build-phases/" />
-  <LinkCard title="Phase 5 · The build loop" description="Build each slice with plan, tests and review." href="/phases/f5-build-loop/" />
-  <LinkCard title="Phase 6 · Integration" description="Validate the whole product end to end." href="/phases/f6-integration/" />
-  <LinkCard title="Phase 7 · Deploy and launch" description="Production, domain, monitoring, rollback." href="/phases/f7-deploy/" />
-  <LinkCard title="Phase 8 · Post-launch" description="Improve every week without breaking things." href="/phases/f8-post-launch/" />
-</CardGrid>
+<PhaseTiles
+  items={[
+    { title: 'Setup', description: 'Install the tools, connect GitHub, create the project.', href: '/phases/f0-setup/' },
+    { title: 'Preliminary spec', description: 'Dictate your idea and turn it into a first spec.', href: '/phases/f1-preliminary-spec/' },
+    { title: 'Discovery', description: 'Take every open decision with /wayfinder.', href: '/phases/f2-discovery/' },
+    { title: 'Spec and architecture', description: 'Final spec, architecture and costs.', href: '/phases/f3-spec-architecture/' },
+    { title: 'Build phases', description: 'Split the product into vertical slices.', href: '/phases/f4-build-phases/' },
+    { title: 'The build loop', description: 'Build each slice with plan, tests and review.', href: '/phases/f5-build-loop/' },
+    { title: 'Integration', description: 'Validate the whole product end to end.', href: '/phases/f6-integration/' },
+    { title: 'Deploy and launch', description: 'Production, domain, monitoring, rollback.', href: '/phases/f7-deploy/' },
+    { title: 'Post-launch', description: 'Improve every week without breaking things.', href: '/phases/f8-post-launch/' },
+  ]}
+/>
 
 ## Keep it at hand
 

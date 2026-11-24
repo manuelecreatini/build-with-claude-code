@@ -3,14 +3,34 @@
 title: "Step 4 — Review and tests"
 description: "Tests are not optional for critical features. Every phase closes only with all checks green."
 lastVerified: 2026-11-12
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L1237
 phase: F5
 ---
 
 import Term from '~/components/Term.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
+import Only from '~/components/guide/Only.astro';
 import Role from '~/components/Role.astro';
 
 <WhyThisStep>Tests and review catch what the plan missed while the change is still small and fresh. Green checks are what lets you merge without reading every line.</WhyThisStep>
+
+<Only security="hardened">
+
+**Hardened security:** run `/security-review` on every build phase, not only those that touch login, permissions, payments or personal data, and `npm audit --audit-level=high` before opening the pull request. Ask Claude to fix or explain every finding in the pull request description.
+
+</Only>
+
+<Only focus="polish">
+
+**Polished:** add to the review an accessibility pass on the screens the phase touches: keyboard only, a screen reader on the main flow, contrast, and a check that the screens follow `docs/design-system.md`.
+
+</Only>
+
+<Only surface="desktop">
+
+**In the desktop app:** `/code-review` and `/security-review` work as in the terminal. **Create PR** opens the pull request (it needs `gh`); *Auto-fix* and *Merge when ready* are in the pull request's ⋮ menu.
+
+</Only>
 
 Tests are not optional for critical features. Every phase closes only with all checks green.
 

@@ -3,10 +3,13 @@
 title: "Phase 3 · Final spec and technical architecture"
 description: "Turn decisions and the preliminary spec into a single source of truth: what we build, how, within which limits and what stays out."
 lastVerified: 2026-11-12
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L849
 phase: F3
 ---
 
 import Term from '~/components/Term.astro';
+import Only from '~/components/guide/Only.astro';
+import ToolChoice from '~/components/guide/ToolChoice.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
@@ -76,6 +79,22 @@ If you are not an engineer, a boring, widespread stack that Claude knows well is
 | Tests | Vitest + Playwright | Jest | An existing project already on Jest. |
 | Monitoring | Sentry + PostHog + Vercel Analytics | — | — |
 
+<Only deps="lean">
+
+**Lean dependencies.** Add one line to the prompt from template T5: *"Prefer what the framework and the platform already provide. For every library or external service you propose, write in the ADR what it saves us, what it costs to keep updated, and the version without it."* Expect fewer services (for example: no separate analytics or error tracker at the start) and more code you own.
+
+</Only>
+
+<ToolChoice tool="supabase" />
+
+<ToolChoice tool="docker" />
+
+<Only tool="docker">
+
+With Docker: ask Claude to add a `docker-compose.yml` with the app and a local Postgres, and to document `docker compose up` in the README. Record the choice in an ADR; Phase 7 deploys the same image.
+
+</Only>
+
 ## Step 4 — Interface: mockups and prototypes (when needed)
 
 If the look or behaviour of the interface is still uncertain, settle it before gate G3:
@@ -84,6 +103,18 @@ If the look or behaviour of the interface is still uncertain, settle it before g
 - **Behaviour prototypes**: `/prototype` <Role as="pocock" /> builds a throwaway prototype, either a single HTML file for state and logic questions or very different interface variants you can switch between from one page (this last mode requires the app's code to exist already).
 
 Attach the results to the spec (UI/UX section) or to the relevant issue.
+
+<Only focus="function">
+
+**Function first.** Skip the mockups unless a flow is genuinely unclear. Ask for a ready-made component library in the architecture (for example shadcn/ui with its default theme) and leave visual polish to a build phase after launch.
+
+</Only>
+
+<Only focus="polish">
+
+**Polished.** Do the mockups for every main screen, not only the uncertain ones. Ask Claude to write `docs/design-system.md` (colours, type scale, spacing, components, states, dark mode) from the approved mockups, and add to the spec an accessibility target: WCAG 2.2 AA, keyboard navigation, visible focus, contrast checked.
+
+</Only>
 
 ## Step 5 — Independent critical review
 

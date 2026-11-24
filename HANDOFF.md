@@ -188,6 +188,63 @@ Decisions taken after step 8 (2026-11-24):
   channel. No personal email in the repo.
 - **GitHub Discussions:** off; issues are enough for now.
 - **"15 templates":** correct as written. The 15 are T1–T15; T0 (project CLAUDE.md) is an extra.
+- Done after step 8: "Edit page" links to the real source; `npm run check:freshness` flags
+  pages whose `lastVerified` is more than 90 days old.
+
+### Customizable guide (issues #1–#3, branch `issues-1-5`, 2026-11-24)
+
+- **Preferences** (`src/lib/prefs.ts`; text, pros and cons in `src/data/prefs.ts`). Each axis
+  has a recommended value, which is also what visitors without JavaScript see:
+  - surface: terminal (rec., every command in the playbook works as written) | desktop
+  - level: guided | standard (rec., the playbook as written) | expert (hides why/hood/quiz)
+  - security: baseline (rec.) | hardened
+  - focus: function | balanced (rec.) | polish
+  - deps: lean | standard (rec.)
+  - tools: GitHub, Vercel, Supabase, Sentry on; Docker off (the default stack does not need it)
+- **How it works:** a small inline script in `<head>` (`headScript`) copies the saved prefs to
+  `data-*` attributes on `<html>` before first paint, so pages do not flash. Generated CSS
+  (`visibilityCss`) hides `.bcc-only` blocks that do not match. State is in the existing
+  `localStorage` store (`prefs` slice) and shared across languages.
+- **UI:** a Terminal / Desktop app switch and a "Customize" button next to the language
+  switcher (header on desktop, menu footer on phones, as Starlight places the language
+  picker). The button opens a `<dialog>` with every option as a card: pros, cons and a
+  "Recommended" badge. A dot on the button marks a non-recommended setup. `ToolChoice`
+  cards in the pages switch one tool and say what to do instead when it is skipped.
+- **Content:** `scripts/guide-inserts.mjs` (both locales), merged with the teaching inserts by
+  `applyInserts`. Kinds: `only` (block for one setup), `choice` (`<ToolChoice>`), `swap` (the
+  section body becomes the terminal version and a desktop version follows). `pos: 'start'`
+  places an insert right after its heading. The audit counts guide inserts as expected
+  additions.
+- **Desktop facts** were checked on 2026-11-24 against code.claude.com (desktop docs): Code
+  tab, + New, Local environment, Plan mode in the mode selector, diff and Changes card,
+  Browser pane, `.claude/launch.json`, plugins via +, `/doctor` etc. not available there.
+- Tests: `tests/unit/prefs.test.ts`, the insert tests, `tests/e2e/guide.spec.ts` (switch,
+  panel, tool choice, no-JS fallback).
+
+### Redesign "Workbench" and social previews (issues #4–#5, branch `issues-1-5`, 2026-11-24)
+
+- **Design:** the user's design system was empty, so the site has its own: "Workbench".
+  Tokens are in `src/styles/theme.css` (dark values on `:root`, light ones on
+  `:root[data-theme='light']`, unlayered so they beat Starlight's `@layer starlight.base`).
+  Teal accent, warm orange for gates, blue for "you". No Anthropic brand colours or logos.
+  The design canvas from the session is a private artifact; it is not part of the repo.
+- **Fonts:** self-hosted through fontsource, with no external requests: Inter (text),
+  Space Grotesk (headings), JetBrains Mono (code). Loaded via `customCss` in `astro.config.mjs`.
+- **Homepage:** a hero card showing a build-loop session, number-led "What's inside" stats
+  (`home/Stat.astro`), tinted role cards, numbered phase tiles (`home/PhaseTiles.astro`).
+  Styles in `src/styles/home.css`. Both `index.mdx` files are hand-written.
+- **Phase pages:** the `PageTitle` override adds a "Phase N of 8" kicker and a nine-segment
+  rail linking every phase. It strips "Phase N · " from the visible h1 (the kicker says it).
+  The sidebar and the `<title>` keep the full title.
+- **Components:** GateCard, WhyThisStep and UnderTheHood have icons; the Customize panel was
+  restyled (`src/styles/guide.css`).
+- **Social previews:** `src/pages/og/[...slug].png.ts` builds one 1200×630 PNG per page at
+  build time with satori + resvg (`src/lib/og.ts`, devDependencies). The Head override links
+  it as `og:image` / `twitter:image`; the 404 page uses the homepage card. Satori needs
+  `boxSizing: 'border-box'` on the root, and resvg does not draw radial-gradient patterns.
+- **Build time** is now about 3 minutes locally; the 126 images are part of that.
+- **e2e on a busy machine:** with the default workers, some tests can hit the 30s timeout
+  while the browsers start. `npx playwright test --workers=2` passes all of them.
 
 ## Gotchas
 

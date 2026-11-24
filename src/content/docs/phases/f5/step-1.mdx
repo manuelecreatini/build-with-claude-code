@@ -3,12 +3,14 @@
 title: "Step 1 — Start the build phase (gate G5)"
 description: "Build with Claude Code"
 lastVerified: 2026-11-12
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.en.md?plain=1#L1188
 phase: F5
 ---
 
 import Term from '~/components/Term.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import UnderTheHood from '~/components/UnderTheHood.astro';
+import Only from '~/components/guide/Only.astro';
 
 <WhyThisStep>In plan mode Claude can read and explore but cannot edit your source, so you can correct the approach while it costs one sentence instead of a rewrite.</WhyThisStep>
 
@@ -17,6 +19,12 @@ import UnderTheHood from '~/components/UnderTheHood.astro';
 Plan mode is one of Claude Code's permission modes. Claude reads files, runs shell commands to explore and writes a plan, but source edits stay blocked until you approve. When you approve, Claude Code asks how to continue (for example with edits approved manually), and you can open the plan in your editor with `Ctrl+G` to change it first. More in [Plan mode and permissions](/concepts/plan-mode-and-permissions/).
 
 </UnderTheHood>
+
+<Only surface="desktop">
+
+**In the desktop app:** choose **Plan** in the mode selector next to the prompt box, or press `Ctrl+Shift+M` / `Cmd+Shift+M`. `Shift+Tab` does not change mode in the desktop app. The rest of the step is the same.
+
+</Only>
 
 1. Press `Shift+Tab` until the status line shows *<Term id="plan-mode">plan mode</Term> on* (or start the message with `/plan`).
 2. Paste the prompt from template T8 with the phase number: "Proceed with <Term id="build-phase-bp">Build Phase</Term> 07 (<Term id="issue">issue</Term> \#23)".

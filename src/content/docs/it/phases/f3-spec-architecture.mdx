@@ -3,10 +3,13 @@
 title: "Fase 3 · Specifica finale e architettura tecnica"
 description: "Trasformare decisioni e spec preliminare in un'unica fonte di verità: cosa costruiamo, come, con quali limiti e cosa resta fuori."
 lastVerified: 2026-11-12
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L849
 phase: F3
 ---
 
 import Term from '~/components/Term.astro';
+import Only from '~/components/guide/Only.astro';
+import ToolChoice from '~/components/guide/ToolChoice.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
@@ -76,6 +79,22 @@ Per chi non è ingegnere conviene uno stack noioso, molto diffuso e ben conosciu
 | Test | Vitest + Playwright | Jest | Progetto esistente già su Jest. |
 | Monitoring | Sentry + PostHog + Vercel Analytics | — | — |
 
+<Only deps="lean">
+
+**Dipendenze essenziali.** Aggiungi una riga al prompt del template T5: *"Preferisci ciò che il framework e la piattaforma già offrono. Per ogni libreria o servizio esterno che proponi, scrivi nell'ADR cosa ci fa risparmiare, quanto costa tenerlo aggiornato e come sarebbe la versione senza."* Aspettati meno servizi (per esempio: niente analytics o tracciamento errori separati all'inizio) e più codice tuo.
+
+</Only>
+
+<ToolChoice tool="supabase" />
+
+<ToolChoice tool="docker" />
+
+<Only tool="docker">
+
+Con Docker: chiedi a Claude di aggiungere un `docker-compose.yml` con l'app e un Postgres locale, e di documentare `docker compose up` nel README. Registra la scelta in un ADR; la Fase 7 pubblica la stessa immagine.
+
+</Only>
+
 ## Passo 4 — Interfaccia: mockup e prototipi (quando servono)
 
 Se l'aspetto o il comportamento dell'interfaccia sono ancora incerti, chiudili prima del gate G3:
@@ -84,6 +103,18 @@ Se l'aspetto o il comportamento dell'interfaccia sono ancora incerti, chiudili p
 - **Prototipi di comportamento**: `/prototype` <Role as="pocock" /> costruisce un prototipo usa-e-getta, un singolo file HTML per domande di stato e logica oppure varianti di interfaccia molto diverse tra loro, alternabili da una sola pagina (quest'ultima modalità richiede che esista già il codice dell'app).
 
 Allega i risultati alla spec (sezione UI/UX) o alla issue pertinente.
+
+<Only focus="function">
+
+**Prima la funzione.** Salta i mockup a meno che un flusso non sia davvero poco chiaro. Chiedi nell'architettura una libreria di componenti pronta (per esempio shadcn/ui con il tema di default) e rimanda la cura visiva a una build phase dopo il lancio.
+
+</Only>
+
+<Only focus="polish">
+
+**Curato.** Fai i mockup di ogni schermata principale, non solo di quelle incerte. Chiedi a Claude di scrivere `docs/design-system.md` (colori, scala tipografica, spaziature, componenti, stati, tema scuro) a partire dai mockup approvati, e aggiungi alla spec un obiettivo di accessibilità: WCAG 2.2 AA, navigazione da tastiera, focus visibile, contrasto verificato.
+
+</Only>
 
 ## Passo 5 — Revisione critica indipendente
 

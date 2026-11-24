@@ -1,0 +1,20 @@
+---
+/** Numbered tiles for the nine phases on the homepage. */
+interface Props {
+  items: { title: string; description: string; href: string }[];
+}
+const { items } = Astro.props;
+---
+<ol class="bcc-tiles not-content">
+  {
+    items.map((item, i) => (
+      <li>
+        <a href={item.href} class="bcc-tile">
+          <span class="bcc-tile__n" aria-hidden="true">{String(i).padStart(2, '0')}</span>
+          <span class="bcc-tile__title">{item.title}</span>
+          <span class="bcc-tile__desc">{item.description}</span>
+        </a>
+      </li>
+    ))
+  }
+</ol>

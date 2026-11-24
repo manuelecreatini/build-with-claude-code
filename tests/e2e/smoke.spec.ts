@@ -97,3 +97,15 @@ test('concept pages exist in both locales', async ({ page }) => {
   await page.goto('/it/concepts/plan-mode-and-permissions/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Plan mode e permessi');
 });
+
+test('phase pages show the kicker, the phase rail and a social preview image', async ({ page, request }) => {
+  await page.goto('/it/phases/f5-build-loop/');
+  await expect(page.locator('.bcc-phasehead__kicker')).toHaveText('Fase 5 di 8');
+  const rail = page.getByRole('navigation', { name: 'Le nove fasi' });
+  await expect(rail.getByRole('link')).toHaveCount(9);
+  await expect(rail.locator('a[aria-current="step"]')).toHaveAttribute('href', '/it/phases/f5-build-loop/');
+  const og = await page.locator('meta[property="og:image"]').getAttribute('content');
+  expect(og).toMatch(/\/og\/it\/phases\/f5-build-loop\.png$/);
+  const img = await request.get(new URL(og!).pathname);
+  expect(img.headers()['content-type']).toContain('image/png');
+});

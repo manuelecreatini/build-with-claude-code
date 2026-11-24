@@ -1,0 +1,47 @@
+name: Freshness
+
+# Every Monday, list pages whose facts were last verified more than 90 days ago.
+# Opens (or updates) one issue labelled "freshness"; closes it when everything is fresh again.
+on:
+  schedule:
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+    inputs:
+      days:
+        description: Maximum age in days
+        default: '90'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Check lastVerified dates
+        id: check
+        run: |
+          node scripts/check-freshness.mjs --days "${DAYS}" --out report.md | tail -1 >> "$GITHUB_OUTPUT"
+        env:
+          DAYS: ${{ inputs.days || '90' }}
+      - name: Open, update or close the freshness issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STALE: ${{ steps.check.outputs.stale }}
+        run: |
+          gh label create freshness --color FBCA04 --description "Pages due for a fact check" --force
+          existing=$(gh issue list --label freshness --state open --json number --jq '.[0].number // empty')
+          if [ "$STALE" -gt 0 ]; then
+            if [ -n "$existing" ]; then
+              gh issue edit "$existing" --body-file report.md
+            else
+              gh issue create --title "Pages due for a fact check" --label freshness --body-file report.md
+            fi
+          elif [ -n "$existing" ]; then
+            gh issue close "$existing" --comment "All pages were verified recently. Closing."
+          fi

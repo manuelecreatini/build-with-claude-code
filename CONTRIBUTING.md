@@ -69,7 +69,8 @@ scripts, not in either source.
    settings, link the official documentation (https://code.claude.com/docs). For skills, link
    the [`mattpocock/skills`](https://github.com/mattpocock/skills) repo. For prices, link the
    vendor's pricing page. Update a page's `lastVerified` date only when you have re-checked
-   its facts against those sources.
+   its facts against those sources. Every Monday a GitHub Action lists the pages not verified
+   in the last 90 days in an issue labelled `freshness`; those are good first contributions.
 3. **No tracking.** No analytics, no third-party trackers, no scripts or fonts loaded from other
    sites.
 4. **Visitors' keys stay private.** The AI coach may send the visitor's API key only to

@@ -3,11 +3,14 @@
 title: "Fase 7 · Deploy e lancio"
 description: "Portare il prodotto dall'ambiente locale alla produzione in modo sicuro, osservabile e reversibile."
 lastVerified: 2026-11-12
+editUrl: https://github.com/manuelecreatini/build-with-claude-code/blob/main/content-source/playbook.it.md?plain=1#L1568
 phase: F7
 ---
 
 import Term from '~/components/Term.astro';
 import UnderTheHood from '~/components/UnderTheHood.astro';
+import ToolChoice from '~/components/guide/ToolChoice.astro';
+import Only from '~/components/guide/Only.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
@@ -46,6 +49,8 @@ Per un MVP bastano locale, anteprima e produzione. Con Supabase usa **due proget
 | Expo EAS | Build e pubblicazione delle app mobile negli store. | Disponibile. | Servono gli account sviluppatore Apple e Google. |
 
 **Regola del playbook**: in sviluppo, piani gratuiti; al lancio di un prodotto commerciale, Vercel Pro e Supabase Pro (circa 45 USD al mese di base, più l'uso). Prezzi verificati a novembre 2026.
+
+<ToolChoice tool="vercel" />
 
 ## Passo 1 — Account e progetti di produzione
 
@@ -130,7 +135,21 @@ Chiedi a Claude di usare le versioni correnti delle action e di aggiungere i tes
 - [ ] Conferma email e politiche di accesso del servizio di <Term id="autenticazione-autorizzazione">autenticazione</Term> attive.
 - [ ] Privacy policy, termini d'uso e, se usi cookie non essenziali o analytics che li richiedono, banner di consenso. Accordi sul trattamento dei dati (DPA) con i fornitori (Vercel, Supabase, Sentry, PostHog). Claude può preparare le bozze; per la versione finale rivolgiti a un legale.
 
+<Only security="hardened">
+
+Sicurezza rinforzata, prima del lancio:
+
+- [ ] Autenticazione a due fattori su ogni account di produzione (GitHub, hosting, database, registrar del dominio, email).
+- [ ] Secret scanning e push protection attivi; nessun alert Dependabot aperto di gravità alta.
+- [ ] Row-level security verificata su ogni tabella, con l'advisor del database se ne ha uno.
+- [ ] Una `/security-review` dell'intero branch `main`, con i rilievi corretti o accettati per iscritto.
+- [ ] Chiavi ruotate se sono mai state incollate in una chat, un log o una issue.
+
+</Only>
+
 ## Passo 7 — Monitoring, analytics e uptime
+
+<ToolChoice tool="sentry" />
 
 | Strumento | Cosa fa | Piano gratuito | Imposta |
 |---|---|---|---|

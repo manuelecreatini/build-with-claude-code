@@ -31,9 +31,23 @@ export default defineConfig({
         root: { label: 'English', lang: 'en' },
         it: { label: 'Italiano', lang: 'it' },
       },
-      customCss: ['./src/styles/custom.css'],
+      customCss: [
+        '@fontsource-variable/inter',
+        '@fontsource-variable/space-grotesk',
+        '@fontsource-variable/jetbrains-mono',
+        './src/styles/theme.css',
+        './src/styles/custom.css',
+        './src/styles/guide.css',
+        './src/styles/home.css',
+      ],
+      // Hand-written pages edit their own file. Generated pages override this with an
+      // `editUrl` that points at their section of the playbook source (see split-playbook.mjs).
+      editLink: { baseUrl: 'https://github.com/manuelecreatini/build-with-claude-code/edit/main/' },
       components: {
         Footer: './src/components/overrides/Footer.astro',
+        Head: './src/components/overrides/Head.astro',
+        PageTitle: './src/components/overrides/PageTitle.astro',
+        LanguageSelect: './src/components/overrides/LanguageSelect.astro',
       },
       plugins: [starlightLinksValidator({ errorOnLocalLinks: false })],
       sidebar: [

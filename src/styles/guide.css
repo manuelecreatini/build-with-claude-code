@@ -1,0 +1,508 @@
+/* Guide preferences: header switcher, customize panel, conditional blocks, tool choices.
+   Colors come from the Workbench tokens in theme.css. */
+:root {
+  --bcc-pro: var(--bcc-accent);
+  --bcc-con: var(--bcc-gate);
+  --bcc-desktop: #a99bff;
+  --bcc-desktop-soft: #221d3d;
+  --bcc-radius: 14px;
+}
+:root[data-theme='light'] {
+  --bcc-desktop: #5b45c9;
+  --bcc-desktop-soft: #efecfd;
+}
+
+/* ---------- Header controls ---------- */
+.bcc-guide-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.bcc-seg {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--bcc-line);
+  border-radius: 10px;
+  background: var(--bcc-bg);
+}
+.bcc-seg button,
+.bcc-customize {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2rem;
+  padding: 0 0.7rem;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--bcc-muted);
+  font: inherit;
+  font-size: var(--sl-text-xs);
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+.bcc-seg button:hover,
+.bcc-customize:hover {
+  color: var(--bcc-ink);
+}
+.bcc-seg button[aria-pressed='true'] {
+  background: var(--bcc-surface);
+  color: var(--bcc-ink);
+  box-shadow: var(--bcc-shadow);
+}
+.bcc-customize {
+  position: relative;
+  min-height: calc(2rem + 8px);
+  border: 1px solid var(--bcc-line);
+  border-radius: 10px;
+  background: var(--bcc-surface);
+  color: var(--bcc-ink);
+}
+.bcc-customize:hover {
+  border-color: var(--bcc-muted);
+}
+.bcc-customize__dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--bcc-accent);
+}
+.bcc-customize__dot[hidden] {
+  display: none;
+}
+/* The header gets crowded between the md breakpoint and wide screens: icons only. */
+@media (min-width: 50rem) and (max-width: 80rem) {
+  .header .bcc-seg span,
+  .header .bcc-customize__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+/* Mobile menu footer: give the controls their own full-width row. */
+.mobile-preferences .bcc-guide-controls {
+  flex-basis: 100%;
+  flex-wrap: wrap;
+}
+
+/* ---------- Customize panel ---------- */
+.bcc-panel {
+  width: min(55rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  margin: auto; /* Starlight resets margins, which would pin the dialog to the top left */
+  padding: 0;
+  border: 1px solid var(--bcc-line);
+  border-radius: 20px;
+  background: var(--bcc-surface);
+  color: var(--bcc-text);
+  box-shadow: var(--bcc-shadow-lg);
+}
+.bcc-panel::backdrop {
+  background: var(--bcc-scrim);
+  backdrop-filter: blur(3px);
+}
+.bcc-panel[open] {
+  animation: bcc-pop 0.18s ease-out;
+}
+@keyframes bcc-pop {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bcc-panel[open] { animation: none; }
+}
+.bcc-panel__inner {
+  padding: 1.5rem 1.75rem 0;
+}
+.bcc-panel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.bcc-panel__head h2 {
+  margin: 0;
+  color: var(--bcc-ink);
+  font-size: var(--sl-text-h3);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+.bcc-panel__close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--bcc-line);
+  border-radius: 10px;
+  background: var(--bcc-surface);
+  color: var(--bcc-ink);
+  cursor: pointer;
+}
+.bcc-panel__close:hover {
+  border-color: var(--bcc-muted);
+}
+.bcc-panel__intro {
+  margin: 0.4rem 0 1.5rem;
+  color: var(--bcc-muted);
+  font-size: var(--sl-text-sm);
+}
+.bcc-axis {
+  min-width: 0;
+  margin: 0 0 1.75rem;
+  padding: 0;
+  border: 0;
+}
+.bcc-axis legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-bottom: 0.75rem;
+  padding: 0;
+}
+.bcc-axis__label {
+  color: var(--bcc-muted);
+  font-size: var(--sl-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.bcc-axis__q {
+  color: var(--bcc-ink);
+  font-family: var(--bcc-font-display);
+  font-size: var(--sl-text-lg);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+.bcc-options {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+.bcc-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.9rem 1rem;
+  border: 2px solid var(--bcc-line);
+  border-radius: var(--bcc-radius);
+  background: var(--bcc-surface);
+  font-size: var(--sl-text-sm);
+  cursor: pointer;
+  container-type: inline-size;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+.bcc-option:hover {
+  border-color: var(--bcc-muted);
+}
+.bcc-option:has(input:checked) {
+  border-color: var(--bcc-accent);
+  background: var(--bcc-accent-soft);
+}
+.bcc-option:has(input:focus-visible) {
+  outline: 3px solid var(--bcc-accent);
+  outline-offset: 2px;
+}
+.bcc-option > input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.bcc-option__top {
+  display: flex;
+  min-height: 1.6rem; /* same height with or without the Recommended badge */
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0;
+}
+.bcc-option__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--bcc-ink);
+  font-weight: 600;
+}
+/* Radio ring drawn next to the label; the real input stays in the tab order. */
+.bcc-option__label::before {
+  content: '';
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--bcc-line);
+  border-radius: 50%;
+  background: var(--bcc-surface);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.bcc-option:hover .bcc-option__label::before {
+  border-color: var(--bcc-muted);
+}
+.bcc-option:has(input:checked) .bcc-option__label::before {
+  border-color: var(--bcc-accent);
+  background: var(--bcc-accent);
+  box-shadow: inset 0 0 0 3px var(--bcc-surface);
+}
+.bcc-option__top .bcc-badge {
+  color: var(--bcc-accent);
+  background: var(--bcc-surface);
+  box-shadow: inset 0 0 0 1px var(--bcc-line);
+}
+.bcc-option:has(input:checked) .bcc-option__top .bcc-badge {
+  box-shadow: none;
+}
+.bcc-option__summary {
+  color: var(--bcc-text);
+}
+.bcc-pc {
+  display: grid;
+  gap: 0.15rem 1rem;
+}
+@container (min-width: 24rem) {
+  .bcc-pc {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.bcc-pc__h {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+ul.bcc-pc__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--bcc-text);
+  font-size: var(--sl-text-xs);
+  line-height: 1.5;
+}
+ul.bcc-pc__list li {
+  position: relative;
+  margin: 0.2rem 0;
+  padding-inline-start: 1.1rem;
+}
+ul.bcc-pc__list li::before {
+  position: absolute;
+  inset-inline-start: 0;
+  font-weight: 700;
+}
+.bcc-pc__list--pro li::before { content: '+'; color: var(--bcc-pro); }
+.bcc-pc__list--con li::before { content: '−'; color: var(--bcc-con); }
+
+.bcc-gtools {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.bcc-gtool__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.6rem;
+  margin-bottom: 0.5rem;
+}
+.bcc-gtool__name {
+  color: var(--bcc-ink);
+  font-family: var(--bcc-font-display);
+  font-weight: 600;
+}
+.bcc-gtool__role {
+  color: var(--bcc-muted);
+  font-size: var(--sl-text-xs);
+}
+.bcc-gtool__choice {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+.bcc-option--compact {
+  padding: 0.75rem 0.9rem;
+}
+.bcc-panel__foot {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0 -1.75rem;
+  padding: 1rem 1.75rem;
+  border-top: 1px solid var(--bcc-line);
+  background: var(--bcc-bg);
+}
+.bcc-panel__foot .bcc-button--ghost {
+  padding-inline: 0.25rem;
+  border-color: transparent;
+  background: transparent;
+  color: var(--bcc-muted);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.bcc-panel__foot .bcc-button--ghost:hover {
+  color: var(--bcc-ink);
+}
+@media (max-width: 30rem) {
+  .bcc-panel__inner { padding: 1.1rem 1rem 0; }
+  .bcc-panel__foot { margin: 0 -1rem; padding: 0.85rem 1rem; }
+}
+
+/* ---------- Buttons ---------- */
+.bcc-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  padding: 0 1.25rem;
+  border: 1px solid var(--bcc-ink);
+  border-radius: 12px;
+  background: var(--bcc-ink);
+  color: var(--bcc-bg);
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+.bcc-button:hover {
+  border-color: var(--bcc-accent);
+  background: var(--bcc-accent);
+  color: var(--bcc-on-accent);
+}
+.bcc-button--ghost,
+.bcc-button[aria-pressed='false'] {
+  border-color: var(--bcc-line);
+  background: var(--bcc-surface);
+  color: var(--bcc-ink);
+}
+.bcc-button--ghost:hover,
+.bcc-button[aria-pressed='false']:hover {
+  border-color: var(--bcc-muted);
+  background: var(--bcc-surface);
+  color: var(--bcc-ink);
+}
+.bcc-button--small {
+  min-height: 2.25rem;
+  padding: 0 0.9rem;
+  border-radius: 10px;
+  font-size: var(--sl-text-xs);
+}
+.bcc-button[aria-pressed='true'] {
+  border-color: var(--bcc-accent);
+  background: var(--bcc-accent);
+  color: var(--bcc-on-accent);
+}
+
+/* ---------- Conditional blocks ---------- */
+.bcc-only {
+  margin-block: 1.25rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--bcc-line);
+  border-radius: var(--bcc-radius);
+  background: var(--bcc-surface);
+}
+.bcc-only[data-kind='surface'] {
+  border-color: transparent;
+  background: var(--bcc-desktop-soft);
+}
+.bcc-only[data-kind='security'] {
+  border-color: var(--bcc-gate);
+  background: var(--bcc-gate-soft);
+}
+.bcc-only > :first-child { margin-top: 0; }
+.bcc-only > :last-child { margin-bottom: 0; }
+.bcc-only__tag {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.4rem;
+  margin: 0 0 0.45rem !important;
+  color: var(--bcc-muted);
+  font-size: var(--sl-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.bcc-only[data-kind='surface'] .bcc-only__tag { color: var(--bcc-desktop); }
+.bcc-only[data-kind='security'] .bcc-only__tag { color: var(--bcc-gate); }
+.bcc-only__tag span {
+  font-weight: 500;
+}
+/* The terminal version of a step is the playbook text itself, so it needs no frame. */
+.bcc-only[data-kind='surface'][data-only-surface='terminal'] {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.bcc-only[data-only-surface='terminal'] > .bcc-only__tag {
+  display: none;
+}
+
+/* Level: expert hides the teaching panels. */
+html[data-level='expert'] :is(.bcc-why, .bcc-hood, .bcc-quiz) {
+  display: none;
+}
+
+/* ---------- Tool choice ---------- */
+.bcc-tc {
+  margin-block: 1.25rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--bcc-line);
+  border-radius: 16px;
+  background: var(--bcc-surface);
+}
+.bcc-tc > p { margin: 0; }
+.bcc-tc__eyebrow {
+  color: var(--bcc-accent);
+  font-family: var(--__sl-font-mono);
+  font-size: var(--sl-text-xs);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.bcc-tc__title {
+  margin-top: 0.2rem !important;
+  color: var(--bcc-ink);
+  font-family: var(--bcc-font-display);
+  font-weight: 600;
+}
+.bcc-tc__grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  margin-top: 0.85rem;
+}
+.bcc-tc__side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.85rem 1rem;
+  border: 2px solid var(--bcc-line);
+  border-radius: 12px;
+  background: var(--bcc-bg);
+  transition: border-color 0.15s, background-color 0.15s;
+}
+.bcc-tc__side > * { margin: 0 !important; }
+.bcc-tc__side:has(button[aria-pressed='true']) {
+  border-color: var(--bcc-accent);
+  background: var(--bcc-accent-soft);
+}
+.bcc-tc__side .bcc-button {
+  align-self: flex-start;
+  margin-top: auto !important;
+}
+.bcc-tc__instead {
+  margin-top: 0.85rem;
+  font-size: var(--sl-text-sm);
+}
+.bcc-tc__instead p { margin: 0; }
