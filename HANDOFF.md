@@ -4,6 +4,10 @@ Last updated: 2026-11-24. Read this first when resuming. The full approved plan 
 `~/.claude/plans/i-want-to-adaptive-boole-of-f98b2b24-613b-4865-ad4a-e99e24ed8bcc.md`.
 Project rules are in `CLAUDE.md`.
 
+**Status: complete (v1.0.0, 2026-11-24).** Every planned step and every GitHub issue (#1–#9) is
+done and merged, and the site is live. Future work is maintenance: answer new issues, and act on
+the weekly freshness issue when pages pass 90 days since `lastVerified`. See "Final audit" below.
+
 ## Goal
 
 Turn `indicative-playbook/AI-Assisted-Build-Playbook_IT.md` into a public, open-source, interactive
@@ -305,6 +309,33 @@ repeated. Nothing was copied from the site; each item is rewritten for this play
   - `lastVerified` was not bumped: only the new facts were re-checked, not whole pages.
 - Tests: `ai` attribute in the prefs test; an e2e test that the toggle shows the Phase 7 block.
   The Phase 0 e2e locator for hardened blocks now takes `.first()` (there are two).
+
+### Final audit (issue #9, branch `issue-9-final-audit`, 2026-11-24)
+
+- **Dependencies:** `npm audit` showed 2 moderate advisories in `fflate` 0.7.3. It is a build-time
+  dependency of satori, which uses it only to read our own bundled fonts. An `overrides` entry in
+  `package.json` pins `fflate` to `^0.8.3`. The OG image test and the build still pass. `npm audit`: 0.
+- **Coach:**
+  - The key goes only to `api.anthropic.com`: the SDK client is created with an explicit `baseURL`.
+  - The key is never logged (no `console.*` in `src/`) and never exported.
+  - The displayed model prices match the current price list.
+- **Security headers:** production sent only HSTS. `vercel.json` now adds:
+  - a Content-Security-Policy. Its `connect-src 'self' https://api.anthropic.com` makes the browser enforce the coach rule;
+  - `frame-ancestors 'none'`;
+  - `nosniff`, a Referrer-Policy and a Permissions-Policy.
+- **What the CSP allows and why:**
+  - `'unsafe-inline'` for scripts: the inline prefs script and Astro islands.
+  - `'unsafe-inline'` for styles: Mermaid's SVG styles.
+  - `'wasm-unsafe-eval'`: Pagefind search.
+  - `'unsafe-eval'` is not allowed.
+- **CSP tests:** `tests/e2e/csp.spec.ts` applies the policy from `vercel.json` to the local preview. It loads the homepage, a phase page, a Mermaid page, the tools and the coach, then runs a search, and fails on any violation. It also checks that a request to another host is blocked.
+  - If you add a feature that loads from a new origin, update `vercel.json` and this test together.
+  - Vercel preview deployments inject the Vercel toolbar from another origin; the CSP blocks it there. This is expected and harmless.
+- **robots.txt** was missing (404). It now allows all and points to the sitemap.
+- **Links:** all 28 external URLs in the sources return 200. Internal links are checked by the build.
+- No TODOs, `console.log` calls, analytics or third-party requests in `src/`.
+- **README:** now covers the customizable guide and the CSP. `package.json` version 1.0.0.
+- **Checks:** content audit passes; 126/126 MDX pages compile; `astro check` 0 errors; Vitest 108; Playwright 54 (9 new CSP tests); 127 pages built; freshness 0 stale.
 
 ## Gotchas
 
