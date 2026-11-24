@@ -10,7 +10,7 @@
  * What it does:
  *  - splits on top-level sections (and on template / build-loop sub-sections), ignoring
  *    headings inside code fences;
- *  - writes frontmatter (title, description, lastVerified, phase, sidebar order);
+ *  - writes frontmatter (title, description, lastVerified, editUrl, phase, sidebar order);
  *  - converts GitHub callouts (> [!NOTE]) into Starlight asides (:::note);
  *  - converts role markers (**[CLAUDE]**, **[TU]**, **[GATE G3]**...) into <Role /> badges;
  *  - rewrites in-document anchor links to the page that now holds the heading;
@@ -38,6 +38,8 @@ const DOCS_DIR = path.join(ROOT, 'src/content/docs', locale === 'en' ? '' : loca
 const TPL_DIR = path.join(ROOT, 'src/data/templates', locale);
 const URL_PREFIX = locale === 'en' ? '/' : `/${locale}/`;
 const SOURCE_REL = path.relative(ROOT, path.resolve(sourceArg)).split(path.sep).join('/');
+/** Generated pages link "Edit page" to the source section, not to the generated file. */
+const REPO_BLOB = 'https://github.com/manuelecreatini/build-with-claude-code/blob/main/';
 
 const src = fs.readFileSync(path.resolve(sourceArg), 'utf8').replace(/\r\n/g, '\n');
 const lines = src.split('\n');
@@ -62,13 +64,14 @@ const slugger = new GithubSlugger();
 /** anchor (github slug in the source) -> { slug, anchor|null } */
 const anchorMap = new Map();
 const unresolvedLinks = new Set();
-/** @type {{rule: Rule, title: string, body: string[]}[]} */
+/** @type {{rule: Rule, title: string, body: string[], line?: number}[]} */
 const pages = [];
 let current = null;
 let inFence = false;
 let currentTop = null; // slug of the current level-2 page, for `onlyIn`
 
-for (const line of lines) {
+for (let li = 0; li < lines.length; li++) {
+  const line = lines[li];
   if (/^```/.test(line)) inFence = !inFence;
   const h = !inFence && /^(#{1,6}) (.+)$/.exec(line);
   if (h) {
@@ -83,7 +86,7 @@ for (const line of lines) {
         if (rule.alias) anchorMap.set(sourceAnchor, { slug: rule.alias, anchor: null });
         continue;
       }
-      current = { rule, title: text, body: [] };
+      current = { rule, title: text, body: [], line: li + 1 };
       pages.push(current);
       anchorMap.set(sourceAnchor, { slug: rule.slug, anchor: null });
       continue;
@@ -194,6 +197,7 @@ for (const page of pages) {
     `title: ${yaml(cleanTitle(page.title))}`,
     `description: ${yaml(describe(page.body))}`,
     `lastVerified: ${LAST_VERIFIED}`,
+    `editUrl: ${REPO_BLOB}${SOURCE_REL}?plain=1#L${page.line}`,
     rule.phase ? `phase: ${rule.phase}` : null,
     rule.order !== undefined ? `sidebar:\n  order: ${rule.order}` : null,
     '---',

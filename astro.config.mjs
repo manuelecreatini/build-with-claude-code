@@ -32,6 +32,9 @@ export default defineConfig({
         it: { label: 'Italiano', lang: 'it' },
       },
       customCss: ['./src/styles/custom.css'],
+      // Hand-written pages edit their own file. Generated pages override this with an
+      // `editUrl` that points at their section of the playbook source (see split-playbook.mjs).
+      editLink: { baseUrl: 'https://github.com/manuelecreatini/build-with-claude-code/edit/main/' },
       components: {
         Footer: './src/components/overrides/Footer.astro',
       },
