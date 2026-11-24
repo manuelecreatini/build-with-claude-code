@@ -6,14 +6,35 @@
 //  - `at: 'top'`   inserts after the phase summary table (or at the top of the page).
 //  - `at: RegExp`  matches a heading line (after heading shift, e.g. /^## 0\.3 /) and
 //                  inserts at the end of that section.
-//  - `kind`        'why' -> <WhyThisStep> (one line), 'hood' -> <UnderTheHood> (a panel).
+//  - `kind`        'why' -> <WhyThisStep> (one line), 'hood' -> <UnderTheHood> (a panel),
+//                  'only' -> <Only {...when}> (shown only for some guide choices, see src/lib/prefs.ts),
+//                  'choice' -> <ToolChoice tool=...> (pros and cons of using or skipping a tool),
+//                  'swap' -> the section body becomes terminal-only and `en`/`it` is the
+//                  desktop-app version of it.
+//  - `pos: 'start'` puts a section insert right after the heading instead of at the end.
 //  - In text, `@c/` expands to the locale's concepts URL (/concepts/ or /it/concepts/).
 //
 // Every entry must have both `en` and `it`. Facts about Claude Code were checked against
 // code.claude.com on 2026-11-24 (context-window, permission-modes, memory, skills,
 // commands, mcp, sub-agents, hooks).
 
-/** @typedef {{ at: 'top' | RegExp, kind: 'why' | 'hood', title?: {en: string, it: string}, en: string, it: string }} Insert */
+import { GUIDE_INSERTS } from './guide-inserts.mjs';
+
+/**
+ * @typedef {{
+ *   at: 'top' | RegExp,
+ *   kind: 'why' | 'hood' | 'only' | 'choice' | 'swap',
+ *   pos?: 'start' | 'end',
+ *   title?: {en: string, it: string},
+ *   when?: Record<string, string>,
+ *   tool?: string,
+ *   en?: string,
+ *   it?: string,
+ * }} Insert
+ */
+
+/** Components that do not live directly in src/components/. */
+export const COMPONENT_PATHS = { Only: 'guide/Only', ToolChoice: 'guide/ToolChoice' };
 
 /** @type {Record<string, Insert[]>} */
 export const INSERTS = {
@@ -255,12 +276,13 @@ export const QUIZ_PAGES = {
  * @returns {{ lines: string[], components: Set<string> }}
  */
 export function applyInserts(lines, slug, locale, conceptsUrl) {
-  const list = INSERTS[slug] ?? [];
+  const list = [...(INSERTS[slug] ?? []), ...(GUIDE_INSERTS[slug] ?? [])];
   const components = new Set();
   let out = [...lines];
   // Section inserts locate their heading afresh each time; top inserts go in last, in order.
   const top = list.filter((i) => i.at === 'top');
-  const sections = list.filter((i) => i.at !== 'top');
+  // Swaps wrap a whole section, so they run before the inserts that add to it.
+  const sections = list.filter((i) => i.at !== 'top').sort((a, b) => Number(b.kind === 'swap') - Number(a.kind === 'swap'));
   for (const ins of sections) {
     const h = findLine(out, ins.at);
     if (h === -1) throw new Error(`teaching insert for ${slug}: heading ${ins.at} not found`);
@@ -277,7 +299,16 @@ export function applyInserts(lines, slug, locale, conceptsUrl) {
       }
     }
     while (end > h + 1 && !out[end - 1].trim()) end--;
-    out.splice(end, 0, '', ...render(ins, locale, conceptsUrl, components));
+    if (ins.kind === 'swap') {
+      components.add('Only');
+      const alt = text(ins, locale, conceptsUrl);
+      out.splice(end, 0, '', '</Only>', '', '<Only surface="desktop">', '', alt, '', '</Only>');
+      out.splice(h + 1, 0, '', '<Only surface="terminal">');
+    } else if (ins.pos === 'start') {
+      out.splice(h + 1, 0, '', ...render(ins, locale, conceptsUrl, components));
+    } else {
+      out.splice(end, 0, '', ...render(ins, locale, conceptsUrl, components));
+    }
   }
   if (top.length) {
     let at = 0;
@@ -300,12 +331,36 @@ function findLine(lines, re) {
   return -1;
 }
 
+function text(ins, locale, conceptsUrl) {
+  const t = ins[locale];
+  if (typeof t !== 'string') throw new Error(`teaching insert ${ins.at}: missing ${locale} text`);
+  return t.replaceAll('@c/', conceptsUrl);
+}
+
+/** JSX attribute list from an object; values are plain words, so no escaping is needed. */
+function attrs(obj) {
+  return Object.entries(obj)
+    .map(([k, v]) => {
+      if (!/^[\w! -]+$/.test(v)) throw new Error(`teaching insert: bad attribute value ${v}`);
+      return ` ${k}="${v}"`;
+    })
+    .join('');
+}
+
 function render(ins, locale, conceptsUrl, components) {
-  const text = ins[locale].replaceAll('@c/', conceptsUrl);
+  if (ins.kind === 'choice') {
+    components.add('ToolChoice');
+    return [`<ToolChoice${attrs({ tool: ins.tool })} />`];
+  }
+  const body = text(ins, locale, conceptsUrl);
   if (ins.kind === 'why') {
     components.add('WhyThisStep');
-    return [`<WhyThisStep>${text}</WhyThisStep>`];
+    return [`<WhyThisStep>${body}</WhyThisStep>`];
+  }
+  if (ins.kind === 'only') {
+    components.add('Only');
+    return [`<Only${attrs(ins.when)}>`, '', body, '', '</Only>'];
   }
   components.add('UnderTheHood');
-  return [`<UnderTheHood title={${JSON.stringify(ins.title[locale])}}>`, '', text, '', '</UnderTheHood>'];
+  return [`<UnderTheHood title={${JSON.stringify(ins.title[locale])}}>`, '', body, '', '</UnderTheHood>'];
 }

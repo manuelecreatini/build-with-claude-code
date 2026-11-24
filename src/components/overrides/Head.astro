@@ -1,0 +1,13 @@
+---
+/**
+ * Starlight's <head>, plus the guide preferences: an inline script that sets the data-* attributes
+ * on <html> before the first paint, and the CSS that hides blocks not meant for those choices.
+ * Both are generated from src/lib/prefs.ts.
+ */
+import Default from '@astrojs/starlight/components/Head.astro';
+import { headScript, visibilityCss } from '~/lib/prefs';
+import { STORE_KEY } from '~/lib/store';
+---
+<Default />
+<script is:inline set:html={headScript(STORE_KEY)} />
+<style is:global set:html={visibilityCss()} />

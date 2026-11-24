@@ -6,6 +6,8 @@
  * The state is plain JSON so it can be exported to a file and imported on another computer.
  */
 
+import { defaultPrefs, normalizePrefs, type Prefs } from './prefs';
+
 export const STORE_KEY = 'bcc:v1';
 export const EXPORT_TAG = 'build-with-claude-code';
 
@@ -43,6 +45,8 @@ export interface State {
   loop: Loop;
   /** Context meter: the last token count entered. */
   tokens: number;
+  /** How the guide adapts: terminal or desktop app, level of detail, tools in use. */
+  prefs: Prefs;
   updatedAt: string;
 }
 
@@ -54,6 +58,7 @@ export function defaultState(): State {
     values: {},
     loop: { bp: 1, title: '', step: 0, gates: { G5: false, G6: false }, history: [] },
     tokens: 0,
+    prefs: defaultPrefs(),
     updatedAt: '',
   };
 }
@@ -98,6 +103,7 @@ export function normalize(raw: unknown): State {
       history,
     },
     tokens: int(raw.tokens, 0, 2_000_000, 0),
+    prefs: normalizePrefs(raw.prefs),
     updatedAt: str(raw.updatedAt, 40),
   };
 }

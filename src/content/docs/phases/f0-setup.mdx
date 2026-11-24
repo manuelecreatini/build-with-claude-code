@@ -8,7 +8,9 @@ phase: F0
 ---
 
 import Term from '~/components/Term.astro';
+import Only from '~/components/guide/Only.astro';
 import UnderTheHood from '~/components/UnderTheHood.astro';
+import ToolChoice from '~/components/guide/ToolChoice.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import QuizBlock from '~/components/QuizBlock.astro';
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -25,6 +27,12 @@ import Role from '~/components/Role.astro';
 
 <WhyThisStep>Everything after this phase assumes Claude can read your project, run commands and talk to GitHub. Setting it up once, carefully, saves you from debugging your tools in the middle of building your product.</WhyThisStep>
 
+<Only level="guided">
+
+**Take this phase slowly.** Every command below prints something: read it. If a line ends in an error, stop and paste it into Claude (chat is fine at this point) before moving on. Nothing here can harm your computer, and every step can be repeated.
+
+</Only>
+
 
 ## 0.1 Claude chat or Claude Code?
 
@@ -40,6 +48,12 @@ They are two different ways of working with the same model. There is only one pr
 
 **Which Claude Code interface to use.** I recommend the CLI[^6] inside the integrated terminal of VS Code[^7]: you see the files on the left, Claude at the bottom, and you have every command described in this playbook. The desktop app (Code section) is a valid alternative, more visual for diffs and previews; if a command is not available in a graphical interface, use it from the CLI. Claude Code on the web (claude.ai/code) runs sessions in the cloud on your GitHub repositories: useful for kicking off work from your phone, not as your main environment at the start.
 
+<Only surface="desktop">
+
+**You chose the desktop app.** Use the **Code** tab of the Claude desktop app: it includes Claude Code, so you do not need to install Node.js or the CLI to run it. It needs a Pro, Max, Team or Enterprise plan. Sessions, the permission mode and the model are chosen in the row under the prompt box; diffs, a terminal and a preview of your app open as panes next to the chat. The steps on these pages show the desktop version wherever it differs. You can switch to the terminal at any time with the switch at the top of the page: `/desktop` moves a terminal session into the app.
+
+</Only>
+
 ## 0.2 Accounts and starting costs
 
 | Service | Recommended plan | Cost | Notes |
@@ -50,6 +64,16 @@ They are two different ways of working with the same model. There is only one pr
 | Vercel, Supabase, Sentry, PostHog | Free plans during development | 0 until launch | Production costs are analysed in Phase 7. |
 
 ## 0.3 Install the tools (once per computer)
+
+<Only surface="desktop">
+
+**With the desktop app:** download and install it from the [desktop quickstart](https://code.claude.com/docs/en/desktop-quickstart) (macOS, Windows x64 and ARM64; Linux is a beta for Ubuntu 22.04+ and Debian 12+). Then install the other tools below anyway, skipping only the Claude Code line (`install.ps1` / `install.sh`) and `claude --version`:
+
+- **Git** is needed for worktree sessions (on Windows, Git for Windows);
+- **GitHub CLI** (`gh`) is what the **Create PR** button uses;
+- **Node.js** is needed by your project's stack (Next.js), not by the app.
+
+</Only>
 
 <Tabs syncKey="os">
 <TabItem label="Windows">
@@ -138,6 +162,8 @@ Git, `gh`, Node.js and Claude Code are command-line programs: you start them by 
 
 ## 0.4 Configure Git and connect GitHub
 
+<ToolChoice tool="github" />
+
 **PowerShell · Git and GitHub**
 ```powershell
 git config --global user.name "<First Last>"
@@ -150,6 +176,8 @@ gh auth status     # should say "Logged in"
 **How Claude Code connects to GitHub.** No dedicated integration is needed: Claude Code uses `git` and `gh` from your terminal, with your credentials. That way it can create repositories, issues[^12], <Term id="branch">branches</Term>[^13], commits[^14] and pull requests[^15]. Matt Pocock's skills use the same `gh`. Two optional integrations: `/install-github-app` installs the Claude GitHub app and, if you want, the GitHub Actions workflows to mention `@claude` in issues and pull requests; `/web-setup` connects your GitHub account to Claude Code cloud sessions using the `gh` credentials.
 
 ## 0.5 First run of Claude Code and recommended settings
+
+<Only surface="terminal">
 
 Open a terminal in any folder, type `claude` and complete the login in the browser with your Claude account. Then, inside Claude Code:
 
@@ -166,6 +194,27 @@ Open a terminal in any folder, type `claude` and complete the login in the brows
 
 In VS Code also install the *Claude Code* extension from the extensions marketplace: it gives you the graphical panel and the diff view, but keep using the CLI in the integrated terminal when you need a specific command.
 
+</Only>
+
+<Only surface="desktop">
+
+Open the Claude desktop app, sign in with your Claude account and select the **Code** tab. Start a session with **+ New** in the sidebar (or `Ctrl+N` / `Cmd+N`). Before you send the first message, choose in the row under the prompt box:
+
+- **Environment**: *Local*, so Claude works on your computer;
+- **Project folder**: **Open folder…** and pick the project folder (from section 0.7 on);
+- **Permission mode**: *Manual* to start: Claude shows each change as a diff with approve and decline buttons;
+- **Model**.
+
+The terminal commands `/doctor`, `/statusline` and `/autocompact` are not documented for the desktop app. Use these instead:
+
+- `/status` shows the version, the model and the account;
+- `/context` shows how much of the context window is in use: check it often, it is the basis of context management (Phase 5, step 8);
+- `/config` opens Settings.
+
+Commands that need the terminal's own dialogs reply *isn't available in this environment*: for those, open the built-in terminal with `` Ctrl+` `` or use the CLI.
+
+</Only>
+
 <UnderTheHood title={"Under the hood: settings.json and permission modes"}>
 
 `.claude/settings.json` is the project's shared configuration: it is committed, so everyone who opens the repository gets the same rules. `permissions.defaultMode` decides how a session starts; a `--permission-mode` flag on the command line wins over it. Recent versions of Claude Code start in `auto` mode when nothing is configured, which is why the playbook sets `default` explicitly: at the beginning you want to see and approve every action. More in [Plan mode and permissions](/concepts/plan-mode-and-permissions/).
@@ -173,6 +222,12 @@ In VS Code also install the *Claude Code* extension from the extensions marketpl
 </UnderTheHood>
 
 ## 0.6 Install Matt Pocock's skills (once per computer)
+
+<Only surface="desktop">
+
+In the desktop app, plugins are managed from the **+** button next to the prompt box: **Plugins → Add plugins** opens the plugin browser, where you can search for `mattpocock-skills`. Then type `/` in the prompt box: the plugin's skills appear in the list. The notes below on skill names and the `code-review` clash apply to the desktop app too.
+
+</Only>
 
 Matt Pocock's skills[^16] are an open-source set (MIT licence) of engineering procedures: discovery, specification, splitting the work, <Term id="tdd">TDD</Term>, review, handoff. For Claude Code the method recommended by the README is the plugin, which updates itself:
 
@@ -251,6 +306,26 @@ The permissions block to paste into the prompt stops Claude from reading the fil
 At the start of every session Claude Code loads `CLAUDE.md` from the project folder (and every folder above it, plus your personal `~/.claude/CLAUDE.md`) into its context. It is context, not enforced configuration: Claude follows it because it reads it, so short, concrete rules work better than long essays. The official guidance is to keep each file under about 200 lines. More in [CLAUDE.md and memory](/concepts/claude-md-and-memory/).
 
 </UnderTheHood>
+
+<Only security="hardened">
+
+Hardened security: extend the `deny` list in `.claude/settings.json` so Claude cannot read any environment file, key or credential folder, nor download from the network on its own:
+
+```json
+"deny": [
+  "Read(./.env)",
+  "Read(./.env.*)",
+  "Read(./secrets/**)",
+  "Read(~/.ssh/**)",
+  "Read(~/.aws/**)",
+  "Bash(curl:*)",
+  "Bash(wget:*)"
+]
+```
+
+On GitHub, turn on **secret scanning**, **push protection** and **Dependabot alerts** in the repository's *Settings → Advanced Security*, and two-factor authentication on every account the project uses.
+
+</Only>
 
 ### Step 3 — First commit and GitHub repository
 

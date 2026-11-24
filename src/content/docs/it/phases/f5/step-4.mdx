@@ -9,9 +9,28 @@ phase: F5
 
 import Term from '~/components/Term.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
+import Only from '~/components/guide/Only.astro';
 import Role from '~/components/Role.astro';
 
 <WhyThisStep>Test e review trovano ciò che il piano non aveva previsto, finché la modifica è ancora piccola e recente. I controlli verdi sono ciò che ti permette di fare merge senza leggere ogni riga.</WhyThisStep>
+
+<Only security="hardened">
+
+**Sicurezza rinforzata:** esegui `/security-review` a ogni build phase, non solo in quelle che toccano login, permessi, pagamenti o dati personali, e `npm audit --audit-level=high` prima di aprire la pull request. Chiedi a Claude di correggere o spiegare ogni rilievo nella descrizione della pull request.
+
+</Only>
+
+<Only focus="polish">
+
+**Curato:** aggiungi alla review un controllo di accessibilità sulle schermate toccate dalla fase: solo tastiera, uno screen reader sul flusso principale, contrasto, e una verifica che le schermate seguano `docs/design-system.md`.
+
+</Only>
+
+<Only surface="desktop">
+
+**Nell'app desktop:** `/code-review` e `/security-review` funzionano come nel terminale. **Create PR** apre la pull request (richiede `gh`); *Auto-fix* e *Merge when ready* sono nel menu ⋮ della pull request.
+
+</Only>
 
 I test non sono opzionali per le funzionalità critiche. Ogni fase si chiude solo con tutti i controlli verdi.
 

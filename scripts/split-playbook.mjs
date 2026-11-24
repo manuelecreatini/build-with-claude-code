@@ -22,7 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import GithubSlugger from 'github-slugger';
 import { anchorGlossary, linkTerms, parseGlossary } from './lib/glossary.mjs';
-import { applyInserts, QUIZ_PAGES } from './teaching-inserts.mjs';
+import { applyInserts, COMPONENT_PATHS, QUIZ_PAGES } from './teaching-inserts.mjs';
 import { parseChecklist, parseContextLists, parseDod } from './lib/tools-data.mjs';
 import { findRule } from './lib/page-map.mjs';
 
@@ -184,7 +184,7 @@ for (const page of pages) {
   const used = new Set();
   const joined = body.join('\n');
   if (joined.includes('<Term ')) used.add("import Term from '~/components/Term.astro';");
-  for (const c of teach.components) used.add(`import ${c} from '~/components/${c}.astro';`);
+  for (const c of teach.components) used.add(`import ${c} from '~/components/${COMPONENT_PATHS[c] ?? c}.astro';`);
   if (joined.includes('<QuizBlock ')) used.add("import QuizBlock from '~/components/QuizBlock.astro';");
   if (joined.includes('<Tabs ')) used.add("import { Tabs, TabItem } from '@astrojs/starlight/components';");
   if (joined.includes('<Role ')) used.add("import Role from '~/components/Role.astro';");

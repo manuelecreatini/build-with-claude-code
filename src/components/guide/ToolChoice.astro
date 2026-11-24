@@ -1,0 +1,64 @@
+---
+/**
+ * Where the playbook introduces an optional tool: pros and cons of using it and of skipping it,
+ * the recommended option, buttons to choose, and what to do instead when it is skipped.
+ *   <ToolChoice tool="vercel" />
+ */
+import { TOOLS, type Tool } from '~/lib/prefs';
+import { prefsText } from '~/data/prefs';
+import { localeFrom, t, fmt } from '~/lib/i18n';
+import { inlineCode } from '~/lib/inline';
+
+interface Props {
+  tool: Tool;
+}
+const locale = localeFrom(Astro.currentLocale);
+const { tool } = Astro.props;
+const x = prefsText[locale].tools[tool];
+if (!x) throw new Error(`<ToolChoice tool="${tool}">: unknown tool`);
+const rec = TOOLS[tool];
+---
+<aside class="bcc-tc" data-tool-choice={tool} aria-label={`${t(locale, 'guide.choice')}: ${x.name}`}>
+  <p class="bcc-tc__eyebrow">{t(locale, 'guide.choice')}</p>
+  <p class="bcc-tc__title"><strong>{x.name}</strong> — {x.role}</p>
+  <div class="bcc-tc__grid">
+    {[true, false].map((on) => {
+      const side = on ? x.use : x.skip;
+      return (
+        <div class="bcc-tc__side" data-side={on ? 'on' : 'off'}>
+          <p class="bcc-option__top">
+            <span class="bcc-option__label">{fmt(t(locale, on ? 'guide.ifUse' : 'guide.ifSkip'), { tool: x.name })}</span>
+            {on === rec && <span class="bcc-badge">{t(locale, 'guide.recommended')}</span>}
+          </p>
+          <ul class="bcc-pc__list bcc-pc__list--pro">{side.pros.map((p) => <li set:html={inlineCode(p)} />)}</ul>
+          <ul class="bcc-pc__list bcc-pc__list--con">{side.cons.map((c) => <li set:html={inlineCode(c)} />)}</ul>
+          <button type="button" class="bcc-button bcc-button--small" data-choose-tool={tool} data-on={String(on)} aria-pressed={on === rec ? 'true' : 'false'}>
+            {t(locale, on ? 'guide.use' : 'guide.skip')}
+          </button>
+        </div>
+      );
+    })}
+  </div>
+  <div class="bcc-tc__instead" data-only-tool={`!${tool}`}>
+    <p><strong>{t(locale, 'guide.instead')}:</strong> <span set:html={inlineCode(x.instead)} /></p>
+  </div>
+</aside>
+
+<script>
+  import type { Tool } from '~/lib/prefs';
+  import { onPrefs, startPrefs, updatePrefs } from '~/lib/prefs-client';
+
+  startPrefs();
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-choose-tool]');
+  for (const b of buttons) {
+    b.addEventListener('click', () => {
+      const tool = b.dataset.chooseTool as Tool;
+      updatePrefs((p) => ({ ...p, tools: { ...p.tools, [tool]: b.dataset.on === 'true' } }));
+    });
+  }
+  onPrefs((p) => {
+    for (const b of buttons) {
+      b.setAttribute('aria-pressed', String(p.tools[b.dataset.chooseTool as Tool] === (b.dataset.on === 'true')));
+    }
+  });
+</script>

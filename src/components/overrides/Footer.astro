@@ -1,6 +1,7 @@
 ---
 import Default from '@astrojs/starlight/components/Footer.astro';
 import { localeFrom, t } from '~/lib/i18n';
+import GuidePanel from '../guide/GuidePanel.astro';
 
 const route = Astro.locals.starlightRoute;
 const locale = localeFrom(route.lang);
@@ -14,6 +15,7 @@ const fmt = verified
   {fmt && <p>{t(locale, 'lastVerified')} <time datetime={verified!.toISOString().slice(0, 10)}>{fmt}</time>.</p>}
   <p>{t(locale, 'footer.community')}</p>
 </div>
+<GuidePanel />
 <style>
   .bcc-footer {
     margin-top: 1.5rem;

@@ -9,6 +9,8 @@ phase: F7
 
 import Term from '~/components/Term.astro';
 import UnderTheHood from '~/components/UnderTheHood.astro';
+import ToolChoice from '~/components/guide/ToolChoice.astro';
+import Only from '~/components/guide/Only.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
@@ -47,6 +49,8 @@ For an MVP, local, preview and production are enough. With Supabase use **two se
 | Expo EAS | Building and publishing mobile apps to the stores. | Available. | Apple and Google developer accounts are needed. |
 
 **The playbook's rule**: free plans during development; at the launch of a commercial product, Vercel Pro and Supabase Pro (about 45 USD per month base, plus usage). Prices checked in November 2026.
+
+<ToolChoice tool="vercel" />
 
 ## Step 1 — Production accounts and projects
 
@@ -131,7 +135,21 @@ Ask Claude to use the current versions of the actions and to add the <Term id="e
 - [ ] Email confirmation and the <Term id="authentication-authorisation">authentication</Term> service's access policies switched on.
 - [ ] Privacy policy, terms of use and, if you use non-essential cookies or analytics that require them, a consent banner. Data processing agreements (DPAs) with suppliers (Vercel, Supabase, Sentry, PostHog). Claude can prepare the drafts; for the final version, talk to a lawyer.
 
+<Only security="hardened">
+
+Hardened security, before launch:
+
+- [ ] Two-factor authentication on every production account (GitHub, hosting, database, domain registrar, email).
+- [ ] Secret scanning and push protection on; no open Dependabot alert of high severity.
+- [ ] Row-level security checked on every table, with the database's own advisor if it has one.
+- [ ] A `/security-review` of the whole `main` branch, findings fixed or accepted in writing.
+- [ ] Keys rotated if they were ever pasted into a chat, a log or an issue.
+
+</Only>
+
 ## Step 7 — Monitoring, analytics and uptime
+
+<ToolChoice tool="sentry" />
 
 | Tool | What it does | Free plan | Set up |
 |---|---|---|---|

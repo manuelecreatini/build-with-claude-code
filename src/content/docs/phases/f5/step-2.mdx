@@ -10,6 +10,7 @@ phase: F5
 import Term from '~/components/Term.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import UnderTheHood from '~/components/UnderTheHood.astro';
+import Only from '~/components/guide/Only.astro';
 import Role from '~/components/Role.astro';
 
 <WhyThisStep>A failing test written first is a precise, checkable definition of "done". It lets Claude verify its own work instead of asking you to trust it.</WhyThisStep>
@@ -19,6 +20,12 @@ import Role from '~/components/Role.astro';
 A branch is a separate line of commits. Working on `bp-07-…` instead of `main` means `main` always holds a version that passed its checks: if the phase goes wrong you delete the branch and nothing else is touched. More in [Git, branches and pull requests](/concepts/git-branches-and-pull-requests/) and [Tests and CI](/concepts/tests-and-ci/).
 
 </UnderTheHood>
+
+<Only surface="desktop">
+
+**In the desktop app:** in *Manual* mode every edit appears as a diff with approve and decline buttons. The **Changes** card shows all the edits of the session in a diff view where you can leave a comment on a line for Claude. To try the app while it is being built, open the **Browser** pane (`Ctrl+Shift+B` / `Cmd+Shift+B`); Claude configures how to start it in `.claude/launch.json`.
+
+</Only>
 
 After approval Claude:
 

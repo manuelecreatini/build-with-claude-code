@@ -15,6 +15,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { findRule } from './lib/page-map.mjs';
+import { GUIDE_INSERTS } from './guide-inserts.mjs';
 
 const ROOT = process.cwd();
 const LOCALES = {
@@ -44,7 +45,13 @@ for (const [locale, cfg] of Object.entries(LOCALES)) {
     }
     const src = countSource(page.body, page.slug);
     const out = countOutput(stripFrontmatter(read(file)));
-    const expected = EXPECTED[page.slug] ?? {};
+    const expected = { ...(EXPECTED[page.slug] ?? {}) };
+    // The guide inserts add blocks for one setup (Desktop app, hardened security...) on purpose.
+    for (const ins of GUIDE_INSERTS[page.slug] ?? []) {
+      if (!ins[locale]) continue;
+      const add = countOutput(ins[locale].split('\n'));
+      for (const m of METRICS) if (add[m]) expected[m] = (expected[m] ?? 0) + add[m];
+    }
     for (const m of METRICS) {
       const want = src[m] + (expected[m] ?? 0);
       if (out[m] !== want) {

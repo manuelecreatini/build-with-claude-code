@@ -1,0 +1,47 @@
+---
+/** Header controls: the Terminal / Desktop app switcher and the button that opens the customize panel. */
+import { localeFrom, t } from '~/lib/i18n';
+import { prefsText } from '~/data/prefs';
+
+const locale = localeFrom(Astro.currentLocale);
+const surface = prefsText[locale].axes.surface.options;
+---
+<div class="bcc-guide-controls">
+  <div class="bcc-seg" role="group" aria-label={t(locale, 'guide.surface')}>
+    <button type="button" data-set-surface="terminal" aria-pressed="true" title={surface.terminal.summary.replaceAll('`', '')}>
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path d="m5 7 5 5-5 5M12 17h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      <span>{surface.terminal.label}</span>
+    </button>
+    <button type="button" data-set-surface="desktop" aria-pressed="false" title={surface.desktop.summary.replaceAll('`', '')}>
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><rect x="3" y="4" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="2" /><path d="M8 21h8M12 17v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+      <span>{surface.desktop.label}</span>
+    </button>
+  </div>
+  <button type="button" class="bcc-customize" data-open-guide aria-haspopup="dialog">
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" /><circle cx="16" cy="6" r="2" fill="none" stroke="currentColor" stroke-width="2" /><circle cx="10" cy="12" r="2" fill="none" stroke="currentColor" stroke-width="2" /><circle cx="18" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+    <span class="bcc-customize__label">{t(locale, 'guide.customize')}</span>
+    <span class="bcc-customize__dot" data-custom-dot hidden title={t(locale, 'guide.custom')}></span>
+  </button>
+</div>
+
+<script>
+  import { isRecommended } from '~/lib/prefs';
+  import { onPrefs, startPrefs, updatePrefs } from '~/lib/prefs-client';
+
+  startPrefs();
+  for (const b of document.querySelectorAll<HTMLButtonElement>('[data-set-surface]')) {
+    b.addEventListener('click', () => {
+      const surface = b.dataset.setSurface as 'terminal' | 'desktop';
+      updatePrefs((p) => ({ ...p, surface }));
+    });
+  }
+  onPrefs((p) => {
+    for (const b of document.querySelectorAll<HTMLButtonElement>('[data-set-surface]')) {
+      b.setAttribute('aria-pressed', String(b.dataset.setSurface === p.surface));
+    }
+    for (const d of document.querySelectorAll<HTMLElement>('[data-custom-dot]')) d.hidden = isRecommended(p);
+  });
+  for (const b of document.querySelectorAll<HTMLButtonElement>('[data-open-guide]')) {
+    b.addEventListener('click', () => document.querySelector<HTMLDialogElement>('#bcc-guide-panel')?.showModal());
+  }
+</script>

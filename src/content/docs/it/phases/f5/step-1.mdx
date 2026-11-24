@@ -10,6 +10,7 @@ phase: F5
 import Term from '~/components/Term.astro';
 import WhyThisStep from '~/components/WhyThisStep.astro';
 import UnderTheHood from '~/components/UnderTheHood.astro';
+import Only from '~/components/guide/Only.astro';
 
 <WhyThisStep>In plan mode Claude può leggere ed esplorare ma non può modificare il codice: puoi correggere l'approccio quando costa una frase invece di una riscrittura.</WhyThisStep>
 
@@ -18,6 +19,12 @@ import UnderTheHood from '~/components/UnderTheHood.astro';
 Il plan mode è uno dei permission mode di Claude Code. Claude legge i file, esegue comandi di shell per esplorare e scrive un piano, ma le modifiche al codice restano bloccate finché non approvi. Quando approvi, Claude Code chiede come proseguire (per esempio approvando le modifiche manualmente), e puoi aprire il piano nell'editor con `Ctrl+G` per cambiarlo prima. Approfondisci in [Plan mode e permessi](/it/concepts/plan-mode-and-permissions/).
 
 </UnderTheHood>
+
+<Only surface="desktop">
+
+**Nell'app desktop:** scegli **Plan** nel selettore della modalità accanto alla casella del prompt, oppure premi `Ctrl+Shift+M` / `Cmd+Shift+M`. Nell'app desktop `Shift+Tab` non cambia modalità. Il resto del passo è uguale.
+
+</Only>
 
 1. Premi `Shift+Tab` finché la riga di stato mostra *<Term id="plan-mode">plan mode</Term> on* (oppure inizia il messaggio con `/plan`).
 2. Incolla il prompt del template T8 con il numero della fase: «Proceed with <Term id="build-phase-bp">Build Phase</Term> 07 (<Term id="issue">issue</Term> \#23)».

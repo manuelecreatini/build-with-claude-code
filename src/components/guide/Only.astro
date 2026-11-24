@@ -1,0 +1,44 @@
+---
+/**
+ * A block shown only for some guide choices, e.g.
+ *   <Only surface="desktop">…</Only>
+ *   <Only level="guided">…</Only>
+ *   <Only security="hardened">…</Only>
+ *   <Only tool="!github">…</Only>      (shown when GitHub is turned off)
+ * Several values can be listed with spaces: <Only level="guided standard">.
+ * Hidden by CSS generated in src/lib/prefs.ts, so it works before any JavaScript runs.
+ */
+import { AXIS_NAMES, type Axis, type Tool } from '~/lib/prefs';
+import { prefsText } from '~/data/prefs';
+import { localeFrom, t, fmt } from '~/lib/i18n';
+
+type Props = Partial<Record<Axis, string>> & { tool?: string; label?: string };
+
+const locale = localeFrom(Astro.currentLocale);
+const text = prefsText[locale];
+const props = Astro.props;
+const attrs: Record<string, string> = {};
+const tags: string[] = [];
+for (const axis of AXIS_NAMES) {
+  const v = props[axis];
+  if (!v) continue;
+  attrs[`data-only-${axis}`] = v;
+  const names = v.split(/\s+/).map((x) => text.axes[axis].options[x]?.label);
+  if (names.some((n) => !n)) throw new Error(`<Only ${axis}="${v}">: unknown value`);
+  tags.push(axis === 'surface' ? names.join(' / ') : `${text.axes[axis].label}: ${names.join(' / ')}`);
+}
+if (props.tool) {
+  attrs['data-only-tool'] = props.tool;
+  for (const raw of props.tool.split(/\s+/)) {
+    const off = raw.startsWith('!');
+    const tool = text.tools[raw.replace('!', '') as Tool];
+    if (!tool) throw new Error(`<Only tool="${props.tool}">: unknown tool`);
+    tags.push(fmt(t(locale, off ? 'guide.ifSkip' : 'guide.ifUse'), { tool: tool.name }));
+  }
+}
+const kind = props.surface ? 'surface' : props.tool ? 'tool' : (AXIS_NAMES.find((a) => props[a]) ?? 'other');
+---
+<div class="bcc-only" data-kind={kind} {...attrs}>
+  <p class="bcc-only__tag"><span>{t(locale, 'guide.for')}</span> {props.label ?? tags.join(' · ')}</p>
+  <slot />
+</div>

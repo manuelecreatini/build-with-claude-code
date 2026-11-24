@@ -1,0 +1,429 @@
+/* Guide preferences: header switcher, customize panel, conditional blocks, tool choices. */
+:root {
+  --bcc-rec: #047857;
+  --bcc-pro: #047857;
+  --bcc-con: #b45309;
+  --bcc-desktop: #7c3aed;
+  --bcc-surface-1: var(--sl-color-bg);
+  --bcc-line: var(--sl-color-hairline-light, var(--sl-color-gray-5));
+  --bcc-radius: 0.75rem;
+}
+:root[data-theme='dark'] {
+  --bcc-rec: #34d399;
+  --bcc-pro: #34d399;
+  --bcc-con: #fbbf24;
+  --bcc-desktop: #a78bfa;
+}
+
+/* ---------- Header controls ---------- */
+.bcc-guide-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.bcc-seg {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid var(--bcc-line);
+  border-radius: 999px;
+  background: var(--sl-color-gray-7, var(--sl-color-gray-6));
+}
+.bcc-seg button,
+.bcc-customize {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 0;
+  background: transparent;
+  color: var(--sl-color-gray-2);
+  font: inherit;
+  font-size: var(--sl-text-xs);
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s, color 0.15s;
+}
+.bcc-seg button:hover,
+.bcc-customize:hover {
+  color: var(--sl-color-white);
+}
+.bcc-seg button[aria-pressed='true'] {
+  background: var(--sl-color-bg);
+  color: var(--sl-color-white);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.15);
+}
+.bcc-seg button:focus-visible,
+.bcc-customize:focus-visible,
+.bcc-button:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+}
+.bcc-customize {
+  position: relative;
+  border: 1px solid var(--bcc-line);
+}
+.bcc-customize__dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--sl-color-accent);
+}
+.bcc-customize__dot[hidden] {
+  display: none;
+}
+/* The header gets crowded between the md breakpoint and wide screens: icons only. */
+@media (min-width: 50rem) and (max-width: 80rem) {
+  .header .bcc-seg span,
+  .header .bcc-customize__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+/* Mobile menu footer: give the controls their own full-width row. */
+.mobile-preferences .bcc-guide-controls {
+  flex-basis: 100%;
+  flex-wrap: wrap;
+}
+
+/* ---------- Customize panel ---------- */
+.bcc-panel {
+  width: min(52rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  margin: auto; /* Starlight resets margins, which would pin the dialog to the top left */
+  padding: 0;
+  border: 1px solid var(--bcc-line);
+  border-radius: calc(var(--bcc-radius) * 1.5);
+  background: var(--sl-color-bg);
+  color: var(--sl-color-text);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 0.3);
+}
+.bcc-panel::backdrop {
+  background: rgb(15 23 42 / 0.45);
+  backdrop-filter: blur(3px);
+}
+.bcc-panel[open] {
+  animation: bcc-pop 0.18s ease-out;
+}
+@keyframes bcc-pop {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bcc-panel[open] { animation: none; }
+}
+.bcc-panel__inner {
+  padding: 1.25rem 1.5rem 0;
+}
+.bcc-panel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.bcc-panel__head h2 {
+  margin: 0;
+  font-size: var(--sl-text-h3);
+  line-height: 1.2;
+}
+.bcc-panel__close {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--sl-color-gray-2);
+  cursor: pointer;
+}
+.bcc-panel__close:hover {
+  background: var(--sl-color-gray-6);
+}
+.bcc-panel__intro {
+  margin: 0.5rem 0 1rem;
+  color: var(--sl-color-gray-2);
+  font-size: var(--sl-text-sm);
+}
+.bcc-axis {
+  border: 0;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  min-width: 0;
+}
+.bcc-axis legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0;
+  margin-bottom: 0.6rem;
+}
+.bcc-axis__label {
+  font-weight: 700;
+  color: var(--sl-color-white);
+}
+.bcc-axis__q {
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+}
+.bcc-options {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+.bcc-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--bcc-line);
+  border-radius: var(--bcc-radius);
+  cursor: pointer;
+  font-size: var(--sl-text-sm);
+  transition: border-color 0.15s, background-color 0.15s;
+}
+.bcc-option:hover {
+  border-color: var(--sl-color-gray-4);
+}
+.bcc-option:has(input:checked) {
+  border-color: var(--sl-color-accent);
+  background: color-mix(in srgb, var(--sl-color-accent) 8%, transparent);
+  box-shadow: inset 0 0 0 1px var(--sl-color-accent);
+}
+.bcc-option:has(input:focus-visible) {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+}
+.bcc-option > input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.bcc-option__top {
+  display: flex;
+  min-height: 1.6rem; /* same height with or without the Recommended badge */
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0;
+}
+.bcc-option__label {
+  font-weight: 700;
+  color: var(--sl-color-white);
+}
+.bcc-option__top .bcc-badge {
+  color: var(--bcc-rec);
+}
+.bcc-option__summary {
+  color: var(--sl-color-gray-2);
+}
+.bcc-pc {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.bcc-pc__h {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+ul.bcc-pc__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-2);
+}
+ul.bcc-pc__list li {
+  position: relative;
+  padding-inline-start: 1.1rem;
+  margin: 0.15rem 0;
+}
+ul.bcc-pc__list li::before {
+  position: absolute;
+  inset-inline-start: 0;
+  font-weight: 700;
+}
+.bcc-pc__list--pro li::before { content: '+'; color: var(--bcc-pro); }
+.bcc-pc__list--con li::before { content: '−'; color: var(--bcc-con); }
+
+.bcc-gtools {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.bcc-gtool__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.6rem;
+  margin-bottom: 0.4rem;
+}
+.bcc-gtool__name {
+  font-weight: 700;
+}
+.bcc-gtool__role {
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3);
+}
+.bcc-gtool__choice {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+.bcc-option--compact {
+  padding: 0.6rem 0.8rem;
+}
+.bcc-panel__foot {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0 -1.5rem;
+  padding: 0.9rem 1.5rem;
+  border-top: 1px solid var(--bcc-line);
+  background: var(--sl-color-bg);
+}
+
+/* ---------- Buttons ---------- */
+.bcc-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--sl-color-accent);
+  border-radius: 999px;
+  background: var(--sl-color-accent);
+  color: var(--sl-color-black);
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+:root[data-theme='light'] .bcc-button {
+  color: #fff;
+}
+.bcc-button--ghost {
+  background: transparent;
+  color: var(--sl-color-text-accent);
+  border-color: var(--bcc-line);
+}
+:root[data-theme='light'] .bcc-button--ghost {
+  color: var(--sl-color-text-accent);
+}
+.bcc-button--small {
+  padding: 0.3rem 0.8rem;
+  font-size: var(--sl-text-xs);
+}
+.bcc-button[aria-pressed='false'],
+:root[data-theme='light'] .bcc-button[aria-pressed='false'] {
+  background: transparent;
+  color: var(--sl-color-text-accent);
+  border-color: var(--bcc-line);
+}
+
+/* ---------- Conditional blocks ---------- */
+.bcc-only {
+  margin-block: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--bcc-line);
+  border-inline-start: 4px solid var(--sl-color-accent);
+  border-radius: 0 var(--bcc-radius) var(--bcc-radius) 0;
+  background: color-mix(in srgb, var(--sl-color-accent) 5%, transparent);
+}
+.bcc-only[data-kind='surface'] {
+  border-inline-start-color: var(--bcc-desktop);
+  background: color-mix(in srgb, var(--bcc-desktop) 6%, transparent);
+}
+.bcc-only[data-kind='security'] {
+  border-inline-start-color: var(--bcc-gate);
+  background: color-mix(in srgb, var(--bcc-gate) 5%, transparent);
+}
+.bcc-only > :first-child { margin-top: 0; }
+.bcc-only > :last-child { margin-bottom: 0; }
+.bcc-only__tag {
+  margin: 0 0 0.4rem !important;
+  font-size: var(--sl-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--sl-color-gray-3);
+}
+.bcc-only__tag span {
+  font-weight: 500;
+}
+/* The terminal version of a step is the playbook text itself, so it needs no frame. */
+.bcc-only[data-kind='surface'][data-only-surface='terminal'] {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.bcc-only[data-only-surface='terminal'] > .bcc-only__tag {
+  display: none;
+}
+
+/* Level: expert hides the teaching panels. */
+html[data-level='expert'] :is(.bcc-why, .bcc-hood, .bcc-quiz) {
+  display: none;
+}
+
+/* ---------- Tool choice ---------- */
+.bcc-tc {
+  margin-block: 1.25rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--bcc-line);
+  border-radius: var(--bcc-radius);
+  background: var(--sl-color-gray-7, var(--sl-color-gray-6));
+}
+.bcc-tc > p { margin: 0; }
+.bcc-tc__eyebrow {
+  font-size: var(--sl-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sl-color-text-accent);
+}
+.bcc-tc__title {
+  margin-top: 0.2rem !important;
+  font-size: var(--sl-text-sm);
+}
+.bcc-tc__grid {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  margin-top: 0.75rem;
+}
+.bcc-tc__side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--bcc-line);
+  border-radius: calc(var(--bcc-radius) - 0.25rem);
+  background: var(--sl-color-bg);
+}
+.bcc-tc__side > * { margin: 0 !important; }
+.bcc-tc__side:has(button[aria-pressed='true']) {
+  border-color: var(--sl-color-accent);
+  box-shadow: inset 0 0 0 1px var(--sl-color-accent);
+}
+.bcc-tc__side .bcc-button {
+  align-self: flex-start;
+  margin-top: auto !important;
+}
+.bcc-tc__instead {
+  margin-top: 0.75rem;
+  font-size: var(--sl-text-sm);
+}
+.bcc-tc__instead p { margin: 0; }

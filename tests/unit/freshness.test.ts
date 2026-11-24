@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-// @ts-expect-error plain JS module without type declarations
 import { collectPages, findStale, formatReport, readFrontmatter } from '../../scripts/lib/freshness.mjs';
 
 const today = new Date('2027-03-01T00:00:00Z');
