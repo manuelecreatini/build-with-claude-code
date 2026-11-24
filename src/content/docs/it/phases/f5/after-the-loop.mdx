@@ -5,35 +5,39 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
+import Term from '~/components/Term.astro';
+import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
-Quando tutte le issue del traguardo sono chiuse, `STATUS.md` lo dichiara e si passa alla Fase 6.
+Quando tutte le <Term id="issue">issue</Term> del traguardo sono chiuse, `STATUS.md` lo dichiara e si passa alla Fase 6.
 
 :::tip[Definition of Done · ogni build phase]
-- [ ] Tutti i criteri di accettazione verificati, con evidenza nella pull request.
-- [ ] Test scritti e verdi in locale e in CI; nessuna regressione.
-- [ ] Controllo dei tipi e lint puliti; la build di produzione riesce.
+- [ ] Tutti i criteri di accettazione verificati, con evidenza nella <Term id="pull-request-pr">pull request</Term>.
+- [ ] Test scritti e verdi in locale e in CI; nessuna <Term id="regressione">regressione</Term>.
+- [ ] Controllo dei tipi e <Term id="lint">lint</Term> puliti; la build di produzione riesce.
 - [ ] Review eseguita (standard e spec); rilievi risolti; `/security-review` se la fase tocca dati sensibili.
 - [ ] Anteprima provata da te.
-- [ ] Documentazione aggiornata: `STATUS.md`, ADR, glossario, README, CHANGELOG, `.env.example`.
-- [ ] Pull request unita in `main`, branch eliminato, issue chiusa con commento di riepilogo.
+- [ ] Documentazione aggiornata: `STATUS.md`, <Term id="adr">ADR</Term>, glossario, README, CHANGELOG, `.env.example`.
+- [ ] Pull request unita in `main`, <Term id="branch">branch</Term> eliminato, issue chiusa con commento di riepilogo.
 :::
 
 ## Errori comuni
 
 - Approvare il piano senza leggerlo: il gate G5 è il punto più economico per correggere la rotta.
-- Due build phase nella stessa sessione o nello stesso branch.
-- Lasciare arrivare il contesto alla compattazione automatica invece di fare handoff.
+- Due <Term id="build-phase-bp">build phase</Term> nella stessa sessione o nello stesso branch.
+- Lasciare arrivare il contesto alla <Term id="compattazione">compattazione</Term> automatica invece di fare handoff.
 - Non provare l'anteprima: i test verdi non garantiscono un'esperienza buona.
 - Accettare dipendenze o servizi nuovi senza un ADR.
 - «Sistemare» codice non correlato durante una fase: va in una issue separata.
 
 ## Modalità avanzate (dopo due o tre progetti)
 
-- `/implement-spec` <Role as="pocock" />: implementa un'intera spec su un branch di integrazione, eseguendo in parallelo con subagent tutte le issue pronte della frontiera, e chiude con una review. Richiede una suite di test matura.
-- `/batch` <Role as="bundled" />: per grandi modifiche meccaniche in tutto il codice, suddivise in unità indipendenti eseguite in parallelo in worktree[^36] separati.
+- `/implement-spec` <Role as="pocock" />: implementa un'intera spec su un branch di integrazione, eseguendo in parallelo con <Term id="subagent">subagent</Term> tutte le issue pronte della frontiera, e chiude con una review. Richiede una suite di test matura.
+- `/batch` <Role as="bundled" />: per grandi modifiche meccaniche in tutto il codice, suddivise in unità indipendenti eseguite in parallelo in <Term id="worktree">worktree</Term>[^36] separati.
 - `/goal` <Role as="builtin" />: Claude continua a lavorare su più turni finché una condizione non è soddisfatta (per esempio «all tests in tests/e2e pass»).
-- Claude Code sul web e `/remote-control`: avviare o seguire una sessione dal telefono; `/teleport` riporta una sessione cloud nel terminale.
+- Claude Code sul web e `/remote-control`: avviare o seguire una sessione dal telefono; `/teleport` riporta una sessione cloud nel <Term id="cli-terminale">terminale</Term>.
+
+<QuizBlock phase="F5" />
 
 [^29]: **TDD** (*test-driven development*): prima si scrive un test che descrive il comportamento atteso e che fallisce (*red*), poi il codice minimo per farlo passare (*green*), infine si migliora il codice mantenendo i test verdi (*refactor*). Dà a Claude un segnale oggettivo di «funziona».
 

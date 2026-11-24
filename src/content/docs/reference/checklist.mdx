@@ -6,21 +6,23 @@ sidebar:
   order: 1
 ---
 
+import Term from '~/components/Term.astro';
+
 Print it or copy it into `docs/STATUS.md` at the start of every project. Each block matches a phase; the gates are in bold.
 
 #### F0 · Setup (once per PC)
 
-- [ ] Claude Pro or Max active; GitHub account.
-- [ ] Git, GitHub CLI, Node.js LTS, VS Code, Claude Code installed and checked.
+- [ ] Claude Pro or Max active; <Term id="git-github">GitHub</Term> account.
+- [ ] Git, GitHub <Term id="cli-terminal">CLI</Term>, <Term id="nodejs-npm-npx">Node.js</Term> LTS, VS Code, Claude Code installed and checked.
 - [ ] `gh auth login` completed.
-- [ ] `mattpocock-skills` plugin installed; `/skills` shows it.
+- [ ] `mattpocock-skills` <Term id="plugin">plugin</Term> installed; `/skills` shows it.
 - [ ] Status line with context; `/autocompact 200k`.
 
 #### F0 · Setup (every project)
 
 - [ ] Folder outside OneDrive; `git init`.
 - [ ] Scaffolding: `CLAUDE.md` (T0), `docs/`, GitHub templates, `.gitignore`, `.env.example`, `.claude/settings.json`.
-- [ ] Private repository created and pushed.
+- [ ] Private <Term id="repository">repository</Term> created and pushed.
 - [ ] `/setup-matt-pocock-skills`: GitHub, default labels, single-context.
 - [ ] `build-phase` and `tech-debt` labels.
 
@@ -30,52 +32,52 @@ Print it or copy it into `docs/STATUS.md` at the start of every project. Each bl
 - [ ] `docs/00-brain-dump.md` saved.
 - [ ] Prompt T1-B run; `docs/01-preliminary-spec.md` created.
 - [ ] Assumptions and contradictions reviewed; 5 main questions answered or postponed.
-- [ ] **G1** preliminary spec approved; commit.
+- [ ] **G1** preliminary spec approved; <Term id="commit">commit</Term>.
 
 #### F2 · Discovery
 
 - [ ] Session 1: `/wayfinder` + T3; a clear, bounded destination.
-- [ ] Map and decision tickets checked on GitHub (they are questions, not tasks).
+- [ ] Map and <Term id="decision-ticket">decision tickets</Term> checked on GitHub (they are questions, not tasks).
 - [ ] One ticket per session: `/clear` → `/wayfinder <map>`.
 - [ ] Choices between prototypes made by you.
-- [ ] ADRs for stack, hosting, authentication, data, payments; `GLOSSARY.md`.
+- [ ] <Term id="adr">ADRs</Term> for stack, hosting, <Term id="authentication-authorisation">authentication</Term>, data, payments; `GLOSSARY.md`.
 - [ ] Final check: "Map clear".
 - [ ] **G2** no open decisions.
 
 #### F3 · Final spec and architecture
 
-- [ ] `/to-spec <map>`; test seams confirmed.
+- [ ] `/to-spec <map>`; test <Term id="seam">seams</Term> confirmed.
 - [ ] T4: `docs/02-product-spec.md` with US/FR/NFR IDs and Given/When/Then criteria.
 - [ ] T5: `docs/03-architecture.md` with diagrams and costs.
 - [ ] Mockups or prototypes for uncertain screens.
-- [ ] Critical review with a subagent; critical problems fixed.
+- [ ] Critical review with a <Term id="subagent">subagent</Term>; critical problems fixed.
 - [ ] **G3** spec v1.0 approved; commit.
 
 #### F4 · Build phases
 
 - [ ] `/to-tickets` with the T6 constraints.
 - [ ] Proposal reviewed: size, order, dependencies, human actions.
-- [ ] US/FR → BP coverage table with no gaps.
-- [ ] **G4** approval; issues published.
+- [ ] US/FR → <Term id="build-phase-bp">BP</Term> coverage table with no gaps.
+- [ ] **G4** approval; <Term id="issue">issues</Term> published.
 - [ ] `docs/04-build-plan.md` and `STATUS.md` updated.
 
 #### F5 · For every build phase
 
 - [ ] Preflight: `main` up to date, `/context`.
-- [ ] Plan mode + T8; **G5** plan approved.
-- [ ] Branch `bp-NN-slug`; TDD at the seams; small commits.
-- [ ] Human actions handled with T9; no secrets in the chat.
-- [ ] Types, lint, tests, E2E, build green; review done; `/security-review` if needed.
-- [ ] Preview tried by you; T10 filled in in the PR.
+- [ ] <Term id="plan-mode">Plan mode</Term> + T8; **G5** plan approved.
+- [ ] <Term id="branch">Branch</Term> `bp-NN-slug`; <Term id="tdd">TDD</Term> at the seams; small commits.
+- [ ] Human actions handled with T9; no <Term id="secret">secrets</Term> in the chat.
+- [ ] Types, <Term id="lint">lint</Term>, tests, <Term id="e2e-end-to-end">E2E</Term>, build green; review done; `/security-review` if needed.
+- [ ] Preview tried by you; T10 filled in in the <Term id="pull-request-pr">PR</Term>.
 - [ ] Documentation updated.
-- [ ] **G6** squash merge; issue closed with a summary.
+- [ ] **G6** <Term id="squash-merge">squash merge</Term>; issue closed with a summary.
 - [ ] Handoff (T11) and `/clear` before the next phase.
 
 #### F6 · Integration
 
 - [ ] Scope frozen; `main` green.
 - [ ] T13: traceability and integration review.
-- [ ] Security: `/security-review`, authorisation, RLS, `npm audit`.
+- [ ] Security: `/security-review`, authorisation, <Term id="rls">RLS</Term>, `npm audit`.
 - [ ] `/code-review ultra` on the release PR (SaaS).
 - [ ] Acceptance testing with 2–3 real users; bug bash.
 - [ ] **G7** Go: zero S1, S2 closed or accepted.
@@ -84,9 +86,9 @@ Print it or copy it into `docs/STATUS.md` at the start of every project. Each bl
 
 - [ ] Production Vercel and Supabase (commercial plans); EU region.
 - [ ] Variables and secrets in the dashboards; `.env.example` complete.
-- [ ] Migrations applied; RLS; backup and restore tested.
+- [ ] <Term id="migration">Migrations</Term> applied; RLS; backup and restore tested.
 - [ ] CI and protection of `main`; automatic deploy.
-- [ ] Domain, HTTPS, DNS for email.
+- [ ] Domain, HTTPS, <Term id="dns">DNS</Term> for email.
 - [ ] Sentry, PostHog, uptime monitor with alerts.
 - [ ] Rollback and incident runbooks; rollback rehearsed.
 - [ ] Legal pages; T14 checklist; `v1.0.0` tag.
@@ -95,7 +97,7 @@ Print it or copy it into `docs/STATUS.md` at the start of every project. Each bl
 
 - [ ] `/triage` of new issues; severity on bugs.
 - [ ] T15 ops review in `docs/ops/`.
-- [ ] RICE priorities; choice of path by size of change.
+- [ ] <Term id="rice">RICE</Term> priorities; choice of path by size of change.
 - [ ] Every change goes through the build loop (G5, G6).
 - [ ] Tagged release, CHANGELOG and notes.
 - [ ] Every two weeks: `/improve-codebase-architecture`; every month: dependencies and security.

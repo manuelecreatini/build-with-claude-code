@@ -5,14 +5,19 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
-Claude, on its own and within the same pull request:
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+
+<WhyThisStep>The next session starts with an empty context. Whatever is not written down in the repository (status, decisions, new terms) is lost for Claude.</WhyThisStep>
+
+Claude, on its own and within the same <Term id="pull-request-pr">pull request</Term>:
 
 - [ ] updates `docs/STATUS.md` (phase completed, next, blockers);
-- [ ] writes an ADR if the phase introduced a hard-to-reverse decision;
+- [ ] writes an <Term id="adr">ADR</Term> if the phase introduced a hard-to-reverse decision;
 - [ ] adds the new domain terms to `GLOSSARY.md`;
 - [ ] updates `README.md` if installation or commands changed;
 - [ ] adds a line to `CHANGELOG.md` under `[Unreleased]`;
-- [ ] adds the new environment variables to `.env.example` (names only);
-- [ ] updates `docs/04-build-plan.md` if the phase generated new issues.
+- [ ] adds the new <Term id="environment-variable">environment variables</Term> to `.env.example` (names only);
+- [ ] updates `docs/04-build-plan.md` if the phase generated new <Term id="issue">issues</Term>.
 
 You check these changes in the pull request, along with the rest.

@@ -1,0 +1,52 @@
+---
+title: Context window and tokens
+description: What Claude "has in mind" during a session, why it fills up, and how compaction, /compact and /clear keep it useful.
+lastVerified: 2026-11-24
+sidebar:
+  order: 1
+---
+
+**In one sentence:** the context window is everything Claude can see at once in a session (your messages, its answers, the files it read, the output of commands) measured in tokens, and when it gets full the quality of the answers drops.
+
+## Tokens
+
+Models do not read words but *tokens*: pieces of words. In English a token is roughly three quarters of a word; code and other languages use more tokens per word. Every model has a maximum number of tokens it can consider at once: that is the size of the context window.
+
+## What is in the window
+
+At the start of a session, before you type anything, Claude Code already loads:
+
+- your `CLAUDE.md` files and auto memory (see [CLAUDE.md and memory](/concepts/claude-md-and-memory/));
+- the names of the tools offered by connected MCP servers;
+- the short descriptions of installed skills (not their full instructions).
+
+Then, as you work, every message, every answer, every file Claude reads and every command output is added. A long session that reads many files fills the window even if you typed little.
+
+## Watching it
+
+- `/context` shows a live breakdown of what is using the window, by category.
+- The playbook's [Step 8 of the build loop](/phases/f5/step-8/) gives practical thresholds for when to act.
+
+## When it fills up
+
+Claude Code **compacts automatically** as you approach the limit: it replaces the conversation with a summary and keeps going. After compaction it re-reads from disk the project-root `CLAUDE.md` and recently modified files, so what is written in the repository survives; details that existed only in the chat may not.
+
+You can also act yourself:
+
+| Command | What it does | When to use it |
+| --- | --- | --- |
+| `/compact focus on …` | Summarises now, keeping what you name | Mid-task, when the window is heavy but you are not done |
+| `/clear` | Starts an empty conversation in the same project | When you switch to unrelated work |
+
+Some models offer a much larger window (up to one million tokens). A bigger window postpones the problem; it does not remove it.
+
+## What it means for you
+
+- Write status and decisions into files (`docs/STATUS.md`, ADRs, issues) so a fresh session can pick them up. This is why the playbook ends each phase with documentation and a handover.
+- One task per session works better than one session for everything.
+- If answers start ignoring earlier instructions, check `/context` before blaming the model.
+
+## Sources
+
+- [Explore the context window](https://code.claude.com/docs/en/context-window), Claude Code docs.
+- [Commands](https://code.claude.com/docs/en/commands), Claude Code docs (`/context`, `/compact`, `/clear`).

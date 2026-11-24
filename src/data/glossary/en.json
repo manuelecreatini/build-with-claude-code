@@ -1,0 +1,508 @@
+[
+  {
+    "id": "adr",
+    "term": "ADR",
+    "definition": "Architecture Decision Record: a short document that records an important decision and its reasoning.",
+    "match": [
+      "ADR"
+    ]
+  },
+  {
+    "id": "afk-hitl",
+    "term": "AFK / HITL",
+    "definition": "Work the agent does on its own / work that needs you present.",
+    "match": [
+      "AFK",
+      "HITL"
+    ]
+  },
+  {
+    "id": "api",
+    "term": "API",
+    "definition": "The set of \"doors\" through which two programs exchange data.",
+    "match": [
+      "API"
+    ]
+  },
+  {
+    "id": "authentication-authorisation",
+    "term": "Authentication / authorisation",
+    "definition": "Who you are (sign-in) / what you can do (permissions by role).",
+    "match": [
+      "Authentication",
+      "authorisation"
+    ]
+  },
+  {
+    "id": "branch",
+    "term": "Branch",
+    "definition": "A parallel line of development; it joins main through a pull request.",
+    "match": [
+      "Branch"
+    ]
+  },
+  {
+    "id": "build-phase-bp",
+    "term": "Build phase (BP)",
+    "definition": "A vertical slice of the product: one issue, one branch, one pull request.",
+    "match": [
+      "Build phase",
+      "BP"
+    ]
+  },
+  {
+    "id": "cicd",
+    "term": "CI/CD",
+    "definition": "Automated checks on every change and automated publishing.",
+    "match": [
+      "CI/CD"
+    ]
+  },
+  {
+    "id": "claudemd",
+    "term": "CLAUDE.md",
+    "definition": "A file of permanent instructions that Claude Code loads at every session.",
+    "match": [
+      "CLAUDE.md"
+    ]
+  },
+  {
+    "id": "cli-terminal",
+    "term": "CLI / terminal",
+    "definition": "Programs you use by typing commands in a text window.",
+    "match": [
+      "CLI",
+      "terminal"
+    ]
+  },
+  {
+    "id": "commit",
+    "term": "Commit",
+    "definition": "A described save of a set of changes in the Git history.",
+    "match": [
+      "Commit"
+    ]
+  },
+  {
+    "id": "compaction",
+    "term": "Compaction",
+    "definition": "Summarising the conversation to free up context (/compact).",
+    "match": [
+      "Compaction"
+    ]
+  },
+  {
+    "id": "context-window",
+    "term": "Context window",
+    "definition": "How many tokens the model considers at once.",
+    "match": [
+      "Context window"
+    ]
+  },
+  {
+    "id": "conventional-commits",
+    "term": "Conventional Commits",
+    "definition": "Commit messages with a prefix: feat:, fix:, docs:…",
+    "match": [
+      "Conventional Commits"
+    ]
+  },
+  {
+    "id": "database",
+    "term": "Database",
+    "definition": "The structured store of the application's data (here, Postgres).",
+    "match": []
+  },
+  {
+    "id": "decision-ticket",
+    "term": "Decision ticket",
+    "definition": "An issue on the /wayfinder map that holds a question to decide.",
+    "match": [
+      "Decision ticket"
+    ]
+  },
+  {
+    "id": "dependency",
+    "term": "Dependency",
+    "definition": "An external library the project uses, installed with npm.",
+    "match": [
+      "Dependency"
+    ]
+  },
+  {
+    "id": "deploy",
+    "term": "Deploy",
+    "definition": "Publishing a version of the app to a server.",
+    "match": []
+  },
+  {
+    "id": "dns",
+    "term": "DNS",
+    "definition": "The system that links a domain name to a server.",
+    "match": [
+      "DNS"
+    ]
+  },
+  {
+    "id": "e2e-end-to-end",
+    "term": "E2E (end-to-end)",
+    "definition": "A test that simulates a real user in the browser.",
+    "match": [
+      "E2E",
+      "end-to-end"
+    ]
+  },
+  {
+    "id": "environment-variable",
+    "term": "Environment variable",
+    "definition": "Configuration given to the app from outside the code.",
+    "match": [
+      "Environment variable"
+    ]
+  },
+  {
+    "id": "feature-flag",
+    "term": "Feature flag",
+    "definition": "A switch that turns a feature on only for some users.",
+    "match": [
+      "Feature flag"
+    ]
+  },
+  {
+    "id": "framework",
+    "term": "Framework",
+    "definition": "A scaffold of code with ready-made rules and tools (e.g. Next.js).",
+    "match": []
+  },
+  {
+    "id": "frontend-backend",
+    "term": "Frontend / backend",
+    "definition": "What the user sees / the code that runs on the server.",
+    "match": [
+      "Frontend",
+      "backend"
+    ]
+  },
+  {
+    "id": "gate",
+    "term": "Gate",
+    "definition": "A point where Claude stops and waits for your approval.",
+    "match": []
+  },
+  {
+    "id": "git-github",
+    "term": "Git / GitHub",
+    "definition": "The history of changes / the online service that hosts Git projects.",
+    "match": [
+      "Git",
+      "GitHub"
+    ]
+  },
+  {
+    "id": "handoff",
+    "term": "Handoff",
+    "definition": "A document passed from one session to the next (/handoff).",
+    "match": []
+  },
+  {
+    "id": "integration-test",
+    "term": "Integration test",
+    "definition": "A test of several modules together (e.g. API and database).",
+    "match": [
+      "Integration test"
+    ]
+  },
+  {
+    "id": "issue",
+    "term": "Issue",
+    "definition": "A work card on GitHub with labels, an assignee and comments.",
+    "match": [
+      "Issue"
+    ]
+  },
+  {
+    "id": "label",
+    "term": "Label",
+    "definition": "A tag on an issue (e.g. build-phase, ready-for-agent).",
+    "match": []
+  },
+  {
+    "id": "lint",
+    "term": "Lint",
+    "definition": "An automated check for common mistakes and code style.",
+    "match": [
+      "Lint"
+    ]
+  },
+  {
+    "id": "map",
+    "term": "Map",
+    "definition": "The wayfinder:map issue that indexes a project's decisions.",
+    "match": []
+  },
+  {
+    "id": "markdown",
+    "term": "Markdown",
+    "definition": "A text format with simple symbols for headings and lists (.md).",
+    "match": [
+      "Markdown"
+    ]
+  },
+  {
+    "id": "mcp",
+    "term": "MCP",
+    "definition": "The standard Claude uses to connect to external tools and services.",
+    "match": [
+      "MCP"
+    ]
+  },
+  {
+    "id": "merge",
+    "term": "Merge",
+    "definition": "Joining one branch into another, usually into main.",
+    "match": [
+      "Merge"
+    ]
+  },
+  {
+    "id": "migration",
+    "term": "Migration",
+    "definition": "A versioned file that changes the database structure.",
+    "match": [
+      "Migration"
+    ]
+  },
+  {
+    "id": "nodejs-npm-npx",
+    "term": "Node.js / npm / npx",
+    "definition": "JavaScript runtime / library manager / tool runner.",
+    "match": [
+      "Node.js",
+      "npm",
+      "npx"
+    ]
+  },
+  {
+    "id": "owasp-top-10",
+    "term": "OWASP Top 10",
+    "definition": "The ten most common categories of web vulnerability.",
+    "match": [
+      "OWASP Top 10"
+    ]
+  },
+  {
+    "id": "path",
+    "term": "PATH",
+    "definition": "The folders where the system looks for programs.",
+    "match": [
+      "PATH"
+    ]
+  },
+  {
+    "id": "permission-mode",
+    "term": "Permission mode",
+    "definition": "What Claude can do without asking (default, acceptEdits, plan…).",
+    "match": [
+      "Permission mode"
+    ]
+  },
+  {
+    "id": "plan-mode",
+    "term": "Plan mode",
+    "definition": "Claude plans without changing files until you approve.",
+    "match": [
+      "Plan mode"
+    ]
+  },
+  {
+    "id": "plugin",
+    "term": "Plugin",
+    "definition": "A package that distributes skills and other Claude Code extensions.",
+    "match": [
+      "Plugin"
+    ]
+  },
+  {
+    "id": "preview",
+    "term": "Preview",
+    "definition": "A preview URL created for every pull request.",
+    "match": []
+  },
+  {
+    "id": "pull-request-pr",
+    "term": "Pull request (PR)",
+    "definition": "A request to merge a branch, with checks and review.",
+    "match": [
+      "Pull request",
+      "PR"
+    ]
+  },
+  {
+    "id": "regression",
+    "term": "Regression",
+    "definition": "A defect in something that used to work.",
+    "match": [
+      "Regression"
+    ]
+  },
+  {
+    "id": "repository",
+    "term": "Repository",
+    "definition": "A project folder with its whole Git history.",
+    "match": [
+      "Repository"
+    ]
+  },
+  {
+    "id": "rice",
+    "term": "RICE",
+    "definition": "A priority score: Reach × Impact × Confidence ÷ Effort.",
+    "match": [
+      "RICE"
+    ]
+  },
+  {
+    "id": "rls",
+    "term": "RLS",
+    "definition": "Row Level Security: database rules on who sees which rows.",
+    "match": [
+      "RLS"
+    ]
+  },
+  {
+    "id": "seam",
+    "term": "Seam",
+    "definition": "A boundary from which a feature is tested from the outside.",
+    "match": [
+      "Seam"
+    ]
+  },
+  {
+    "id": "secret",
+    "term": "Secret",
+    "definition": "A confidential value (key, password) that must never be published.",
+    "match": [
+      "Secret"
+    ]
+  },
+  {
+    "id": "semver",
+    "term": "SemVer",
+    "definition": "Versions in the form MAJOR.MINOR.PATCH.",
+    "match": [
+      "SemVer"
+    ]
+  },
+  {
+    "id": "skill",
+    "term": "Skill",
+    "definition": "A package of instructions that teaches Claude a procedure (/name).",
+    "match": [
+      "Skill"
+    ]
+  },
+  {
+    "id": "squash-merge",
+    "term": "Squash merge",
+    "definition": "Merging a PR as a single commit on main.",
+    "match": [
+      "Squash merge"
+    ]
+  },
+  {
+    "id": "subagent",
+    "term": "Subagent",
+    "definition": "A Claude instance with a separate context, to which you delegate a task.",
+    "match": [
+      "Subagent"
+    ]
+  },
+  {
+    "id": "tdd",
+    "term": "TDD",
+    "definition": "First the failing test, then the code, then the improvement.",
+    "match": [
+      "TDD"
+    ]
+  },
+  {
+    "id": "technical-debt",
+    "term": "Technical debt",
+    "definition": "Shortcuts that make future changes more expensive.",
+    "match": [
+      "Technical debt"
+    ]
+  },
+  {
+    "id": "token",
+    "term": "Token",
+    "definition": "The unit the model uses to measure text.",
+    "match": [
+      "Token"
+    ]
+  },
+  {
+    "id": "tracer-bullet",
+    "term": "Tracer bullet",
+    "definition": "A minimal but complete slice that goes through every layer.",
+    "match": [
+      "Tracer bullet"
+    ]
+  },
+  {
+    "id": "typescript",
+    "term": "TypeScript",
+    "definition": "JavaScript with types, to catch errors before the code runs.",
+    "match": [
+      "TypeScript"
+    ]
+  },
+  {
+    "id": "unit-test",
+    "term": "Unit test",
+    "definition": "A test of a single function or module in isolation.",
+    "match": [
+      "Unit test"
+    ]
+  },
+  {
+    "id": "user-story",
+    "term": "User story",
+    "definition": "A requirement in the form \"As a… I want… so that…\".",
+    "match": [
+      "User story"
+    ]
+  },
+  {
+    "id": "wcag",
+    "term": "WCAG",
+    "definition": "International guidelines for web accessibility.",
+    "match": [
+      "WCAG"
+    ]
+  },
+  {
+    "id": "webhook",
+    "term": "Webhook",
+    "definition": "An automatic notification that a service sends to your app.",
+    "match": [
+      "Webhook"
+    ]
+  },
+  {
+    "id": "winget",
+    "term": "winget",
+    "definition": "The Windows package manager.",
+    "match": [
+      "winget"
+    ]
+  },
+  {
+    "id": "worktree",
+    "term": "Worktree",
+    "definition": "A second working folder of the same repository, for working in parallel.",
+    "match": [
+      "Worktree"
+    ]
+  }
+]

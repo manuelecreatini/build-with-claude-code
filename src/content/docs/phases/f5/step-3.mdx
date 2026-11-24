@@ -5,15 +5,19 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
 import Role from '~/components/Role.astro';
+
+<WhyThisStep>Some things only you can do: decide, pay, create an account, paste a secret. Making Claude stop explicitly keeps those moments visible instead of guessed.</WhyThisStep>
 
 Claude must stop every time something is needed that only you can do or decide:
 
 - a product decision;
-- a credential or API key;
+- a credential or <Term id="api">API</Term> key;
 - creating an account;
 - a payment or a paid plan;
-- an external configuration (DNS, OAuth app, webhook[^31]);
+- an external configuration (<Term id="dns">DNS</Term>, OAuth app, <Term id="webhook">webhook</Term>[^31]);
 - a legal text;
 - a test on a real device.
 
@@ -25,9 +29,9 @@ Never paste keys or passwords into the chat. Enter them yourself in the `.env.lo
 
 **Useful tools in this step**
 
-- `/wizard` <Role as="pocock" />: for long configurations it generates an interactive Bash walkthrough that guides you step by step (credentials, CI secrets, external service dashboards). On Windows run it in Git Bash.
-- `/to-questionnaire` <Role as="pocock" />: turns a decision you can't take on your own (partner, client, advisor) into a Markdown questionnaire to send.
+- `/wizard` <Role as="pocock" />: for long configurations it generates an interactive Bash walkthrough that guides you step by step (credentials, CI <Term id="secret">secrets</Term>, external service dashboards). On Windows run it in <Term id="git-github">Git</Term> Bash.
+- `/to-questionnaire` <Role as="pocock" />: turns a decision you can't take on your own (partner, client, advisor) into a <Term id="markdown">Markdown</Term> questionnaire to send.
 - `/wait-what` <Role as="pocock" /> and `/teach` <Role as="pocock" />: the first re-explains in plain words a message you didn't understand; the second teaches you a concept over several sessions.
-- If the action can't be done right away, Claude labels the issue `ready-for-human`, comments on what is missing and moves to another unblocked phase.
+- If the action can't be done right away, Claude labels the <Term id="issue">issue</Term> `ready-for-human`, comments on what is missing and moves to another unblocked phase.
 
 [^31]: **Webhook**: an automatic notification that an external service (for example Stripe after a payment) sends to your application by calling one of its web addresses.

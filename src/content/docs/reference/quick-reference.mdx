@@ -6,21 +6,23 @@ sidebar:
   order: 2
 ---
 
+import Term from '~/components/Term.astro';
+
 *Key:* Windows/PowerShell · `<...>` = replace · **G** = gate
 
 | Phase | Action | Command or prompt | Output · gate |
 |---|---|---|---|
 | **F0** | Install (once) | `winget install --id Git.Git -e · ... GitHub.cli · OpenJS.NodeJS.LTS · Microsoft.VisualStudioCode; irm https://claude.ai/install.ps1 \| iex` | `claude --version` ok |
-|  | Connect GitHub | `gh auth login` | gh auth status |
-|  | Skills (once) | `claude plugin install mattpocock-skills@claude-plugins-official` | /skills |
+|  | Connect <Term id="git-github">GitHub</Term> | `gh auth login` | gh auth status |
+|  | <Term id="skill">Skills</Term> (once) | `claude plugin install mattpocock-skills@claude-plugins-official` | /skills |
 |  | Context (once) | `/statusline show model, branch and context % · /autocompact 200k` | status line |
-|  | New project | `mkdir C:\dev\<name> · cd · git init · claude · scaffolding prompt (0.7)` | CLAUDE.md, docs/ |
+|  | New project | `mkdir C:\dev\<name> · cd · git init · claude · scaffolding prompt (0.7)` | <Term id="claudemd">CLAUDE.md</Term>, docs/ |
 |  | Publish | `git add -A · git commit -m "chore: project scaffold" · gh repo create <name> --private --source=. --remote=origin --push` | private repo |
 |  | Configure skills | `/setup-matt-pocock-skills · gh label create build-phase` | docs/agents/ |
 | **F1** | Dictate 10–20 min | `Wispr Flow / Win+H / /voice → docs/00-brain-dump.md (script T1-A)` | transcript |
 |  | Structure | `prompt T1-B` | 01-preliminary-spec · **G1** |
-| **F2** | Draw the map | `/wayfinder + T3 text` | wayfinder:map issue |
-|  | One ticket per session | `/clear · /wayfinder <map URL>` | decisions, ADRs, glossary |
+| **F2** | Draw the map | `/wayfinder + T3 text` | wayfinder:map <Term id="issue">issue</Term> |
+|  | One ticket per session | `/clear · /wayfinder <map URL>` | decisions, <Term id="adr">ADRs</Term>, glossary |
 |  | Check | `prompt "map complete?" (T3)` | "Map clear" · **G2** |
 | **F3** | Synthesis | `/clear · /to-spec <map URL>` | spec issue |
 |  | Spec and architecture | `prompt T4 · prompt T5 · red team with a subagent` | 02-spec, 03-architecture · **G3** |
@@ -30,17 +32,17 @@ sidebar:
 | **×N** | 1 Start | `Shift+Tab → plan mode · prompt T8 "Proceed with Build Phase NN"` | plan · **G5** |
 |  | 2 Implement | `approve → branch bp-NN-slug · /tdd · commits (or /implement #<n>)` | code + tests |
 |  | 3 Human | `HUMAN ACTION REQUIRED block (T9) → you do it → "done"` | unblocked |
-|  | 4 Review and test | `npm run typecheck · lint · test · test:e2e · build · /mattpocock-skills:code-review · /security-review` | T10 in the PR |
+|  | 4 Review and test | `npm run typecheck · lint · test · test:e2e · build · /mattpocock-skills:code-review · /security-review` | T10 in the <Term id="pull-request-pr">PR</Term> |
 |  | 5 Documentation | `STATUS.md · ADR · GLOSSARY.md · CHANGELOG.md · .env.example` | — |
 |  | 6 Close | `git push -u origin <branch> · gh pr create --fill · gh pr checks --watch · gh pr merge --squash --delete-branch` | **G6** |
 |  | 7 Handoff | `/handoff Next session: <focus> (T11) → /clear → resume prompt` | file in %TEMP% |
-|  | 8 Context | `/context · /compact focus on <...> · /clear (T12 zones)` | under 100k tokens |
+|  | 8 Context | `/context · /compact focus on <...> · /clear (T12 zones)` | under 100k <Term id="token">tokens</Term> |
 | **F6** | Integration | `/clear · prompt T13 · /security-review · /code-review ultra` | review · **G7** |
 | **F7** | Launch | `T14 checklist · npx supabase db push · domain · Sentry · PostHog` | v1.0.0 live |
 | **F8** | Every week | `/triage · prompt T15 · /improve-codebase-architecture (every 2 weeks)` | docs/ops/&lt;YYYY-WW>.md |
-|  | Bug | `/diagnosing-bugs → build loop` | fix + regression test |
+|  | Bug | `/diagnosing-bugs → build loop` | fix + <Term id="regression">regression</Term> test |
 |  | Release | `git tag vX.Y.Z · git push origin vX.Y.Z · gh release create vX.Y.Z --generate-notes` | CHANGELOG |
 
 :::caution
-**Emergencies and shortcuts** — `Esc` interrupt · `Esc Esc` or `/rewind` go back · `/btw` side question · `/wait-what` explain again · `/doctor` diagnostics · `/usage` plan limits · `!cmd` terminal · `@file` pull in a file · `/resume` resume · **Never**: secrets in the chat, `bypassPermissions`, two phases in the same session, merging without green CI.
+**Emergencies and shortcuts** — `Esc` interrupt · `Esc Esc` or `/rewind` go back · `/btw` side question · `/wait-what` explain again · `/doctor` diagnostics · `/usage` plan limits · `!cmd` <Term id="cli-terminal">terminal</Term> · `@file` pull in a file · `/resume` resume · **Never**: <Term id="secret">secrets</Term> in the chat, `bypassPermissions`, two phases in the same session, merging without green CI.
 :::

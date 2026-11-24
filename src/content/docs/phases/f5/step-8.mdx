@@ -5,15 +5,20 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
+import Term from '~/components/Term.astro';
+import UnderTheHood from '~/components/UnderTheHood.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
 import Role from '~/components/Role.astro';
+
+<WhyThisStep>The context window is Claude's working memory. Watching it, and clearing it between unrelated tasks, is the most effective way to keep answers sharp in long projects.</WhyThisStep>
 
 ## The problem
 
-Claude works inside a context window[^35]: everything it reads and writes fills it, even what you see in the terminal as a single line (the content of a file it read, the test output). The more it fills with old or irrelevant material, the more noise grows. Some recent models have a 1-million-token window, others 200,000; the point where automatic compaction kicks in depends on the model and configuration. That is why the playbook adopts a **cautious budget of 200,000 tokens per session**, whatever the model.
+Claude works inside a <Term id="context-window">context window</Term>[^35]: everything it reads and writes fills it, even what you see in the <Term id="cli-terminal">terminal</Term> as a single line (the content of a file it read, the test output). The more it fills with old or irrelevant material, the more noise grows. Some recent models have a 1-million-token window, others 200,000; the point where automatic <Term id="compaction">compaction</Term> kicks in depends on the model and configuration. That is why the playbook adopts a **cautious budget of 200,000 <Term id="token">tokens</Term> per session**, whatever the model.
 
 ## How to check consumption
 
-- `/context` <Role as="builtin" />: a coloured grid of the context by category (instructions, CLAUDE.md, memory, skills, MCP tools, conversation) with optimisation tips.
+- `/context` <Role as="builtin" />: a coloured grid of the context by category (instructions, <Term id="claudemd">CLAUDE.md</Term>, memory, <Term id="skill">skills</Term>, <Term id="mcp">MCP</Term> tools, conversation) with optimisation tips.
 - Status line: the percentage set up in Phase 0. Careful: it is relative to the model's window; with a 1-million model, 200,000 tokens are 20%. Think in tokens, which `/context` shows.
 - `/usage` <Role as="builtin" /> shows something else: consumption against your plan's limits.
 
@@ -23,7 +28,7 @@ Claude works inside a context window[^35]: everything it reads and writes fills 
 |---|---|---|
 | Green | under 100,000 | Work normally. The best sessions end here: Matt Pocock sizes `/wayfinder` tickets for a 100,000-token session. |
 | Yellow | 100,000–150,000 | Finish the current step and don't start big new work. If you stay on the same phase: `/compact` with an explicit focus. |
-| Red | 150,000–200,000 | At the first stable point: commit, `/handoff`, `/clear`. |
+| Red | 150,000–200,000 | At the first stable point: <Term id="commit">commit</Term>, `/handoff`, `/clear`. |
 | Beyond | over 200,000 | The `/autocompact 200k` safety net kicks in. Check that decisions and status are in files; a handoff and a new conversation are still better. |
 
 ## Which tool to use
@@ -31,19 +36,19 @@ Claude works inside a context window[^35]: everything it reads and writes fills 
 | Tool | What it does | What you keep | When |
 |---|---|---|---|
 | `/compact [focus]` <Role as="builtin" /> | Replaces the conversation with a structured summary, in the same session. | Instructions and memory; the summary; some recent files; the invoked skills. Full outputs and intermediate reasoning are lost. | Same phase, yellow zone. Example: `/compact focus on BP-07 plan, test results and open issues`. |
-| `/handoff [focus]` <Role as="pocock" /> | Writes a document for a new agent in the temporary folder. | What the next session needs, with pointers to issues, commits, ADRs; secrets redacted. | End of phase, red zone, change of focus, end of day. |
+| `/handoff [focus]` <Role as="pocock" /> | Writes a document for a new agent in the temporary folder. | What the next session needs, with pointers to <Term id="issue">issues</Term>, commits, <Term id="adr">ADRs</Term>; <Term id="secret">secrets</Term> redacted. | End of phase, red zone, change of focus, end of day. |
 | `/clear` <Role as="builtin" /> | New empty conversation; the previous one stays available with `/resume`. | `CLAUDE.md` and project memory are reloaded. | Between unrelated pieces of work; right after a handoff. |
-| New session (`/exit` and `claude`) | Also restarts the process. | Same as `/clear`. | After Claude Code or plugin updates, or if the session behaves oddly. |
+| New session (`/exit` and `claude`) | Also restarts the process. | Same as `/clear`. | After Claude Code or <Term id="plugin">plugin</Term> updates, or if the session behaves oddly. |
 | `/rewind` <Role as="builtin" /> | Goes back to a code and conversation checkpoint, or summarises only part of the conversation. | You choose the point. | A direction turned out to be wrong. |
 | `/btw` <Role as="builtin" /> | A side question that doesn't enter the history. | — | Quick clarifications during the work. |
-| Subagent | Delegates reading and research to a separate context; only the result comes back. | Your context stays clean. | "Use a subagent to research…" for broad searches in the code or on the web. |
+| <Term id="subagent">Subagent</Term> | Delegates reading and research to a separate context; only the result comes back. | Your context stays clean. | "Use a subagent to research…" for broad searches in the code or on the web. |
 
 ## What survives compaction
 
 According to the Claude Code documentation, after a compaction (manual or automatic):
 
-- the system prompt, the root `CLAUDE.md`, rules without a path and automatic memory are reloaded from disk; so is the plan written in plan mode;
-- the Git status is read again from scratch;
+- the system prompt, the root `CLAUDE.md`, rules without a path and automatic memory are reloaded from disk; so is the plan written in <Term id="plan-mode">plan mode</Term>;
+- the <Term id="git-github">Git</Term> status is read again from scratch;
 - up to five files, the most recently modified, are read again;
 - the text of invoked skills is re-inserted, up to 5,000 tokens per skill and 25,000 in total, dropping the oldest;
 - path-scoped rules and nested `CLAUDE.md` files come back only when Claude reads files in those folders again;
@@ -51,9 +56,15 @@ According to the Claude Code documentation, after a compaction (manual or automa
 
 **The lesson**: whatever must survive has to be written to a file (`CLAUDE.md`, `STATUS.md`, issues, ADRs), not left in the conversation.
 
+<UnderTheHood title={"Under the hood: what compaction keeps"}>
+
+Claude Code compacts automatically as you approach the limit, replacing the conversation with a summary. Afterwards it re-reads the project-root `CLAUDE.md` and unscoped rules from disk, and re-reads a few recently modified files. Details that existed only in the conversation can be lost, which is why the playbook writes status and decisions into files. More in [Context window and tokens](/concepts/context-window-and-tokens/).
+
+</UnderTheHood>
+
 ## How to use less context
 
-- One session, one goal: one build phase, or one map ticket.
+- One session, one goal: one <Term id="build-phase-bp">build phase</Term>, or one map ticket.
 - Be specific about files and folders ("fix the bug in the attendance module"), so Claude reads less.
 - Delegate broad research to a subagent.
 - Paste the error and the 20 lines around it, not whole logs.

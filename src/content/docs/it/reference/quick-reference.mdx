@@ -6,21 +6,23 @@ sidebar:
   order: 2
 ---
 
+import Term from '~/components/Term.astro';
+
 *Legenda:* Windows/PowerShell · `<...>` = da sostituire · **G** = gate
 
 | Fase | Azione | Comando o prompt | Output · gate |
 |---|---|---|---|
 | **F0** | Installa (una volta) | `winget install --id Git.Git -e · ... GitHub.cli · OpenJS.NodeJS.LTS · Microsoft.VisualStudioCode; irm https://claude.ai/install.ps1 \| iex` | `claude --version` ok |
-|  | Collega GitHub | `gh auth login` | gh auth status |
-|  | Skill (una volta) | `claude plugin install mattpocock-skills@claude-plugins-official` | /skills |
+|  | Collega <Term id="git-github">GitHub</Term> | `gh auth login` | gh auth status |
+|  | <Term id="skill">Skill</Term> (una volta) | `claude plugin install mattpocock-skills@claude-plugins-official` | /skills |
 |  | Contesto (una volta) | `/statusline show model, branch and context % · /autocompact 200k` | riga di stato |
-|  | Nuovo progetto | `mkdir C:\dev\<nome> · cd · git init · claude · prompt di scaffolding (0.7)` | CLAUDE.md, docs/ |
+|  | Nuovo progetto | `mkdir C:\dev\<nome> · cd · git init · claude · prompt di scaffolding (0.7)` | <Term id="claudemd">CLAUDE.md</Term>, docs/ |
 |  | Pubblica | `git add -A · git commit -m "chore: project scaffold" · gh repo create <nome> --private --source=. --remote=origin --push` | repo privato |
 |  | Configura skill | `/setup-matt-pocock-skills · gh label create build-phase` | docs/agents/ |
 | **F1** | Detta 10–20 min | `Wispr Flow / Win+H / /voice → docs/00-brain-dump.md (copione T1-A)` | trascrizione |
 |  | Struttura | `prompt T1-B` | 01-preliminary-spec · **G1** |
-| **F2** | Traccia la mappa | `/wayfinder + testo T3` | issue wayfinder:map |
-|  | Un ticket a sessione | `/clear · /wayfinder <URL mappa>` | decisioni, ADR, glossario |
+| **F2** | Traccia la mappa | `/wayfinder + testo T3` | <Term id="issue">issue</Term> wayfinder:map |
+|  | Un ticket a sessione | `/clear · /wayfinder <URL mappa>` | decisioni, <Term id="adr">ADR</Term>, glossario |
 |  | Verifica | `prompt «map complete?» (T3)` | «Map clear» · **G2** |
 | **F3** | Sintesi | `/clear · /to-spec <URL mappa>` | spec issue |
 |  | Spec e architettura | `prompt T4 · prompt T5 · red team con subagent` | 02-spec, 03-architecture · **G3** |
@@ -30,17 +32,17 @@ sidebar:
 | **×N** | 1 Avvia | `Shift+Tab → plan mode · prompt T8 «Proceed with Build Phase NN»` | piano · **G5** |
 |  | 2 Implementa | `approva → branch bp-NN-slug · /tdd · commit (o /implement #<n>)` | codice + test |
 |  | 3 Umano | `blocco HUMAN ACTION REQUIRED (T9) → tu esegui → «done»` | sbloccato |
-|  | 4 Review e test | `npm run typecheck · lint · test · test:e2e · build · /mattpocock-skills:code-review · /security-review` | T10 nella PR |
+|  | 4 Review e test | `npm run typecheck · lint · test · test:e2e · build · /mattpocock-skills:code-review · /security-review` | T10 nella <Term id="pull-request-pr">PR</Term> |
 |  | 5 Documentazione | `STATUS.md · ADR · GLOSSARY.md · CHANGELOG.md · .env.example` | — |
 |  | 6 Chiudi | `git push -u origin <branch> · gh pr create --fill · gh pr checks --watch · gh pr merge --squash --delete-branch` | **G6** |
 |  | 7 Handoff | `/handoff Next session: <focus> (T11) → /clear → prompt di ripresa` | file in %TEMP% |
-|  | 8 Contesto | `/context · /compact focus on <...> · /clear (zone T12)` | sotto 100k token |
+|  | 8 Contesto | `/context · /compact focus on <...> · /clear (zone T12)` | sotto 100k <Term id="token">token</Term> |
 | **F6** | Integrazione | `/clear · prompt T13 · /security-review · /code-review ultra` | review · **G7** |
 | **F7** | Lancio | `checklist T14 · npx supabase db push · dominio · Sentry · PostHog` | v1.0.0 online |
 | **F8** | Ogni settimana | `/triage · prompt T15 · /improve-codebase-architecture (ogni 2 sett.)` | docs/ops/&lt;YYYY-WW>.md |
-|  | Bug | `/diagnosing-bugs → build loop` | fix + test di regressione |
+|  | Bug | `/diagnosing-bugs → build loop` | fix + test di <Term id="regressione">regressione</Term> |
 |  | Release | `git tag vX.Y.Z · git push origin vX.Y.Z · gh release create vX.Y.Z --generate-notes` | CHANGELOG |
 
 :::caution
-**Emergenze e scorciatoie** — `Esc` interrompi · `Esc Esc` o `/rewind` torna indietro · `/btw` domanda laterale · `/wait-what` rispiegami · `/doctor` diagnosi · `/usage` limiti del piano · `!cmd` terminale · `@file` richiama un file · `/resume` riprendi · **Mai**: segreti in chat, `bypassPermissions`, due fasi nella stessa sessione, merge senza CI verde.
+**Emergenze e scorciatoie** — `Esc` interrompi · `Esc Esc` o `/rewind` torna indietro · `/btw` domanda laterale · `/wait-what` rispiegami · `/doctor` diagnosi · `/usage` limiti del piano · `!cmd` <Term id="cli-terminale">terminale</Term> · `@file` richiama un file · `/resume` riprendi · **Mai**: segreti in chat, `bypassPermissions`, due fasi nella stessa sessione, <Term id="merge">merge</Term> senza CI verde.
 :::

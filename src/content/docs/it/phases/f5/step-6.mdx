@@ -5,7 +5,18 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import UnderTheHood from '~/components/UnderTheHood.astro';
 import Role from '~/components/Role.astro';
+
+<WhyThisStep>La pull request è l'unico punto in cui la modifica, i suoi test e la sua spiegazione si incontrano. Approvarla significa accettare la fase.</WhyThisStep>
+
+<UnderTheHood title={"Dietro le quinte: cosa succede con push e merge"}>
+
+Quando il branch arriva su GitHub, il workflow di CI in `.github/workflows/` esegue gli stessi controlli su una macchina pulita, quindi "sul mio computer funziona" non basta. Lo squash merge trasforma tutti i commit della fase in un solo commit su `main`, così la storia resta leggibile: una fase, un commit. Approfondisci in [Test e CI](/it/concepts/tests-and-ci/).
+
+</UnderTheHood>
 
 **Claude Code (o PowerShell) · chiusura della fase**
 ```powershell
@@ -17,10 +28,10 @@ git switch main
 git pull
 ```
 
-1. Claude apre la pull request con il template B3: cosa cambia e perché, evidenze (test, screenshot), tabella dei criteri, «pericolosità» del merge (reversibile o no, quanto impatta) e `Closes #<numero>` per chiudere la issue in automatico.
+1. Claude apre la <Term id="pull-request-pr">pull request</Term> con il template B3: cosa cambia e perché, evidenze (test, screenshot), tabella dei criteri, «pericolosità» del <Term id="merge">merge</Term> (reversibile o no, quanto impatta) e `Closes #<numero>` per chiudere la <Term id="issue">issue</Term> in automatico.
 2. La CI deve essere verde; Vercel pubblica un'anteprima.
 3. <Role as="you" /> Leggi il riepilogo (non serve leggere ogni riga di codice), prova l'anteprima, spunta la Definition of Done della issue.
-4. Merge con *squash*[^34] ed eliminazione del branch.
+4. Merge con *squash*[^34] ed eliminazione del <Term id="branch">branch</Term>.
 5. Claude commenta la issue con un riepilogo finale: cosa è stato fatto, test eseguiti, link alla pull request, eventuali issue nuove.
 
 [^34]: **Squash merge**: unisce tutti i commit della pull request in un unico commit su `main`. La storia principale resta pulita: un commit per build phase.

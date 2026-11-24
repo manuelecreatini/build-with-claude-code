@@ -1,0 +1,29 @@
+---
+/** Server wrapper for the Quiz island: picks the questions and UI strings for the page locale. */
+import Quiz from '~/islands/Quiz';
+import { quizzes, type Phase } from '~/data/quizzes';
+import { localeFrom, t } from '~/lib/i18n';
+
+interface Props {
+  phase: Phase;
+}
+const locale = localeFrom(Astro.currentLocale);
+const { phase } = Astro.props;
+// The data authors the right answer in a fixed slot; rotate the options so its position varies
+// between questions. Deterministic (phase + index), so both locales show the same order.
+const questions = quizzes[locale][phase].map((q, i) => {
+  const n = q.options.length;
+  const shift = (((Number(phase.slice(1)) + i * 2) % n) - q.answer + n) % n;
+  const options = q.options.map((_, j) => q.options[(j - shift + n) % n]);
+  return { ...q, options, answer: (q.answer + shift) % n };
+});
+const strings = {
+  heading: t(locale, 'quiz.heading'),
+  intro: t(locale, 'quiz.intro'),
+  correct: t(locale, 'quiz.correct'),
+  wrong: t(locale, 'quiz.wrong'),
+  score: t(locale, 'quiz.score'),
+  retry: t(locale, 'quiz.retry'),
+};
+---
+<Quiz client:visible questions={questions} strings={strings} />

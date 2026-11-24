@@ -5,15 +5,19 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
 import Role from '~/components/Role.astro';
+
+<WhyThisStep>Alcune cose puoi farle solo tu: decidere, pagare, creare un account, incollare un segreto. Far fermare Claude in modo esplicito rende visibili questi momenti invece di lasciarli indovinare.</WhyThisStep>
 
 Claude deve fermarsi ogni volta che serve qualcosa che solo tu puoi fare o decidere:
 
 - una decisione di prodotto;
-- una credenziale o chiave API;
+- una credenziale o chiave <Term id="api">API</Term>;
 - la creazione di un account;
 - un pagamento o un piano a pagamento;
-- una configurazione esterna (DNS, app OAuth, webhook[^31]);
+- una configurazione esterna (<Term id="dns">DNS</Term>, app OAuth, <Term id="webhook">webhook</Term>[^31]);
 - un testo legale;
 - un test su un dispositivo reale.
 
@@ -25,9 +29,9 @@ Non incollare mai chiavi o password nella chat. Inseriscile tu nel file `.env.lo
 
 **Strumenti utili in questo passo**
 
-- `/wizard` <Role as="pocock" />: per configurazioni lunghe genera una procedura guidata interattiva in Bash che ti accompagna passo per passo (credenziali, segreti della CI, pannelli di servizi esterni). Su Windows eseguila in Git Bash.
-- `/to-questionnaire` <Role as="pocock" />: trasforma una decisione che non puoi prendere da solo (socio, cliente, consulente) in un questionario Markdown da inviare.
+- `/wizard` <Role as="pocock" />: per configurazioni lunghe genera una procedura guidata interattiva in Bash che ti accompagna passo per passo (credenziali, segreti della CI, pannelli di servizi esterni). Su Windows eseguila in <Term id="git-github">Git</Term> Bash.
+- `/to-questionnaire` <Role as="pocock" />: trasforma una decisione che non puoi prendere da solo (socio, cliente, consulente) in un questionario <Term id="markdown">Markdown</Term> da inviare.
 - `/wait-what` <Role as="pocock" /> e `/teach` <Role as="pocock" />: il primo rispiega in parole semplici un messaggio che non hai capito; il secondo ti insegna un concetto in più sessioni.
-- Se l'azione non si può fare subito, Claude etichetta la issue `ready-for-human`, commenta cosa manca e passa a un'altra fase sbloccata.
+- Se l'azione non si può fare subito, Claude etichetta la <Term id="issue">issue</Term> `ready-for-human`, commenta cosa manca e passa a un'altra fase sbloccata.
 
 [^31]: **Webhook**: una notifica automatica che un servizio esterno (per esempio Stripe dopo un pagamento) invia alla tua applicazione chiamando un suo indirizzo web.

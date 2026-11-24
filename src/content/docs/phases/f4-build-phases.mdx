@@ -5,27 +5,33 @@ lastVerified: 2026-11-12
 phase: F4
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
 | Item | Detail |
 |---|---|
-| **Goal** | Turn the approved spec into 10–50 sequential build phases, each an independent GitHub issue, ordered and with explicit dependencies. |
-| **Input** | `docs/02-product-spec.md` v1.0, `docs/03-architecture.md`, the issue template (T7) in the repository. |
-| **Output** | Issues `BP-01`…`BP-NN` with the `build-phase` label, native *blocked by* links, `docs/04-build-plan.md` with a dependency graph. |
+| **Goal** | Turn the approved spec into 10–50 sequential <Term id="build-phase-bp">build phases</Term>, each an independent <Term id="git-github">GitHub</Term> <Term id="issue">issue</Term>, ordered and with explicit dependencies. |
+| **Input** | `docs/02-product-spec.md` v1.0, `docs/03-architecture.md`, the issue template (T7) in the <Term id="repository">repository</Term>. |
+| **Output** | Issues `BP-01`…`BP-NN` with the `build-phase` label, native *blocked by* links, `docs/04-build-plan.md` with a <Term id="dependency">dependency</Term> graph. |
 | **Tools** | `/to-tickets` <Role as="pocock" />, prompt T6, `gh`. |
 | **Gate** | <Role as="gate" n={4} /> you approve the plan before it is published. |
 | **Typical time** | 1–2 hours. |
+
+<WhyThisStep>Claude does its best work on a task that fits in one session. Small vertical slices, each with its own issue and pull request, keep every change reviewable and every mistake cheap to undo.</WhyThisStep>
+
 
 ## What a build phase is
 
 A build phase is a ticket in the `/to-tickets` sense: a **vertical tracer-bullet slice**[^27]: a narrow but complete path through data, logic, interface and tests, demonstrable or verifiable on its own and sized for one clean-context session. In the playbook this equation holds:
 
-**1 build phase = 1 issue = 1 branch = 1 session = 1 pull request = 1 demonstrable result**
+**1 build phase = 1 issue = 1 <Term id="branch">branch</Term> = 1 session = 1 <Term id="pull-request-pr">pull request</Term> = 1 demonstrable result**
 
 | Layer | Horizontal slice: "the whole interface" | Vertical slice: one complete capability |
 |---|---|---|
 | Interface | ✅ the whole interface, for every feature | ✅ only this capability's |
-| Logic and API | — | ✅ |
+| Logic and <Term id="api">API</Term> | — | ✅ |
 | Data and schema | — | ✅ |
 | Tests | — | ✅ |
 | **Result** | nothing works until everything is finished | it works, can be tested and shown straight away |
@@ -36,7 +42,7 @@ A build phase is a ticket in the `/to-tickets` sense: a **vertical tracer-bullet
 |---|---|---|
 | Landing page or showcase site with a form | 8–12 | Many content and SEO phases. |
 | Internal tool or dashboard | 12–20 | Data, permissions and exports weigh most. |
-| Web app or SaaS MVP | 20–35 | Authentication, roles, payments, email. |
+| Web app or SaaS MVP | 20–35 | <Term id="authentication-authorisation">Authentication</Term>, roles, payments, email. |
 | Multi-role marketplace, app with mobile and payments | 35–50 | Consider splitting into several milestones. |
 
 \* The playbook's heuristic. Beyond 50, the milestone is too broad: split it (MVP, v1.1, v1.2…).
@@ -49,11 +55,11 @@ A build phase is a ticket in the `/to-tickets` sense: a **vertical tracer-bullet
 | It can't be closed in one session without filling the context. | It is a one-line change that doesn't deserve a pull request. |
 | The resulting pull request is hard to review in 15 minutes. | It exists only to "prepare" something not yet decided. |
 
-**Quick test**: a build phase is right if the result can be shown to a user in two minutes or verified with an end-to-end test. Exception: large mechanical refactorings (renaming a concept everywhere) don't fit in a vertical slice; `/to-tickets` handles them with the *expand–contract* sequence: first add the new form next to the old one, then migrate the usages in batches, finally remove the old one.
+**Quick test**: a build phase is right if the result can be shown to a user in two minutes or verified with an <Term id="e2e-end-to-end">end-to-end</Term> test. Exception: large mechanical refactorings (renaming a concept everywhere) don't fit in a vertical slice; `/to-tickets` handles them with the *expand–contract* sequence: first add the new form next to the old one, then migrate the usages in batches, finally remove the old one.
 
 ## The standard order
 
-1. **BP-01 · Walking skeleton**: app scaffolding, type checking, lint[^28], test tooling, CI and the deploy of a "hello world" page to a preview URL. From here on every phase can be verified online.
+1. **BP-01 · Walking skeleton**: app scaffolding, type checking, <Term id="lint">lint</Term>[^28], test tooling, CI and the deploy of a "hello world" page to a preview URL. From here on every phase can be verified online.
 2. **Authentication and roles.**
 3. **First slice of the main journey**, thin but complete: data, logic, interface, tests.
 4. **Thickening the main journey**: edge cases, empty states, errors.
@@ -120,7 +126,7 @@ that implements something not in the spec. Then list all phases that need a huma
 - [ ] Every phase has a visible or verifiable result and 2–6 acceptance criteria.
 - [ ] Every requirement in the spec is covered; no phase does things outside the spec.
 - [ ] The dependencies are only the real ones (fewer blockers = more flexibility).
-- [ ] Human actions (accounts, keys, payments, DNS) are explicit and carry the `ready-for-human` label.
+- [ ] Human actions (accounts, keys, payments, <Term id="dns">DNS</Term>) are explicit and carry the `ready-for-human` label.
 - [ ] The total count is consistent with the sizing table.
 
 ## Step 4 — Publish and index
@@ -152,6 +158,8 @@ Approve when the coverage table is complete, the order follows the standard sche
 - Huge phases ("complete dashboard") that don't fit in one session.
 - Excessive dependencies that make everything sequential for no reason.
 - Forgetting BP-01: without CI and preview, every phase can only be verified on your PC.
+
+<QuizBlock phase="F4" />
 
 [^27]: **Tracer bullet**: a minimal but complete slice that crosses every layer of the system and really works end to end. It shows straight away whether the road is right, as opposed to building one layer at a time and discovering the problems only at the end.
 

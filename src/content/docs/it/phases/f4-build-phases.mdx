@@ -5,27 +5,33 @@ lastVerified: 2026-11-12
 phase: F4
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
 | Voce | Dettaglio |
 |---|---|
-| **Obiettivo** | Trasformare la spec approvata in 10–50 build phase sequenziali, ognuna una issue GitHub indipendente, ordinata e con dipendenze esplicite. |
-| **Input** | `docs/02-product-spec.md` v1.0, `docs/03-architecture.md`, template della issue (T7) nel repository. |
+| **Obiettivo** | Trasformare la spec approvata in 10–50 <Term id="build-phase-bp">build phase</Term> sequenziali, ognuna una <Term id="issue">issue</Term> <Term id="git-github">GitHub</Term> indipendente, ordinata e con dipendenze esplicite. |
+| **Input** | `docs/02-product-spec.md` v1.0, `docs/03-architecture.md`, template della issue (T7) nel <Term id="repository">repository</Term>. |
 | **Output** | Issue `BP-01`…`BP-NN` con label `build-phase`, collegamenti *blocked by* nativi, `docs/04-build-plan.md` con grafo delle dipendenze. |
 | **Strumenti** | `/to-tickets` <Role as="pocock" />, prompt T6, `gh`. |
 | **Gate** | <Role as="gate" n={4} /> approvi il piano prima che venga pubblicato. |
 | **Tempo tipico** | 1–2 ore. |
 
+<WhyThisStep>Claude lavora meglio su un compito che sta in una sessione. Fette verticali piccole, ognuna con la sua issue e la sua pull request, rendono ogni modifica revisionabile e ogni errore facile da annullare.</WhyThisStep>
+
+
 ## Cos'è una build phase
 
 Una build phase è un ticket nel senso di `/to-tickets`: una **fetta verticale a proiettile tracciante**[^27]: un percorso stretto ma completo attraverso dati, logica, interfaccia e test, dimostrabile o verificabile da solo e dimensionato per una sessione di contesto pulita. Nel playbook vale l'equazione:
 
-**1 build phase = 1 issue = 1 branch = 1 sessione = 1 pull request = 1 risultato dimostrabile**
+**1 build phase = 1 issue = 1 <Term id="branch">branch</Term> = 1 sessione = 1 <Term id="pull-request-pr">pull request</Term> = 1 risultato dimostrabile**
 
 | Strato | Fetta orizzontale: «tutta l'interfaccia» | Fetta verticale: una capacità completa |
 |---|---|---|
 | Interfaccia | ✅ tutta l'interfaccia, di tutte le funzionalità | ✅ solo quella di questa capacità |
-| Logica e API | — | ✅ |
+| Logica e <Term id="api">API</Term> | — | ✅ |
 | Dati e schema | — | ✅ |
 | Test | — | ✅ |
 | **Risultato** | nulla funziona finché tutto non è finito | funziona, si testa e si mostra subito |
@@ -36,7 +42,7 @@ Una build phase è un ticket nel senso di `/to-tickets`: una **fetta verticale a
 |---|---|---|
 | Landing page o sito vetrina con form | 8–12 | Molte fasi di contenuto e SEO. |
 | Strumento interno o dashboard | 12–20 | Pesano dati, permessi, export. |
-| Web app o SaaS MVP | 20–35 | Autenticazione, ruoli, pagamenti, email. |
+| Web app o SaaS MVP | 20–35 | <Term id="autenticazione-autorizzazione">Autenticazione</Term>, ruoli, pagamenti, email. |
 | Marketplace multi-ruolo, app con mobile e pagamenti | 35–50 | Valuta di dividere in più traguardi. |
 
 \* Euristica del playbook. Oltre 50, il traguardo è troppo ampio: spezzalo (MVP, v1.1, v1.2…).
@@ -49,11 +55,11 @@ Una build phase è un ticket nel senso di `/to-tickets`: una **fetta verticale a
 | Non si chiude in una sessione senza riempire il contesto. | È una modifica di una riga che non merita una pull request. |
 | La pull request risultante è difficile da rivedere in 15 minuti. | Esiste solo per «preparare» qualcosa che non è ancora deciso. |
 
-**Test rapido**: una build phase è giusta se il risultato si può mostrare a un utente in due minuti oppure verificare con un test end-to-end. Eccezione: i grandi refactoring meccanici (rinominare un concetto ovunque) non stanno in una fetta verticale; `/to-tickets` li gestisce con la sequenza *expand–contract*: prima si aggiunge la forma nuova accanto alla vecchia, poi si migrano gli usi a lotti, infine si rimuove la vecchia.
+**Test rapido**: una build phase è giusta se il risultato si può mostrare a un utente in due minuti oppure verificare con un test <Term id="e2e-end-to-end">end-to-end</Term>. Eccezione: i grandi refactoring meccanici (rinominare un concetto ovunque) non stanno in una fetta verticale; `/to-tickets` li gestisce con la sequenza *expand–contract*: prima si aggiunge la forma nuova accanto alla vecchia, poi si migrano gli usi a lotti, infine si rimuove la vecchia.
 
 ## L'ordine standard
 
-1. **BP-01 · Walking skeleton**: scaffolding dell'app, controllo dei tipi, lint[^28], strumenti di test, CI e deploy di una pagina «hello world» su un URL di anteprima. Da qui in poi ogni fase è verificabile online.
+1. **BP-01 · Walking skeleton**: scaffolding dell'app, controllo dei tipi, <Term id="lint">lint</Term>[^28], strumenti di test, CI e deploy di una pagina «hello world» su un URL di anteprima. Da qui in poi ogni fase è verificabile online.
 2. **Autenticazione e ruoli.**
 3. **Prima fetta del percorso principale**, sottile ma completa: dati, logica, interfaccia, test.
 4. **Ispessimento del percorso principale**: casi limite, stati vuoti, errori.
@@ -103,7 +109,7 @@ Il file `.github/ISSUE_TEMPLATE/build-phase.md` (template T7) è stato creato in
 2. cerca occasioni di *prefactoring*, cioè preparare il codice perché la modifica diventi semplice;
 3. disegna le fette verticali e, per ciascuna, le dipendenze che la bloccano;
 4. **ti presenta l'elenco numerato** (titolo, bloccata da, cosa consegna) e ti chiede se la granularità è giusta, se le dipendenze sono corrette, se qualcosa va unito o diviso. Itera finché non approvi;
-5. solo dopo l'approvazione pubblica le issue in ordine di dipendenza, con i collegamenti nativi *blocked by* di GitHub e la label `ready-for-agent`, senza modificare la issue madre.
+5. solo dopo l'approvazione pubblica le issue in ordine di <Term id="dipendenza">dipendenza</Term>, con i collegamenti nativi *blocked by* di GitHub e la label `ready-for-agent`, senza modificare la issue madre.
 
 ## Passo 3 — Rivedi il piano (gate G4)
 
@@ -120,7 +126,7 @@ that implements something not in the spec. Then list all phases that need a huma
 - [ ] Ogni fase ha un risultato visibile o verificabile e 2–6 criteri di accettazione.
 - [ ] Ogni requisito della spec è coperto; nessuna fase fa cose fuori spec.
 - [ ] Le dipendenze sono solo quelle reali (meno blocchi = più flessibilità).
-- [ ] Le azioni umane (account, chiavi, pagamenti, DNS) sono esplicite e hanno la label `ready-for-human`.
+- [ ] Le azioni umane (account, chiavi, pagamenti, <Term id="dns">DNS</Term>) sono esplicite e hanno la label `ready-for-human`.
 - [ ] Il numero totale è coerente con la tabella delle dimensioni.
 
 ## Passo 4 — Pubblica e indicizza
@@ -152,6 +158,8 @@ Approva quando la tabella di copertura è completa, l'ordine segue lo schema sta
 - Fasi enormi («dashboard completa») che non stanno in una sessione.
 - Dipendenze eccessive che rendono tutto sequenziale senza motivo.
 - Dimenticare BP-01: senza CI e anteprima, ogni fase si verifica solo sul tuo PC.
+
+<QuizBlock phase="F4" />
 
 [^27]: **Tracer bullet** (proiettile tracciante): una porzione minima ma completa che attraversa tutti gli strati del sistema e funziona davvero dall'inizio alla fine. Mostra subito se la strada è giusta, al contrario di costruire uno strato alla volta e scoprire i problemi solo alla fine.
 

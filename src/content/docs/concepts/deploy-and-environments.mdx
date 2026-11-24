@@ -1,0 +1,37 @@
+---
+title: Deploy and environments
+description: Local, preview and production environments, environment variables and secrets, DNS and rollback, explained for the moment your product goes live.
+lastVerified: 2026-11-24
+sidebar:
+  order: 7
+---
+
+**In one sentence:** deploying means putting a version of your app on a server where others can use it; keeping separate environments and keeping secrets out of the code is what makes that safe to repeat.
+
+## Environments
+
+| Environment | Who uses it | What it is for |
+| --- | --- | --- |
+| Local | You and Claude | Building and running the tests on your computer |
+| Preview (or staging) | You, testers | A temporary online copy of a branch or pull request, to try before merging |
+| Production | Real users | The live app, with real data |
+
+Many hosting platforms create a preview automatically for every pull request and deploy to production when `main` changes. That is the *CD* in CI/CD: continuous delivery.
+
+## Environment variables and secrets
+
+An API key, a database password or a payment key is a **secret**. Secrets must never be in the repository: anyone who sees the code would see them, and Git keeps them in the history even after you delete them.
+
+Instead, the hosting platform stores them as **environment variables** and hands them to the app when it starts. The same code then runs in preview with test keys and in production with real ones. Locally, they live in a `.env` file that is listed in `.gitignore`. See [Step 2 of Phase 7](/phases/f7-deploy/).
+
+## Domain and DNS
+
+A domain (`example.com`) is a name you rent. **DNS** records connect that name to the server that hosts the app; your hosting provider tells you which records to add. Changes can take from minutes to hours to spread.
+
+## Rollback
+
+Every deploy is a numbered version. A *rollback* switches production back to the previous one. It is only quick if you tried it before you needed it, and if database changes (migrations) can also be undone or are backwards-compatible. That is why the playbook plans backups and a rollback runbook before launch day.
+
+## Sources
+
+- Your hosting provider's documentation on environment variables, preview deployments and domains. Phase 7 lists the providers the playbook considers.

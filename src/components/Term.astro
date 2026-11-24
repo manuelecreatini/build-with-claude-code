@@ -1,0 +1,20 @@
+---
+/**
+ * A glossary term: links to its entry in Appendix A and shows the one-line definition as a
+ * tooltip on hover and keyboard focus. Inserted automatically on the first mention of each
+ * term by scripts/split-playbook.mjs; usable by hand in any page: <Term id="branch">branches</Term>.
+ */
+import { localeFrom } from '~/lib/i18n';
+import { glossaryEntry, glossaryHref } from '~/lib/glossary';
+
+interface Props {
+  /** Entry id from src/data/glossary/<locale>.json. */
+  id: string;
+}
+const { id } = Astro.props;
+const locale = localeFrom(Astro.currentLocale);
+const entry = glossaryEntry(locale, id);
+if (!entry) throw new Error(`<Term>: unknown glossary id "${id}" (${locale})`);
+const tipId = `bcc-tip-${id}`;
+---
+<span class="bcc-term"><a href={glossaryHref(locale, id)} aria-describedby={tipId}><slot /></a><span class="bcc-term__tip" role="tooltip" id={tipId}><strong>{entry.term}</strong> — {entry.definition}</span></span>

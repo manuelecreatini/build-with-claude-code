@@ -5,13 +5,17 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
 import Role from '~/components/Role.astro';
 
-`/handoff` <Role as="pocock" /> compresses the conversation into a handover document, so that a new agent, with a clean context, can continue the work. From the skill's documentation:
+<WhyThisStep>A fresh session with a good handover beats a long session full of stale detail: Claude reasons better when its context holds only what matters now.</WhyThisStep>
 
-- it saves the document in the **system's temporary folder** (on Windows `%TEMP%`), not in the repository;
+`/handoff` <Role as="pocock" /> compresses the conversation into a handover document, so that a new agent, with a clean context, can continue the work. From the <Term id="skill">skill</Term>'s documentation:
+
+- it saves the document in the **system's temporary folder** (on Windows `%TEMP%`), not in the <Term id="repository">repository</Term>;
 - it includes a *suggested skills* section for the next session;
-- it doesn't duplicate what is already in other artefacts (specs, plans, ADRs, issues, commits, diffs): it references them by path or URL;
+- it doesn't duplicate what is already in other artefacts (specs, plans, <Term id="adr">ADRs</Term>, <Term id="issue">issues</Term>, <Term id="commit">commits</Term>, diffs): it references them by path or URL;
 - it redacts sensitive information (keys, passwords, personal data);
 - it accepts an optional argument: what the next session will be for, and it adapts the document accordingly.
 
@@ -24,8 +28,8 @@ import Role from '~/components/Role.astro';
 5. before leaving work to run on its own in another session;
 6. when a conversation has turned into a project: "hand off to /wayfinder" turns it into a map.
 
-**How**: use template T11. In short: (1) Claude commits the work in progress and pushes it to the branch; (2) it comments the status on the issue and updates `STATUS.md`; (3) you run `/handoff` with the description of the next session; (4) you note the path of the file created; (5) `/clear`; (6) in the new conversation you paste the resume prompt with that path.
+**How**: use template T11. In short: (1) Claude commits the work in progress and pushes it to the <Term id="branch">branch</Term>; (2) it comments the status on the issue and updates `STATUS.md`; (3) you run `/handoff` with the description of the next session; (4) you note the path of the file created; (5) `/clear`; (6) in the new conversation you paste the resume prompt with that path.
 
 :::note[The handoff document is a bridge, not an archive]
-Temporary files can be deleted by the system. Durable memory stays in the repository and on GitHub: commits, the issue comment, `STATUS.md`, ADRs. That is why the playbook updates them *before* the handoff: if the temporary file disappears, you lose nothing important.
+Temporary files can be deleted by the system. Durable memory stays in the repository and on <Term id="git-github">GitHub</Term>: commits, the issue comment, `STATUS.md`, ADRs. That is why the playbook updates them *before* the handoff: if the temporary file disappears, you lose nothing important.
 :::

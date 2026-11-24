@@ -5,29 +5,35 @@ lastVerified: 2026-11-12
 phase: F3
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
 | Item | Detail |
 |---|---|
 | **Goal** | Turn decisions and the preliminary spec into a single source of truth: what we build, how, within which limits and what stays out. |
-| **Input** | Closed `/wayfinder` map, ADRs, `GLOSSARY.md`, `docs/01-preliminary-spec.md`, prototypes and research. |
-| **Output** | `docs/02-product-spec.md` (v1.0), `docs/03-architecture.md`, complete ADRs, spec issue on GitHub, updated `README.md`. |
-| **Tools** | `/to-spec` <Role as="pocock" />, templates T4 and T5, a subagent for the critical review, Claude Design or `/prototype` for the interface. |
+| **Input** | Closed `/wayfinder` map, <Term id="adr">ADRs</Term>, `GLOSSARY.md`, `docs/01-preliminary-spec.md`, prototypes and research. |
+| **Output** | `docs/02-product-spec.md` (v1.0), `docs/03-architecture.md`, complete ADRs, spec <Term id="issue">issue</Term> on <Term id="git-github">GitHub</Term>, updated `README.md`. |
+| **Tools** | `/to-spec` <Role as="pocock" />, templates T4 and T5, a <Term id="subagent">subagent</Term> for the critical review, Claude Design or `/prototype` for the interface. |
 | **Gate** | <Role as="gate" n={3} /> you approve spec and architecture. |
 | **Typical time** | 2–4 hours, plus reading time. |
+
+<WhyThisStep>From here on, the spec is the contract: every build phase, test and review is checked against it. A single, versioned source of truth stops the product from drifting one prompt at a time.</WhyThisStep>
+
 
 ## The documents of this phase and where they live
 
 | Document | Path | Content | Created with |
 |---|---|---|---|
-| Spec issue (epic) | GitHub issue with the `ready-for-agent` label | Synthesis of the decisions in the `/to-spec` format; it becomes the parent issue of the build phases. | `/to-spec` |
+| Spec issue (epic) | GitHub issue with the `ready-for-agent` label | Synthesis of the decisions in the `/to-spec` format; it becomes the parent issue of the <Term id="build-phase-bp">build phases</Term>. | `/to-spec` |
 | Product spec | `docs/02-product-spec.md` | Complete spec (template T4). **Source of truth.** | Prompt T4 |
 | Architecture | `docs/03-architecture.md` | Technical architecture (template T5). | Prompt T5 |
-| ADR | `docs/adr/NNNN-title.md` | One hard-to-reverse decision per file. | Grilling skills, template B1 |
+| ADR | `docs/adr/NNNN-title.md` | One hard-to-reverse decision per file. | Grilling <Term id="skill">skills</Term>, template B1 |
 | Glossary | `GLOSSARY.md` | Domain terms and their meaning. | `domain-modeling` |
 | README | `README.md` | What the project is and how to run it. | Claude |
 
-**Why the source of truth is a file and not the issue.** A file in the repository is versioned together with the code, Claude reads it without calling GitHub, every change goes through a pull request with its history, and it survives any change of tool. The spec issue created by `/to-spec` stays useful as the parent issue and points to the file.
+**Why the source of truth is a file and not the issue.** A file in the <Term id="repository">repository</Term> is versioned together with the code, Claude reads it without calling GitHub, every change goes through a <Term id="pull-request-pr">pull request</Term> with its history, and it survives any change of tool. The spec issue created by `/to-spec` stays useful as the parent issue and points to the file.
 
 ## Step 1 — Synthesise the decisions with /to-spec
 
@@ -40,7 +46,7 @@ import Role from '~/components/Role.astro';
 `/to-spec` <Role as="pocock" /> doesn't interview: it synthesises what has already been decided (the map and the linked tickets). In order:
 
 1. it explores the repository and uses the vocabulary of `GLOSSARY.md`, respecting the ADRs;
-2. it identifies the *seams* where features will be tested[^22] and asks you to confirm them;
+2. it identifies the *<Term id="seam">seams</Term>* where features will be tested[^22] and asks you to confirm them;
 3. it writes the spec with fixed sections: *Problem Statement*, *Solution*, *User Stories* (a long, numbered list), *Implementation Decisions* (without file paths, which go stale quickly), *Testing Decisions*, *Out of Scope*, *Further Notes*;
 4. it publishes it as an issue with the `ready-for-agent` label.
 
@@ -50,7 +56,7 @@ The `/to-spec` format is excellent for agents but doesn't cover everything a pro
 
 ## Step 3 — Write the technical architecture
 
-Paste the prompt from template T5. Claude writes `docs/03-architecture.md` with Mermaid text diagrams[^24], the list of technologies with a pointer to each one's ADR, the data model, the authentication flows, the environments, the testing strategy and the cost limits.
+Paste the prompt from template T5. Claude writes `docs/03-architecture.md` with Mermaid text diagrams[^24], the list of technologies with a pointer to each one's ADR, the data model, the <Term id="authentication-authorisation">authentication</Term> flows, the environments, the testing strategy and the cost limits.
 
 ### This playbook's default stack
 
@@ -58,8 +64,8 @@ If you are not an engineer, a boring, widespread stack that Claude knows well is
 
 | Need | Default | Alternative | When to choose the alternative |
 |---|---|---|---|
-| Web app or SaaS | Next.js + TypeScript + Tailwind CSS + shadcn/ui | Astro | Content site or showcase with few interactive parts. |
-| Backend | Next.js server functions + Supabase | FastAPI (Python) | Heavy data or AI logic written in Python. |
+| Web app or SaaS | Next.js + <Term id="typescript">TypeScript</Term> + Tailwind CSS + shadcn/ui | Astro | Content site or showcase with few interactive parts. |
+| <Term id="frontend-backend">Backend</Term> | Next.js server functions + Supabase | FastAPI (Python) | Heavy data or AI logic written in Python. |
 | Database, login, files | Supabase (Postgres, Auth, Storage) | Neon + a dedicated authentication service | A database that scales to zero when idle, or enterprise authentication requirements. |
 | Hosting | Vercel | Netlify, Cloudflare, Railway, Render, Fly.io | Always-on processes, containers, Python backends. |
 | Mobile app | Expo (React Native) + Supabase | Flutter | A team that already knows Flutter. |
@@ -96,10 +102,10 @@ Then, in plain English, summarise for me the 5 most important changes and wait f
 
 ## Step 6 — Approve and freeze version 1.0
 
-Apply the fixes you accept, then ask Claude to set the spec status to `APPROVED` with the date, commit (`docs: product spec v1.0`) and update `docs/STATUS.md`. From here on the spec changes only through pull requests, with a line in its *change log*.
+Apply the fixes you accept, then ask Claude to set the spec status to `APPROVED` with the date, <Term id="commit">commit</Term> (`docs: product spec v1.0`) and update `docs/STATUS.md`. From here on the spec changes only through pull requests, with a line in its *change log*.
 
 :::danger[GATE G3 · You approve spec and architecture]
-Approve when: every user story has testable criteria; non-functional requirements, security and privacy are explicit; the stack is justified by ADRs; the *Out of scope* section lists what you are knowingly not doing; the critical review left no critical problems open.
+Approve when: every <Term id="user-story">user story</Term> has testable criteria; non-functional requirements, security and privacy are explicit; the stack is justified by ADRs; the *Out of scope* section lists what you are knowingly not doing; the critical review left no critical problems open.
 :::
 
 :::tip[Definition of Done · Phase 3]
@@ -112,10 +118,12 @@ Approve when: every user story has testable criteria; non-functional requirement
 
 ### Common mistakes
 
-- Letting the spec "decide" things that were never discussed: if `/to-spec` makes things up, a decision ticket is missing.
+- Letting the spec "decide" things that were never discussed: if `/to-spec` makes things up, a <Term id="decision-ticket">decision ticket</Term> is missing.
 - A spec full of file paths and code: they go stale immediately. Modules and interfaces are enough.
 - No *Out of scope* section: it is the main defence against scope creep.
 - Approving without reading the non-functional requirements (performance, privacy, accessibility, costs).
+
+<QuizBlock phase="F3" />
 
 [^22]: **Seam**: a boundary in the code from which a feature can be tested from the outside, without looking at the internal details. A few well-chosen seams, as high up as possible, keep tests stable even when the code changes.
 

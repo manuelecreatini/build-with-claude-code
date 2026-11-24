@@ -5,13 +5,17 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
 import Role from '~/components/Role.astro';
 
-`/handoff` <Role as="pocock" /> comprime la conversazione in un documento di passaggio, perché un agente nuovo, con contesto pulito, possa continuare il lavoro. Dalla documentazione della skill:
+<WhyThisStep>Una sessione nuova con un buon passaggio di consegne funziona meglio di una sessione lunga piena di dettagli superati: Claude ragiona meglio quando il contesto contiene solo ciò che serve adesso.</WhyThisStep>
 
-- salva il documento nella **cartella temporanea del sistema** (su Windows `%TEMP%`), non nel repository;
+`/handoff` <Role as="pocock" /> comprime la conversazione in un documento di passaggio, perché un agente nuovo, con contesto pulito, possa continuare il lavoro. Dalla documentazione della <Term id="skill">skill</Term>:
+
+- salva il documento nella **cartella temporanea del sistema** (su Windows `%TEMP%`), non nel <Term id="repository">repository</Term>;
 - include una sezione di *skill suggerite* per la sessione successiva;
-- non duplica ciò che è già in altri artefatti (spec, piani, ADR, issue, commit, diff): li cita per percorso o URL;
+- non duplica ciò che è già in altri artefatti (spec, piani, <Term id="adr">ADR</Term>, <Term id="issue">issue</Term>, <Term id="commit">commit</Term>, diff): li cita per percorso o URL;
 - oscura le informazioni sensibili (chiavi, password, dati personali);
 - accetta un argomento opzionale: a cosa servirà la prossima sessione, e adatta il documento di conseguenza.
 
@@ -24,8 +28,8 @@ import Role from '~/components/Role.astro';
 5. prima di lasciare lavoro in autonomia a un'altra sessione;
 6. quando una conversazione è diventata un progetto: «hand off to /wayfinder» la trasforma in una mappa.
 
-**Come**: usa il template T11. In sintesi: (1) Claude fa commit del lavoro in corso e lo pubblica sul branch; (2) commenta lo stato sulla issue e aggiorna `STATUS.md`; (3) esegui `/handoff` con la descrizione della prossima sessione; (4) annoti il percorso del file creato; (5) `/clear`; (6) nella nuova conversazione incolli il prompt di ripresa con quel percorso.
+**Come**: usa il template T11. In sintesi: (1) Claude fa commit del lavoro in corso e lo pubblica sul <Term id="branch">branch</Term>; (2) commenta lo stato sulla issue e aggiorna `STATUS.md`; (3) esegui `/handoff` con la descrizione della prossima sessione; (4) annoti il percorso del file creato; (5) `/clear`; (6) nella nuova conversazione incolli il prompt di ripresa con quel percorso.
 
 :::note[Il documento di handoff è un ponte, non un archivio]
-I file temporanei possono essere cancellati dal sistema. La memoria durevole resta nel repository e su GitHub: commit, commento sulla issue, `STATUS.md`, ADR. Per questo il playbook li aggiorna *prima* dell'handoff: se il file temporaneo sparisce, non perdi nulla di importante.
+I file temporanei possono essere cancellati dal sistema. La memoria durevole resta nel repository e su <Term id="git-github">GitHub</Term>: commit, commento sulla issue, `STATUS.md`, ADR. Per questo il playbook li aggiorna *prima* dell'handoff: se il file temporaneo sparisce, non perdi nulla di importante.
 :::

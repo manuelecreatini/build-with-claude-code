@@ -5,6 +5,9 @@ lastVerified: 2026-11-12
 phase: F1
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
 | Item | Detail |
@@ -15,6 +18,9 @@ import Role from '~/components/Role.astro';
 | **Tools** | Wispr Flow, Windows dictation or `/voice`; Claude Code; templates T1 and T2. |
 | **Gate** | <Role as="gate" n={1} /> you approve the preliminary spec. |
 | **Typical time** | 30–90 minutes. |
+
+<WhyThisStep>An agent builds exactly what it understands. Getting the whole idea out of your head first, before any technical choice, is the cheapest moment to discover what you actually want.</WhyThisStep>
+
 
 ## Why start with your voice
 
@@ -44,10 +50,10 @@ Save the file, open Claude Code in the project folder and paste the prompt from 
 
 ## Step 4 — Review, answer, approve
 
-Read the draft (15 minutes). Answer the open questions directly in the chat, by voice if you like; ask Claude to update the document. Two or three rounds are enough: don't aim for perfection, Phase 2 will dig into every point. Then commit: `docs: preliminary spec v0.1`.
+Read the draft (15 minutes). Answer the open questions directly in the chat, by voice if you like; ask Claude to update the document. Two or three rounds are enough: don't aim for perfection, Phase 2 will dig into every point. Then <Term id="commit">commit</Term>: `docs: preliminary spec v0.1`.
 
 :::note[When to use Claude chat in this phase]
-For market research, competitor analysis, naming or a first exploration of the idea, use a Project on claude.ai dedicated to the product. Save the useful conclusions in `docs/research/` (one file per topic) so they enter the repository and Claude Code can use them in Phase 2.
+For market research, competitor analysis, naming or a first exploration of the idea, use a Project on claude.ai dedicated to the product. Save the useful conclusions in `docs/research/` (one file per topic) so they enter the <Term id="repository">repository</Term> and Claude Code can use them in Phase 2.
 :::
 
 :::danger[GATE G1 · You approve the preliminary spec]
@@ -67,3 +73,5 @@ Approve when, rereading the draft, you recognise your idea: problem, users, expe
 - Dictating for two minutes: without stories and details, the draft will be generic.
 - Silently accepting the assumptions marked `[ASSUMPTION]`: they are exactly the points to check.
 - Trying to close every decision here: that is Phase 2's job.
+
+<QuizBlock phase="F1" />

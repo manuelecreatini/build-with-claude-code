@@ -5,9 +5,21 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
-1. Press `Shift+Tab` until the status line shows *plan mode on* (or start the message with `/plan`).
-2. Paste the prompt from template T8 with the phase number: "Proceed with Build Phase 07 (issue \#23)".
-3. Claude reads the issue with its comments, `STATUS.md`, the referenced spec sections, the ADRs, the glossary and the code involved; it checks that the dependencies are closed and that `main` is green.
-4. It presents the plan: what the user will be able to do at the end, approach and modules touched, seams and tests to write first, risks and out-of-scope things noticed, human actions needed, final checks.
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import UnderTheHood from '~/components/UnderTheHood.astro';
+
+<WhyThisStep>In plan mode Claude can read and explore but cannot edit your source, so you can correct the approach while it costs one sentence instead of a rewrite.</WhyThisStep>
+
+<UnderTheHood title={"Under the hood: what plan mode allows"}>
+
+Plan mode is one of Claude Code's permission modes. Claude reads files, runs shell commands to explore and writes a plan, but source edits stay blocked until you approve. When you approve, Claude Code asks how to continue (for example with edits approved manually), and you can open the plan in your editor with `Ctrl+G` to change it first. More in [Plan mode and permissions](/concepts/plan-mode-and-permissions/).
+
+</UnderTheHood>
+
+1. Press `Shift+Tab` until the status line shows *<Term id="plan-mode">plan mode</Term> on* (or start the message with `/plan`).
+2. Paste the prompt from template T8 with the phase number: "Proceed with <Term id="build-phase-bp">Build Phase</Term> 07 (<Term id="issue">issue</Term> \#23)".
+3. Claude reads the issue with its comments, `STATUS.md`, the referenced spec sections, the <Term id="adr">ADRs</Term>, the glossary and the code involved; it checks that the dependencies are closed and that `main` is green.
+4. It presents the plan: what the user will be able to do at the end, approach and modules touched, <Term id="seam">seams</Term> and tests to write first, risks and out-of-scope things noticed, human actions needed, final checks.
 
 **How to review the plan.** Ask questions until it is clear; press `Ctrl+G` to edit its text in the editor. Don't approve plans that touch areas outside the issue, add dependencies without saying so, skip tests or leave human actions unanswered. When you approve, choose *approve and manually review each edit* for the first 3–5 phases, *approve and accept edits* once you trust the process.

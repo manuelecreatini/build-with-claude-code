@@ -1,0 +1,508 @@
+[
+  {
+    "id": "adr",
+    "term": "ADR",
+    "definition": "Architecture Decision Record: documento breve che registra una decisione importante e il suo perché.",
+    "match": [
+      "ADR"
+    ]
+  },
+  {
+    "id": "afk-hitl",
+    "term": "AFK / HITL",
+    "definition": "Lavoro svolto dall'agente da solo / lavoro che richiede te presente.",
+    "match": [
+      "AFK",
+      "HITL"
+    ]
+  },
+  {
+    "id": "api",
+    "term": "API",
+    "definition": "L'insieme di «porte» con cui due programmi si scambiano dati.",
+    "match": [
+      "API"
+    ]
+  },
+  {
+    "id": "autenticazione-autorizzazione",
+    "term": "Autenticazione / autorizzazione",
+    "definition": "Chi sei (login) / cosa puoi fare (permessi per ruolo).",
+    "match": [
+      "Autenticazione",
+      "autorizzazione"
+    ]
+  },
+  {
+    "id": "branch",
+    "term": "Branch",
+    "definition": "Linea di sviluppo parallela; si unisce a main con una pull request.",
+    "match": [
+      "Branch"
+    ]
+  },
+  {
+    "id": "build-phase-bp",
+    "term": "Build phase (BP)",
+    "definition": "Fetta verticale del prodotto: una issue, un branch, una pull request.",
+    "match": [
+      "Build phase",
+      "BP"
+    ]
+  },
+  {
+    "id": "cicd",
+    "term": "CI/CD",
+    "definition": "Controlli automatici su ogni modifica e pubblicazione automatica.",
+    "match": [
+      "CI/CD"
+    ]
+  },
+  {
+    "id": "claudemd",
+    "term": "CLAUDE.md",
+    "definition": "File di istruzioni permanenti che Claude Code carica a ogni sessione.",
+    "match": [
+      "CLAUDE.md"
+    ]
+  },
+  {
+    "id": "cli-terminale",
+    "term": "CLI / terminale",
+    "definition": "Programmi che si usano scrivendo comandi in una finestra di testo.",
+    "match": [
+      "CLI",
+      "terminale"
+    ]
+  },
+  {
+    "id": "commit",
+    "term": "Commit",
+    "definition": "Salvataggio descritto di un insieme di modifiche nella storia Git.",
+    "match": [
+      "Commit"
+    ]
+  },
+  {
+    "id": "compattazione",
+    "term": "Compattazione",
+    "definition": "Riassunto della conversazione per liberare contesto (/compact).",
+    "match": [
+      "Compattazione"
+    ]
+  },
+  {
+    "id": "conventional-commits",
+    "term": "Conventional Commits",
+    "definition": "Messaggi di commit con prefisso: feat:, fix:, docs:…",
+    "match": [
+      "Conventional Commits"
+    ]
+  },
+  {
+    "id": "database",
+    "term": "Database",
+    "definition": "Archivio strutturato dei dati dell'applicazione (qui Postgres).",
+    "match": []
+  },
+  {
+    "id": "debito-tecnico",
+    "term": "Debito tecnico",
+    "definition": "Scorciatoie che rendono più costose le modifiche future.",
+    "match": [
+      "Debito tecnico"
+    ]
+  },
+  {
+    "id": "decision-ticket",
+    "term": "Decision ticket",
+    "definition": "Issue della mappa di /wayfinder che contiene una domanda da decidere.",
+    "match": [
+      "Decision ticket"
+    ]
+  },
+  {
+    "id": "deploy",
+    "term": "Deploy",
+    "definition": "Pubblicazione di una versione dell'app su un server.",
+    "match": []
+  },
+  {
+    "id": "dipendenza",
+    "term": "Dipendenza",
+    "definition": "Libreria esterna usata dal progetto, installata con npm.",
+    "match": [
+      "Dipendenza"
+    ]
+  },
+  {
+    "id": "dns",
+    "term": "DNS",
+    "definition": "Sistema che collega un nome di dominio al server.",
+    "match": [
+      "DNS"
+    ]
+  },
+  {
+    "id": "e2e-end-to-end",
+    "term": "E2E (end-to-end)",
+    "definition": "Test che simula un utente reale nel browser.",
+    "match": [
+      "E2E",
+      "end-to-end"
+    ]
+  },
+  {
+    "id": "feature-flag",
+    "term": "Feature flag",
+    "definition": "Interruttore che attiva una funzione solo per alcuni utenti.",
+    "match": [
+      "Feature flag"
+    ]
+  },
+  {
+    "id": "finestra-di-contesto",
+    "term": "Finestra di contesto",
+    "definition": "Quanti token il modello considera insieme.",
+    "match": [
+      "Finestra di contesto"
+    ]
+  },
+  {
+    "id": "framework",
+    "term": "Framework",
+    "definition": "Impalcatura di codice con regole e strumenti pronti (es. Next.js).",
+    "match": []
+  },
+  {
+    "id": "frontend-backend",
+    "term": "Frontend / backend",
+    "definition": "Ciò che l'utente vede / il codice che gira sul server.",
+    "match": [
+      "Frontend",
+      "backend"
+    ]
+  },
+  {
+    "id": "gate",
+    "term": "Gate",
+    "definition": "Punto in cui Claude si ferma e aspetta la tua approvazione.",
+    "match": []
+  },
+  {
+    "id": "git-github",
+    "term": "Git / GitHub",
+    "definition": "Storia delle modifiche / servizio online che ospita i progetti Git.",
+    "match": [
+      "Git",
+      "GitHub"
+    ]
+  },
+  {
+    "id": "handoff",
+    "term": "Handoff",
+    "definition": "Documento di passaggio tra una sessione e la successiva (/handoff).",
+    "match": []
+  },
+  {
+    "id": "integration-test",
+    "term": "Integration test",
+    "definition": "Test di più moduli insieme (es. API e database).",
+    "match": [
+      "Integration test"
+    ]
+  },
+  {
+    "id": "issue",
+    "term": "Issue",
+    "definition": "Scheda di lavoro su GitHub con label, assegnatario e commenti.",
+    "match": [
+      "Issue"
+    ]
+  },
+  {
+    "id": "label",
+    "term": "Label",
+    "definition": "Etichetta su una issue (es. build-phase, ready-for-agent).",
+    "match": []
+  },
+  {
+    "id": "lint",
+    "term": "Lint",
+    "definition": "Controllo automatico di errori comuni e stile del codice.",
+    "match": [
+      "Lint"
+    ]
+  },
+  {
+    "id": "mappa",
+    "term": "Mappa",
+    "definition": "Issue wayfinder:map che indicizza le decisioni di un progetto.",
+    "match": []
+  },
+  {
+    "id": "markdown",
+    "term": "Markdown",
+    "definition": "Formato di testo con simboli semplici per titoli ed elenchi (.md).",
+    "match": [
+      "Markdown"
+    ]
+  },
+  {
+    "id": "mcp",
+    "term": "MCP",
+    "definition": "Standard con cui Claude si collega a strumenti e servizi esterni.",
+    "match": [
+      "MCP"
+    ]
+  },
+  {
+    "id": "merge",
+    "term": "Merge",
+    "definition": "Unione di un branch in un altro, di solito in main.",
+    "match": [
+      "Merge"
+    ]
+  },
+  {
+    "id": "migrazione",
+    "term": "Migrazione",
+    "definition": "File versionato che modifica la struttura del database.",
+    "match": [
+      "Migrazione"
+    ]
+  },
+  {
+    "id": "nodejs-npm-npx",
+    "term": "Node.js / npm / npx",
+    "definition": "Ambiente JavaScript / gestore delle librerie / esecutore di strumenti.",
+    "match": [
+      "Node.js",
+      "npm",
+      "npx"
+    ]
+  },
+  {
+    "id": "owasp-top-10",
+    "term": "OWASP Top 10",
+    "definition": "Le dieci categorie di vulnerabilità web più diffuse.",
+    "match": [
+      "OWASP Top 10"
+    ]
+  },
+  {
+    "id": "path",
+    "term": "PATH",
+    "definition": "Cartelle in cui il sistema cerca i programmi.",
+    "match": [
+      "PATH"
+    ]
+  },
+  {
+    "id": "permission-mode",
+    "term": "Permission mode",
+    "definition": "Cosa Claude può fare senza chiedere (default, acceptEdits, plan…).",
+    "match": [
+      "Permission mode"
+    ]
+  },
+  {
+    "id": "plan-mode",
+    "term": "Plan mode",
+    "definition": "Claude pianifica senza modificare i file, finché non approvi.",
+    "match": [
+      "Plan mode"
+    ]
+  },
+  {
+    "id": "plugin",
+    "term": "Plugin",
+    "definition": "Pacchetto che distribuisce skill e altre estensioni di Claude Code.",
+    "match": [
+      "Plugin"
+    ]
+  },
+  {
+    "id": "preview",
+    "term": "Preview",
+    "definition": "URL di anteprima creato per ogni pull request.",
+    "match": []
+  },
+  {
+    "id": "pull-request-pr",
+    "term": "Pull request (PR)",
+    "definition": "Richiesta di unire un branch, con controlli e revisione.",
+    "match": [
+      "Pull request",
+      "PR"
+    ]
+  },
+  {
+    "id": "regressione",
+    "term": "Regressione",
+    "definition": "Difetto in qualcosa che prima funzionava.",
+    "match": [
+      "Regressione"
+    ]
+  },
+  {
+    "id": "repository",
+    "term": "Repository",
+    "definition": "Cartella di progetto con tutta la sua storia Git.",
+    "match": [
+      "Repository"
+    ]
+  },
+  {
+    "id": "rice",
+    "term": "RICE",
+    "definition": "Punteggio di priorità: Reach × Impact × Confidence ÷ Effort.",
+    "match": [
+      "RICE"
+    ]
+  },
+  {
+    "id": "rls",
+    "term": "RLS",
+    "definition": "Row Level Security: regole del database su chi vede quali righe.",
+    "match": [
+      "RLS"
+    ]
+  },
+  {
+    "id": "seam",
+    "term": "Seam",
+    "definition": "Confine da cui una funzionalità si testa dall'esterno.",
+    "match": [
+      "Seam"
+    ]
+  },
+  {
+    "id": "segreto",
+    "term": "Segreto",
+    "definition": "Valore riservato (chiave, password) che non va mai pubblicato.",
+    "match": [
+      "Segreto"
+    ]
+  },
+  {
+    "id": "semver",
+    "term": "SemVer",
+    "definition": "Versioni MAGGIORE.MINORE.CORREZIONE.",
+    "match": [
+      "SemVer"
+    ]
+  },
+  {
+    "id": "skill",
+    "term": "Skill",
+    "definition": "Pacchetto di istruzioni che insegna a Claude una procedura (/nome).",
+    "match": [
+      "Skill"
+    ]
+  },
+  {
+    "id": "squash-merge",
+    "term": "Squash merge",
+    "definition": "Unione di una PR in un solo commit su main.",
+    "match": [
+      "Squash merge"
+    ]
+  },
+  {
+    "id": "subagent",
+    "term": "Subagent",
+    "definition": "Istanza di Claude con contesto separato a cui delegare un compito.",
+    "match": [
+      "Subagent"
+    ]
+  },
+  {
+    "id": "tdd",
+    "term": "TDD",
+    "definition": "Prima il test che fallisce, poi il codice, poi il miglioramento.",
+    "match": [
+      "TDD"
+    ]
+  },
+  {
+    "id": "token",
+    "term": "Token",
+    "definition": "Unità di misura del testo per il modello.",
+    "match": [
+      "Token"
+    ]
+  },
+  {
+    "id": "tracer-bullet",
+    "term": "Tracer bullet",
+    "definition": "Porzione minima ma completa che attraversa tutti gli strati.",
+    "match": [
+      "Tracer bullet"
+    ]
+  },
+  {
+    "id": "typescript",
+    "term": "TypeScript",
+    "definition": "JavaScript con i tipi, per trovare errori prima dell'esecuzione.",
+    "match": [
+      "TypeScript"
+    ]
+  },
+  {
+    "id": "unit-test",
+    "term": "Unit test",
+    "definition": "Test di una singola funzione o modulo isolato.",
+    "match": [
+      "Unit test"
+    ]
+  },
+  {
+    "id": "user-story",
+    "term": "User story",
+    "definition": "Requisito nella forma «Come… voglio… così che…».",
+    "match": [
+      "User story"
+    ]
+  },
+  {
+    "id": "variabile-dambiente",
+    "term": "Variabile d'ambiente",
+    "definition": "Configurazione fornita all'app dall'esterno del codice.",
+    "match": [
+      "Variabile d'ambiente"
+    ]
+  },
+  {
+    "id": "wcag",
+    "term": "WCAG",
+    "definition": "Linee guida internazionali per l'accessibilità web.",
+    "match": [
+      "WCAG"
+    ]
+  },
+  {
+    "id": "webhook",
+    "term": "Webhook",
+    "definition": "Notifica automatica che un servizio invia alla tua app.",
+    "match": [
+      "Webhook"
+    ]
+  },
+  {
+    "id": "winget",
+    "term": "winget",
+    "definition": "Gestore di pacchetti di Windows.",
+    "match": [
+      "winget"
+    ]
+  },
+  {
+    "id": "worktree",
+    "term": "Worktree",
+    "definition": "Seconda cartella di lavoro dello stesso repository, per lavorare in parallelo.",
+    "match": [
+      "Worktree"
+    ]
+  }
+]

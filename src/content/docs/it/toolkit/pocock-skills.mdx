@@ -6,37 +6,39 @@ sidebar:
   order: 2
 ---
 
-**Cosa sono.** Il repository `mattpocock/skills` (licenza MIT, circa 307.000 stelle su GitHub a novembre 2026) raccoglie le skill che Matt Pocock, autore di Total TypeScript e di AI Hero, usa ogni giorno per «ingegneria vera, non vibe coding». Sono piccole, componibili e adattabili, e funzionano con qualsiasi modello. Non sono incluse in Claude Code: vanno installate (Fase 0, sezione 0.6).
+import Term from '~/components/Term.astro';
+
+**Cosa sono.** Il <Term id="repository">repository</Term> `mattpocock/skills` (licenza MIT, circa 307.000 stelle su <Term id="git-github">GitHub</Term> a novembre 2026) raccoglie le <Term id="skill">skill</Term> che Matt Pocock, autore di Total <Term id="typescript">TypeScript</Term> e di AI Hero, usa ogni giorno per «ingegneria vera, non vibe coding». Sono piccole, componibili e adattabili, e funzionano con qualsiasi modello. Non sono incluse in Claude Code: vanno installate (Fase 0, sezione 0.6).
 
 **Chi le invoca.** Il README le divide in due gruppi. Le skill *user-invoked* partono solo quando le scrivi tu (`/nome`) e orchestrano un flusso; le skill *model-invoked* puoi invocarle tu, ma Claude le usa anche da solo quando il compito lo richiede: contengono la disciplina riutilizzabile.
 
 :::note[Come si scrivono i nomi con il plugin]
-Con il plugin ogni skill ha il nome completo `/mattpocock-skills:<nome>`; il nome breve `/<nome>` funziona finché nessun altro comando lo usa. Unica collisione rilevante: `code-review`, che in Claude Code è anche una skill inclusa. Per la versione di Matt Pocock scrivi `/mattpocock-skills:code-review`.
+Con il <Term id="plugin">plugin</Term> ogni skill ha il nome completo `/mattpocock-skills:<nome>`; il nome breve `/<nome>` funziona finché nessun altro comando lo usa. Unica collisione rilevante: `code-review`, che in Claude Code è anche una skill inclusa. Per la versione di Matt Pocock scrivi `/mattpocock-skills:code-review`.
 :::
 
 | Skill | Chi | A cosa serve | Quando nel playbook | Fase |
 |---|---|---|---|---|
 | **Engineering · invocate da te** |  |  |  |  |
-| `setup-matt-pocock-skills` ★ | Tu | Configura per il repository issue tracker, label di triage e posizione dei documenti di dominio. | Una volta per repository, prima delle altre skill di engineering. | F0 |
+| `setup-matt-pocock-skills` ★ | Tu | Configura per il repository <Term id="issue">issue</Term> tracker, label di triage e posizione dei documenti di dominio. | Una volta per repository, prima delle altre skill di engineering. | F0 |
 | `ask-matt` | Tu | Indica quale skill o flusso usare nella tua situazione. | Quando non sai da dove partire. | Tutte |
-| `wayfinder` ★ | Tu | Pianifica un lavoro più grande di una sessione come mappa di decision ticket sul tracker e li risolve uno alla volta. | Discovery di un prodotto nuovo; grandi funzionalità dopo il lancio. | F2, F8 |
-| `grill-with-docs` | Tu | Intervista di allineamento che costruisce anche il modello di dominio: aggiorna `GLOSSARY.md` e gli ADR. | Pianificazione in una sola seduta, con codice esistente. | F2, F8 |
+| `wayfinder` ★ | Tu | Pianifica un lavoro più grande di una sessione come mappa di <Term id="decision-ticket">decision ticket</Term> sul tracker e li risolve uno alla volta. | Discovery di un prodotto nuovo; grandi funzionalità dopo il lancio. | F2, F8 |
+| `grill-with-docs` | Tu | Intervista di allineamento che costruisce anche il modello di dominio: aggiorna `GLOSSARY.md` e gli <Term id="adr">ADR</Term>. | Pianificazione in una sola seduta, con codice esistente. | F2, F8 |
 | `to-spec` ★ | Tu | Trasforma la conversazione o la mappa in una spec pubblicata sul tracker, senza intervista. | Dopo la mappa. | F3 |
-| `to-tickets` ★ | Tu | Spezza piano, spec o conversazione in ticket a proiettile tracciante con le dipendenze, da approvare prima della pubblicazione. | Piano delle build phase. | F4 |
-| `implement` ★ | Tu | Implementa spec o ticket: `/tdd` ai seam concordati, controlli frequenti, review, commit. | Fasi piccole e chiare; disciplina ripresa dal prompt T8. | F5 |
-| `implement-spec` | Tu | Implementa un'intera spec su un branch di integrazione, con subagent in parallelo sulla frontiera, e chiude con una review. | Modalità avanzata, con test maturi. | F5 |
+| `to-tickets` ★ | Tu | Spezza piano, spec o conversazione in ticket a proiettile tracciante con le dipendenze, da approvare prima della pubblicazione. | Piano delle <Term id="build-phase-bp">build phase</Term>. | F4 |
+| `implement` ★ | Tu | Implementa spec o ticket: `/tdd` ai <Term id="seam">seam</Term> concordati, controlli frequenti, review, <Term id="commit">commit</Term>. | Fasi piccole e chiare; disciplina ripresa dal prompt T8. | F5 |
+| `implement-spec` | Tu | Implementa un'intera spec su un <Term id="branch">branch</Term> di integrazione, con <Term id="subagent">subagent</Term> in parallelo sulla frontiera, e chiude con una review. | Modalità avanzata, con test maturi. | F5 |
 | `triage` ★ | Tu | Porta le issue attraverso la macchina a stati dei ruoli di triage. | Review settimanale dopo il lancio. | F8 |
 | `improve-codebase-architecture` | Tu | Cerca opportunità di «approfondire» i moduli, produce un report HTML e approfondisce con te il candidato scelto. | Ogni pochi giorni in sviluppo attivo; ogni due settimane dopo il lancio. | F5, F8 |
 | `retro` | Tu | Dopo una sessione suggerisce miglioramenti all'ambiente dell'agente: navigazione, controlli automatici, standard, file di istruzioni, strumenti. | Dopo sessioni difficili. | F5, F8 |
 | **Engineering · invocate da te o da Claude** |  |  |  |  |
 | `tdd` ★ | Tu o Claude | Test-driven development con ciclo red-green-refactor, una fetta verticale alla volta. | Logica, permessi, pagamenti, dati, bug. | F5 |
 | `code-review` ★ | Tu o Claude | Review su due assi in parallelo: standard del repository e fedeltà alla spec. | Fine di ogni build phase (`/mattpocock-skills:code-review`). | F5 |
-| `diagnosing-bugs` ★ | Tu o Claude | Ciclo disciplinato per bug difficili e regressioni di prestazioni: riproduci, minimizza, ipotizza, strumenta, correggi, test di regressione. | Ogni bug non banale. | F5, F8 |
+| `diagnosing-bugs` ★ | Tu o Claude | Ciclo disciplinato per bug difficili e regressioni di prestazioni: riproduci, minimizza, ipotizza, strumenta, correggi, test di <Term id="regressione">regressione</Term>. | Ogni bug non banale. | F5, F8 |
 | `prototype` | Tu o Claude | Prototipo usa-e-getta per una domanda di design: un file HTML per stato e logica, o varianti di interfaccia alternabili. | Ticket `prototype` della mappa; dubbi di interfaccia. | F2, F3 |
-| `research` | Tu o Claude | Indaga una domanda su fonti primarie affidabili e salva un file Markdown con citazioni, come agente in background. | Ticket `research` della mappa. | F2 |
+| `research` | Tu o Claude | Indaga una domanda su fonti primarie affidabili e salva un file <Term id="markdown">Markdown</Term> con citazioni, come agente in background. | Ticket `research` della mappa. | F2 |
 | `domain-modeling` | Tu o Claude | Costruisce il modello di dominio: verifica i termini, prova scenari limite, aggiorna glossario e ADR. | Durante grilling e discovery. | F2, F3 |
 | `codebase-design` | Tu o Claude | Vocabolario e disciplina per progettare moduli profondi dietro interfacce piccole e testabili. | Architettura; refactoring. | F3, F5 |
-| `pr` | Tu o Claude | La forma del corpo di una pull request: sintesi visiva, evidenze prima e dopo, pericolosità del merge. | Apertura di ogni pull request (template B3). | F5 |
+| `pr` | Tu o Claude | La forma del corpo di una <Term id="pull-request-pr">pull request</Term>: sintesi visiva, evidenze prima e dopo, pericolosità del <Term id="merge">merge</Term>. | Apertura di ogni pull request (template B3). | F5 |
 | `wizard` | Tu o Claude | Genera una procedura Bash interattiva per i passi che solo un umano può fare: infrastruttura, credenziali, segreti della CI, pannelli di terzi, migrazioni una tantum. | Configurazioni lunghe; su Windows in Git Bash. | F5–F7 |
 | **Productivity · invocate da te** |  |  |  |  |
 | `handoff` ★ | Tu | Compatta la conversazione in un documento di passaggio per un altro agente, nella cartella temporanea. | Confini di sessione e di fase (T11). | F5 |

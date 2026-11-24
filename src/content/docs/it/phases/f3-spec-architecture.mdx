@@ -5,29 +5,35 @@ lastVerified: 2026-11-12
 phase: F3
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
 | Voce | Dettaglio |
 |---|---|
 | **Obiettivo** | Trasformare decisioni e spec preliminare in un'unica fonte di verità: cosa costruiamo, come, con quali limiti e cosa resta fuori. |
-| **Input** | Mappa `/wayfinder` chiusa, ADR, `GLOSSARY.md`, `docs/01-preliminary-spec.md`, prototipi e ricerche. |
-| **Output** | `docs/02-product-spec.md` (v1.0), `docs/03-architecture.md`, ADR completi, spec issue su GitHub, `README.md` aggiornato. |
-| **Strumenti** | `/to-spec` <Role as="pocock" />, template T4 e T5, subagent per la revisione critica, Claude Design o `/prototype` per l'interfaccia. |
+| **Input** | Mappa `/wayfinder` chiusa, <Term id="adr">ADR</Term>, `GLOSSARY.md`, `docs/01-preliminary-spec.md`, prototipi e ricerche. |
+| **Output** | `docs/02-product-spec.md` (v1.0), `docs/03-architecture.md`, ADR completi, spec <Term id="issue">issue</Term> su <Term id="git-github">GitHub</Term>, `README.md` aggiornato. |
+| **Strumenti** | `/to-spec` <Role as="pocock" />, template T4 e T5, <Term id="subagent">subagent</Term> per la revisione critica, Claude Design o `/prototype` per l'interfaccia. |
 | **Gate** | <Role as="gate" n={3} /> approvi spec e architettura. |
 | **Tempo tipico** | 2–4 ore, più il tempo di lettura. |
+
+<WhyThisStep>Da qui in poi la spec è il contratto: ogni build phase, test e review viene verificato rispetto a essa. Un'unica fonte di verità, con una versione, impedisce al prodotto di cambiare direzione un prompt alla volta.</WhyThisStep>
+
 
 ## I documenti di questa fase e dove vivono
 
 | Documento | Percorso | Contenuto | Creato con |
 |---|---|---|---|
-| Spec issue (epic) | Issue GitHub con label `ready-for-agent` | Sintesi delle decisioni nel formato di `/to-spec`; diventa la issue madre delle build phase. | `/to-spec` |
+| Spec issue (epic) | Issue GitHub con label `ready-for-agent` | Sintesi delle decisioni nel formato di `/to-spec`; diventa la issue madre delle <Term id="build-phase-bp">build phase</Term>. | `/to-spec` |
 | Product spec | `docs/02-product-spec.md` | Spec completa (template T4). **Fonte di verità.** | Prompt T4 |
 | Architettura | `docs/03-architecture.md` | Architettura tecnica (template T5). | Prompt T5 |
-| ADR | `docs/adr/NNNN-titolo.md` | Una decisione difficile da invertire per file. | Skill di grilling, template B1 |
+| ADR | `docs/adr/NNNN-titolo.md` | Una decisione difficile da invertire per file. | <Term id="skill">Skill</Term> di grilling, template B1 |
 | Glossario | `GLOSSARY.md` | Termini del dominio e loro significato. | `domain-modeling` |
 | README | `README.md` | Cos'è il progetto e come si avvia. | Claude |
 
-**Perché la fonte di verità è un file e non la issue.** Un file nel repository è versionato insieme al codice, Claude lo legge senza chiamate a GitHub, ogni modifica passa da una pull request con la sua storia, e sopravvive a qualsiasi cambio di strumento. La spec issue creata da `/to-spec` resta utile come issue madre e rimanda al file.
+**Perché la fonte di verità è un file e non la issue.** Un file nel <Term id="repository">repository</Term> è versionato insieme al codice, Claude lo legge senza chiamate a GitHub, ogni modifica passa da una <Term id="pull-request-pr">pull request</Term> con la sua storia, e sopravvive a qualsiasi cambio di strumento. La spec issue creata da `/to-spec` resta utile come issue madre e rimanda al file.
 
 ## Passo 1 — Sintetizza le decisioni con /to-spec
 
@@ -40,17 +46,17 @@ import Role from '~/components/Role.astro';
 `/to-spec` <Role as="pocock" /> non fa interviste: sintetizza ciò che è già stato deciso (la mappa e i ticket collegati). In ordine:
 
 1. esplora il repository e usa il vocabolario di `GLOSSARY.md`, rispettando gli ADR;
-2. individua i *seam* in cui verranno testate le funzionalità[^22] e ti chiede di confermarli;
+2. individua i *<Term id="seam">seam</Term>* in cui verranno testate le funzionalità[^22] e ti chiede di confermarli;
 3. scrive la spec con sezioni fisse: *Problem Statement*, *Solution*, *User Stories* (un elenco lungo e numerato), *Implementation Decisions* (senza percorsi di file, che invecchiano in fretta), *Testing Decisions*, *Out of Scope*, *Further Notes*;
 4. la pubblica come issue con la label `ready-for-agent`.
 
 ## Passo 2 — Espandi nella spec completa
 
-Il formato di `/to-spec` è eccellente per gli agenti ma non copre tutto ciò che serve a un prodotto: obiettivi, requisiti non funzionali, interfaccia, sicurezza, criteri di successo. Incolla il prompt del template T4: Claude scrive `docs/02-product-spec.md` unendo la spec issue, la mappa, gli ADR e la spec preliminare, con identificativi stabili (`US-001` per le user story[^23], `FR-001` per i requisiti funzionali) che useremo per la tracciabilità fino ai test.
+Il formato di `/to-spec` è eccellente per gli agenti ma non copre tutto ciò che serve a un prodotto: obiettivi, requisiti non funzionali, interfaccia, sicurezza, criteri di successo. Incolla il prompt del template T4: Claude scrive `docs/02-product-spec.md` unendo la spec issue, la mappa, gli ADR e la spec preliminare, con identificativi stabili (`US-001` per le <Term id="user-story">user story</Term>[^23], `FR-001` per i requisiti funzionali) che useremo per la tracciabilità fino ai test.
 
 ## Passo 3 — Scrivi l'architettura tecnica
 
-Incolla il prompt del template T5. Claude scrive `docs/03-architecture.md` con diagrammi testuali Mermaid[^24], l'elenco delle tecnologie con il rimando all'ADR di ciascuna, il modello dei dati, i flussi di autenticazione, gli ambienti, la strategia di test e i limiti di costo.
+Incolla il prompt del template T5. Claude scrive `docs/03-architecture.md` con diagrammi testuali Mermaid[^24], l'elenco delle tecnologie con il rimando all'ADR di ciascuna, il modello dei dati, i flussi di <Term id="autenticazione-autorizzazione">autenticazione</Term>, gli ambienti, la strategia di test e i limiti di costo.
 
 ### Lo stack di default di questo playbook
 
@@ -58,8 +64,8 @@ Per chi non è ingegnere conviene uno stack noioso, molto diffuso e ben conosciu
 
 | Esigenza | Default | Alternativa | Quando scegliere l'alternativa |
 |---|---|---|---|
-| Web app o SaaS | Next.js + TypeScript + Tailwind CSS + shadcn/ui | Astro | Sito di contenuti o vetrina con poche parti interattive. |
-| Backend | Funzioni server di Next.js + Supabase | FastAPI (Python) | Logica pesante di dati o AI scritta in Python. |
+| Web app o SaaS | Next.js + <Term id="typescript">TypeScript</Term> + Tailwind CSS + shadcn/ui | Astro | Sito di contenuti o vetrina con poche parti interattive. |
+| <Term id="frontend-backend">Backend</Term> | Funzioni server di Next.js + Supabase | FastAPI (Python) | Logica pesante di dati o AI scritta in Python. |
 | Database, login, file | Supabase (Postgres, Auth, Storage) | Neon + un servizio di autenticazione dedicato | Database che si spegne quando inattivo, o requisiti di autenticazione aziendali. |
 | Hosting | Vercel | Netlify, Cloudflare, Railway, Render, Fly.io | Processi sempre attivi, container, backend Python. |
 | App mobile | Expo (React Native) + Supabase | Flutter | Team che conosce già Flutter. |
@@ -96,7 +102,7 @@ Then, in Italian, summarise for me the 5 most important changes and wait for my 
 
 ## Passo 6 — Approva e congela la versione 1.0
 
-Applica le correzioni che accetti, poi chiedi a Claude di impostare lo stato della spec su `APPROVED` con la data, fare il commit (`docs: product spec v1.0`) e aggiornare `docs/STATUS.md`. Da qui in avanti la spec cambia solo tramite pull request, con una riga nel suo *change log*.
+Applica le correzioni che accetti, poi chiedi a Claude di impostare lo stato della spec su `APPROVED` con la data, fare il <Term id="commit">commit</Term> (`docs: product spec v1.0`) e aggiornare `docs/STATUS.md`. Da qui in avanti la spec cambia solo tramite pull request, con una riga nel suo *change log*.
 
 :::danger[GATE G3 · Approvi spec e architettura]
 Approva quando: ogni user story ha criteri verificabili; requisiti non funzionali, sicurezza e privacy sono espliciti; lo stack è motivato da ADR; la sezione *Out of scope* elenca ciò che consapevolmente non farai; la revisione critica non ha lasciato problemi critici aperti.
@@ -112,10 +118,12 @@ Approva quando: ogni user story ha criteri verificabili; requisiti non funzional
 
 ### Errori comuni
 
-- Lasciare che la spec «decida» cose mai discusse: se `/to-spec` inventa, manca un decision ticket.
+- Lasciare che la spec «decida» cose mai discusse: se `/to-spec` inventa, manca un <Term id="decision-ticket">decision ticket</Term>.
 - Spec piena di percorsi di file e codice: invecchiano subito. Bastano moduli e interfacce.
 - Nessuna sezione *Out of scope*: è la principale difesa contro lo scope creep.
 - Approvare senza leggere i requisiti non funzionali (prestazioni, privacy, accessibilità, costi).
+
+<QuizBlock phase="F3" />
 
 [^22]: **Seam** (punto di aggancio): un confine nel codice da cui una funzionalità si può testare dall'esterno, senza guardare i dettagli interni. Pochi seam ben scelti, il più in alto possibile, rendono i test stabili anche quando il codice cambia.
 

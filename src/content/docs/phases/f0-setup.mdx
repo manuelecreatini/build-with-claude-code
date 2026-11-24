@@ -5,17 +5,24 @@ lastVerified: 2026-11-12
 phase: F0
 ---
 
+import Term from '~/components/Term.astro';
+import UnderTheHood from '~/components/UnderTheHood.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import QuizBlock from '~/components/QuizBlock.astro';
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import Role from '~/components/Role.astro';
 
 | Item | Detail |
 |---|---|
-| **Goal** | Have your computer, accounts and repository ready: Claude Code installed and connected to GitHub, Matt Pocock's skills configured, standard folder structure. |
+| **Goal** | Have your computer, accounts and <Term id="repository">repository</Term> ready: Claude Code installed and connected to <Term id="git-github">GitHub</Term>, Matt Pocock's <Term id="skill">skills</Term> configured, standard folder structure. |
 | **Input** | Just the working name of the project. |
 | **Output** | Tools installed; private GitHub repository with the standard structure; `CLAUDE.md`; `.claude/settings.json`; skills configured; GitHub labels. |
-| **Tools** | winget, Git, GitHub CLI (`gh`), Node.js, VS Code, Claude Code, `mattpocock-skills` plugin. |
+| **Tools** | <Term id="winget">winget</Term>, Git, GitHub <Term id="cli-terminal">CLI</Term> (`gh`), <Term id="nodejs-npm-npx">Node.js</Term>, VS Code, Claude Code, `mattpocock-skills` <Term id="plugin">plugin</Term>. |
 | **Gate** | None. |
 | **Typical time** | 1–2 hours the first time on your computer; 10–15 minutes for every new project. |
+
+<WhyThisStep>Everything after this phase assumes Claude can read your project, run commands and talk to GitHub. Setting it up once, carefully, saves you from debugging your tools in the middle of building your product.</WhyThisStep>
+
 
 ## 0.1 Claude chat or Claude Code?
 
@@ -26,7 +33,7 @@ They are two different ways of working with the same model. There is only one pr
 | What it is | Conversational assistant with Projects, artifacts, research, design, documents and voice mode. | Coding agent: reads and edits the project files, runs commands, uses Git and GitHub. |
 | Where it runs | claude.ai and the Claude apps. | Terminal (CLI), VS Code and JetBrains extensions, desktop app (Code section), web at claude.ai/code with cloud sessions, mobile to start and follow sessions. |
 | File access | Manual upload or connectors. | Direct access to the project folder, within the permissions you grant. |
-| Use it for | Exploring the idea, market and competitor research, naming, visual mockups, learning a concept, reviewing a document. | Everything that becomes a file, issue, commit or pull request: spec, plan, code, tests, deploy. |
+| Use it for | Exploring the idea, market and competitor research, naming, visual mockups, learning a concept, reviewing a document. | Everything that becomes a file, <Term id="issue">issue</Term>, <Term id="commit">commit</Term> or <Term id="pull-request-pr">pull request</Term>: spec, plan, code, tests, deploy. |
 | Output | Conversation or artifact. | Files in the repository, commits, issues, pull requests. |
 
 **Which Claude Code interface to use.** I recommend the CLI[^6] inside the integrated terminal of VS Code[^7]: you see the files on the left, Claude at the bottom, and you have every command described in this playbook. The desktop app (Code section) is a valid alternative, more visual for diffs and previews; if a command is not available in a graphical interface, use it from the CLI. Claude Code on the web (claude.ai/code) runs sessions in the cloud on your GitHub repositories: useful for kicking off work from your phone, not as your main environment at the start.
@@ -56,7 +63,7 @@ winget install --id Microsoft.VisualStudioCode -e
 irm https://claude.ai/install.ps1 | iex
 ```
 
-Close and reopen the terminal (needed for the new programs to enter the PATH[^11]), then check: every command must print a version number.
+Close and reopen the terminal (needed for the new programs to enter the <Term id="path">PATH</Term>[^11]), then check: every command must print a version number.
 
 **PowerShell · check**
 ```powershell
@@ -121,6 +128,12 @@ claude --version
 If `claude` is not found, the terminal cannot see the PATH yet: reopen it or follow the *Troubleshoot installation* page of the documentation. If PowerShell blocks scripts (*running scripts is disabled on this system*), the same page gives the fix. Once inside Claude Code, `/doctor` runs a full check of the installation.
 :::
 
+<UnderTheHood title={"Under the hood: what \"installing a CLI\" means"}>
+
+Git, `gh`, Node.js and Claude Code are command-line programs: you start them by typing their name in a terminal. The installer copies the program to a folder and adds that folder to `PATH`, the list of places the terminal searches when you type a command. That is why you must open a **new** terminal after installing: the old one still has the old `PATH`, and answers "command not found".
+
+</UnderTheHood>
+
 ## 0.4 Configure Git and connect GitHub
 
 **PowerShell · Git and GitHub**
@@ -132,7 +145,7 @@ gh auth login      # GitHub.com -> HTTPS -> Login with a web browser
 gh auth status     # should say "Logged in"
 ```
 
-**How Claude Code connects to GitHub.** No dedicated integration is needed: Claude Code uses `git` and `gh` from your terminal, with your credentials. That way it can create repositories, issues[^12], branches[^13], commits[^14] and pull requests[^15]. Matt Pocock's skills use the same `gh`. Two optional integrations: `/install-github-app` installs the Claude GitHub app and, if you want, the GitHub Actions workflows to mention `@claude` in issues and pull requests; `/web-setup` connects your GitHub account to Claude Code cloud sessions using the `gh` credentials.
+**How Claude Code connects to GitHub.** No dedicated integration is needed: Claude Code uses `git` and `gh` from your terminal, with your credentials. That way it can create repositories, issues[^12], <Term id="branch">branches</Term>[^13], commits[^14] and pull requests[^15]. Matt Pocock's skills use the same `gh`. Two optional integrations: `/install-github-app` installs the Claude GitHub app and, if you want, the GitHub Actions workflows to mention `@claude` in issues and pull requests; `/web-setup` connects your GitHub account to Claude Code cloud sessions using the `gh` credentials.
 
 ## 0.5 First run of Claude Code and recommended settings
 
@@ -147,13 +160,19 @@ Open a terminal in any folder, type `claude` and complete the login in the brows
 
 - `/doctor` <Role as="bundled" /> checks installation, settings, extensions and `CLAUDE.md`; it proposes fixes that Claude applies after you confirm.
 - `/statusline` <Role as="builtin" /> configures the status line: describe in words what you want to see. Always having the percentage of context used in front of you is the basis of context management (Phase 5, step 8).
-- `/autocompact 200k` <Role as="builtin" /> sets the automatic compaction threshold at 200,000 tokens: it is the safety net for this playbook's cautious budget. The value is saved in your user settings; to go back to the default use `/autocompact auto`.
+- `/autocompact 200k` <Role as="builtin" /> sets the automatic <Term id="compaction">compaction</Term> threshold at 200,000 <Term id="token">tokens</Term>: it is the safety net for this playbook's cautious budget. The value is saved in your user settings; to go back to the default use `/autocompact auto`.
 
 In VS Code also install the *Claude Code* extension from the extensions marketplace: it gives you the graphical panel and the diff view, but keep using the CLI in the integrated terminal when you need a specific command.
 
+<UnderTheHood title={"Under the hood: settings.json and permission modes"}>
+
+`.claude/settings.json` is the project's shared configuration: it is committed, so everyone who opens the repository gets the same rules. `permissions.defaultMode` decides how a session starts; a `--permission-mode` flag on the command line wins over it. Recent versions of Claude Code start in `auto` mode when nothing is configured, which is why the playbook sets `default` explicitly: at the beginning you want to see and approve every action. More in [Plan mode and permissions](/concepts/plan-mode-and-permissions/).
+
+</UnderTheHood>
+
 ## 0.6 Install Matt Pocock's skills (once per computer)
 
-Matt Pocock's skills[^16] are an open-source set (MIT licence) of engineering procedures: discovery, specification, splitting the work, TDD, review, handoff. For Claude Code the method recommended by the README is the plugin, which updates itself:
+Matt Pocock's skills[^16] are an open-source set (MIT licence) of engineering procedures: discovery, specification, splitting the work, <Term id="tdd">TDD</Term>, review, handoff. For Claude Code the method recommended by the README is the plugin, which updates itself:
 
 **PowerShell · install the plugin**
 ```powershell
@@ -207,7 +226,7 @@ When done, list the files you created and stop.
  and the settings.json block from section 0.7 of the playbook>
 ```
 
-The permissions block to paste into the prompt stops Claude from reading the files that hold secrets and from force-rewriting Git history:
+The permissions block to paste into the prompt stops Claude from reading the files that hold <Term id="secret">secrets</Term> and from force-rewriting Git history:
 
 **.claude/settings.json**
 ```json
@@ -225,6 +244,12 @@ The permissions block to paste into the prompt stops Claude from reading the fil
 }
 ```
 
+<UnderTheHood title={"Under the hood: what Claude reads from CLAUDE.md"}>
+
+At the start of every session Claude Code loads `CLAUDE.md` from the project folder (and every folder above it, plus your personal `~/.claude/CLAUDE.md`) into its context. It is context, not enforced configuration: Claude follows it because it reads it, so short, concrete rules work better than long essays. The official guidance is to keep each file under about 200 lines. More in [CLAUDE.md and memory](/concepts/claude-md-and-memory/).
+
+</UnderTheHood>
+
 ### Step 3 — First commit and GitHub repository
 
 **PowerShell (or the ! command in Claude Code)**
@@ -236,6 +261,12 @@ gh repo create <project-name> --private --source=. --remote=origin --push
 
 Inside Claude Code you can run a terminal command by prefixing it with `!` (for example `!git status`): the command and its result enter the conversation's context. Or simply ask Claude to do it. Keep the repository **private**: the Phase 2 decision issues contain business reasoning.
 
+<UnderTheHood title={"Under the hood: local repository vs GitHub"}>
+
+Git keeps the full history of the project in a hidden `.git` folder on your computer. GitHub is a copy of that history on a server, plus collaboration tools (issues, pull requests, Actions). `git push` sends your new commits to GitHub; `git pull` brings down the ones you do not have yet. More in [Git, branches and pull requests](/concepts/git-branches-and-pull-requests/).
+
+</UnderTheHood>
+
 ### Step 4 — Configure the skills for this repository
 
 **Claude Code**
@@ -245,7 +276,7 @@ Inside Claude Code you can run a terminal command by prefixing it with `!` (for 
 
 `/setup-matt-pocock-skills` <Role as="pocock" /> explores the repository, shows you what it found and asks you three questions, one at a time, proposing the recommended answer:
 
-1. **Issue tracker**: answer *GitHub* (the default if the remote points to GitHub). Alternatives: GitLab, local Markdown[^17] files, or another tool described in words.
+1. **Issue tracker**: answer *GitHub* (the default if the remote points to GitHub). Alternatives: GitLab, local <Term id="markdown">Markdown</Term>[^17] files, or another tool described in words.
 2. **Triage labels**: accept the five defaults (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). The question appears only if the `triage` skill is installed, as it is with the plugin.
 3. **Domain documents**: accept *single-context*, i.e. one `GLOSSARY.md` and one `docs/adr/` folder at the root.
 
@@ -261,7 +292,7 @@ gh label create tech-debt --color 6B4FA0 --description "Technical debt to pay do
 
 ## 0.8 Standard folder structure
 
-The same structure for every project: you and Claude always know where to look. The code folders (`src/`, `tests/`, `supabase/`) appear with the first build phase.
+The same structure for every project: you and Claude always know where to look. The code folders (`src/`, `tests/`, `supabase/`) appear with the first <Term id="build-phase-bp">build phase</Term>.
 
 **Repository structure**
 ```text
@@ -302,7 +333,7 @@ The same structure for every project: you and Claude always know where to look. 
 |---|---|---|---|
 | `CLAUDE.md` | Claude from T0 | F0 | Short, under 200 lines: only rules that always apply. |
 | `docs/01-preliminary-spec.md` | Claude from T1 and T2 | F1 | Draft: not binding. |
-| `GLOSSARY.md`, `docs/adr/` | Grilling and domain-modelling skills | F2–F8 | One term, one meaning; ADRs are only added, never rewritten. |
+| `GLOSSARY.md`, `docs/adr/` | Grilling and domain-modelling skills | F2–F8 | One term, one meaning; <Term id="adr">ADRs</Term> are only added, never rewritten. |
 | `docs/02-product-spec.md` | Claude from `/to-spec` and T4 | F3 | Source of truth: changed only through pull requests. |
 | `docs/03-architecture.md` | Claude from T5 | F3 | Every important choice points to an ADR. |
 | `docs/04-build-plan.md` | Claude from T6 | F4 | Index; the detail lives in the issues. |
@@ -310,7 +341,7 @@ The same structure for every project: you and Claude always know where to look. 
 
 ## 0.9 Optional integrations
 
-- **Supabase and Vercel connectors** <Role as="integration" />. If you have already connected them on claude.ai, Claude Code can use them when you log in with the same account; check with `/mcp`. They are MCP servers[^18]: they let Claude read tables, logs and deploys without you copying anything by hand.
+- **Supabase and Vercel connectors** <Role as="integration" />. If you have already connected them on claude.ai, Claude Code can use them when you log in with the same account; check with `/mcp`. They are <Term id="mcp">MCP</Term> servers[^18]: they let Claude read tables, logs and deploys without you copying anything by hand.
 - **Claude in Chrome** <Role as="integration" />. With `/chrome` or by starting `claude --chrome`, Claude can open your app in the browser, click around and read the console: very useful for assisted manual testing.
 - **Supabase skills** <Role as="integration" />. Supabase publishes agent instructions on development and security: `npx skills add supabase/agent-skills`. Worth considering when you choose Supabase in Phase 2.
 
@@ -336,6 +367,8 @@ From a new terminal, `claude` starts in the project folder, `/skills` shows Matt
 - Forgetting `gh auth login`: the skills cannot create issues.
 - Adding a `.env` file with real values to the first commit.
 - Not reopening the terminal after the installs and concluding that something "doesn't work".
+
+<QuizBlock phase="F0" />
 
 [^6]: **CLI** (*command-line interface*): a program you use by typing commands in a **terminal**, the operating system's text window. On Windows the standard terminal is **PowerShell**.
 

@@ -5,16 +5,23 @@ lastVerified: 2026-11-12
 phase: F2
 ---
 
+import Term from '~/components/Term.astro';
+import UnderTheHood from '~/components/UnderTheHood.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
 | Item | Detail |
 |---|---|
 | **Goal** | Turn the preliminary spec into a clearly defined project, making and recording every decision needed before building. |
-| **Input** | `docs/01-preliminary-spec.md`; repository configured with `/setup-matt-pocock-skills` on GitHub. |
-| **Output** | A *map* (an issue with the `wayfinder:map` label) with all decision tickets closed; ADRs in `docs/adr/`; `GLOSSARY.md`; linked prototypes and research. |
-| **Tools** | `/wayfinder` <Role as="pocock" />, which in turn uses the `grilling`, `domain-modeling`, `prototype` and `research` skills; GitHub Issues. |
+| **Input** | `docs/01-preliminary-spec.md`; <Term id="repository">repository</Term> configured with `/setup-matt-pocock-skills` on <Term id="git-github">GitHub</Term>. |
+| **Output** | A *map* (an <Term id="issue">issue</Term> with the `wayfinder:map` label) with all <Term id="decision-ticket">decision tickets</Term> closed; <Term id="adr">ADRs</Term> in `docs/adr/`; `GLOSSARY.md`; linked prototypes and research. |
+| **Tools** | `/wayfinder` <Role as="pocock" />, which in turn uses the `grilling`, `domain-modeling`, `prototype` and `research` <Term id="skill">skills</Term>; GitHub Issues. |
 | **Gate** | <Role as="gate" n={2} /> no open decisions, clear scope. |
 | **Typical time** | 3–15 short sessions, usually 1–5 calendar days. |
+
+<WhyThisStep>Every decision left open now gets taken later by Claude, silently, in the code. Discovery turns those hidden choices into explicit tickets you answer once and can find again.</WhyThisStep>
+
 
 ## What /wayfinder is, in plain words
 
@@ -29,14 +36,20 @@ import Role from '~/components/Role.astro';
 - **Frontier**: the open tickets that are neither blocked nor assigned. It is the edge of what is known, visible directly in the GitHub interface thanks to the native *blocked by* links.
 - **Golden rule**: it plans, it doesn't build. When the fog is gone, it hands over to `/to-spec`.
 
-Every ticket has one of four types and is HITL or AFK[^19]; research tickets are resolved by a subagent[^20].
+Every ticket has one of four types and is <Term id="afk-hitl">HITL</Term> or AFK[^19]; research tickets are resolved by a <Term id="subagent">subagent</Term>[^20].
 
 | Ticket type | Mode | When it is used | How it is resolved |
 |---|---|---|---|
 | `grilling` | HITL | The default case: the question is closed by discussing it. | Conversation with you, using the `grilling` and `domain-modeling` skills. |
 | `prototype` | HITL | "How should it look" or "how should it behave": talking is not enough. | A quick, rough artefact (a sketch, an HTML file, interface variants) you react to; the choice is yours. |
-| `research` | AFK | A fact from outside the project is needed: documentation, third-party APIs, a service's limits. | A subagent works in parallel and saves the results with sources on a `research/<n>` branch, never merged into the code. |
+| `research` | AFK | A fact from outside the project is needed: documentation, third-party <Term id="api">APIs</Term>, a service's limits. | A subagent works in parallel and saves the results with sources on a `research/<n>` <Term id="branch">branch</Term>, never merged into the code. |
 | `task` | HITL or AFK | Nothing to decide, but a manual action unblocks a decision (signing up to a service to evaluate its API, getting access). | The agent does it if it can; otherwise it gives you a precise checklist. |
+
+<UnderTheHood title={"Under the hood: what a skill is"}>
+
+`/wayfinder` is a *skill*: a folder with a `SKILL.md` file of instructions. Claude Code only keeps each skill's short description in context; the full instructions load when you type `/wayfinder` or when Claude decides the skill fits the task. That is how dozens of skills can be installed without filling the context window. More in [Skills, commands and MCP](/concepts/skills-commands-and-mcp/).
+
+</UnderTheHood>
 
 ## When to use it (and when not to)
 
@@ -58,7 +71,7 @@ For small projects (a landing page, an internal tool with two screens) skip the 
 - [ ] `docs/01-preliminary-spec.md` in the repository.
 - [ ] Private repository: business decisions end up in the issues.
 
-**Why GitHub Issues as the tracker.** It is free, sits next to the code and the pull requests, is driven from `gh` and natively supports sub-issues and dependencies (*blocked by*): you can see the map's frontier without opening it. According to the skill's documentation it is the best-supported tracker. Pick an alternative only if there is a strong reason: Linear if the team already uses it; local Markdown files if you work alone without a remote (with the caveat that material in the repository tends to stay there forever).
+**Why GitHub Issues as the tracker.** It is free, sits next to the code and the <Term id="pull-request-pr">pull requests</Term>, is driven from `gh` and natively supports sub-issues and dependencies (*blocked by*): you can see the map's frontier without opening it. According to the skill's documentation it is the best-supported tracker. Pick an alternative only if there is a strong reason: Linear if the team already uses it; local <Term id="markdown">Markdown</Term> files if you work alone without a remote (with the caveat that material in the repository tends to stay there forever).
 
 ## Session 1 — Draw the map
 
@@ -98,7 +111,7 @@ One session resolves only one ticket; the exception is research tickets, handled
 
 ## Decision tickets and build phases: two different things
 
-|  | Decision ticket (Phase 2) | Build phase (Phase 4) |
+|  | Decision ticket (Phase 2) | <Term id="build-phase-bp">Build phase</Term> (Phase 4) |
 |---|---|---|
 | Purpose | Resolve a question. | Build a working slice of the product. |
 | Example | "Which login methods do we support in the MVP?" | "BP-07 · The coach creates a training plan". |
@@ -120,7 +133,7 @@ Use this list to check that the map is complete before gate G2.
 - [ ] Main user journeys.
 - [ ] Platforms: web, mobile, PWA.
 - [ ] Main data entities.
-- [ ] Authentication and permissions per role.
+- [ ] <Term id="authentication-authorisation">Authentication</Term> and permissions per role.
 - [ ] External integrations.
 - [ ] Payments and pricing model.
 - [ ] Tech stack and hosting (ADR).
@@ -185,6 +198,8 @@ Approve when the map has no open tickets, *Not yet specified* is empty (or its c
 - [ ] Prototypes and research linked to their tickets.
 - [ ] Not a single line of product code written.
 :::
+
+<QuizBlock phase="F2" />
 
 [^19]: **HITL** (*human in the loop*): work that can only be resolved with you present, answering in person. **AFK** (*away from keyboard*): work the agent carries on by itself.
 

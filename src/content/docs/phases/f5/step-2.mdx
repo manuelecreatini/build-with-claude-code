@@ -5,17 +5,28 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import UnderTheHood from '~/components/UnderTheHood.astro';
 import Role from '~/components/Role.astro';
+
+<WhyThisStep>A failing test written first is a precise, checkable definition of "done". It lets Claude verify its own work instead of asking you to trust it.</WhyThisStep>
+
+<UnderTheHood title={"Under the hood: why a branch per phase"}>
+
+A branch is a separate line of commits. Working on `bp-07-…` instead of `main` means `main` always holds a version that passed its checks: if the phase goes wrong you delete the branch and nothing else is touched. More in [Git, branches and pull requests](/concepts/git-branches-and-pull-requests/) and [Tests and CI](/concepts/tests-and-ci/).
+
+</UnderTheHood>
 
 After approval Claude:
 
-- creates the `bp-07-<slug>` branch from an up-to-date `main`;
+- creates the `bp-07-<slug>` <Term id="branch">branch</Term> from an up-to-date `main`;
 - for business logic, permissions, payments and data transformations uses `/tdd` <Role as="pocock" />, which follows the red-green-refactor cycle[^29] one vertical slice at a time;
 - runs the type check and individual test files often, the full suite at the end;
-- makes small commits with messages in Conventional Commits format[^30];
-- touches nothing outside the scope: whatever it notices it lists as "out of scope", and it will become a new issue.
+- makes small <Term id="commit">commits</Term> with messages in <Term id="conventional-commits">Conventional Commits</Term> format[^30];
+- touches nothing outside the scope: whatever it notices it lists as "out of scope", and it will become a new <Term id="issue">issue</Term>.
 
-This is exactly the discipline of the `/implement` <Role as="pocock" /> skill, which prompt T8 builds on. For small, very clear phases you can skip plan mode and type `/implement #<number>` directly on a branch you have already created.
+This is exactly the discipline of the `/implement` <Role as="pocock" /> <Term id="skill">skill</Term>, which prompt T8 builds on. For small, very clear phases you can skip <Term id="plan-mode">plan mode</Term> and type `/implement #<number>` directly on a branch you have already created.
 
 **While Claude works** you can watch, interrupt with `Esc` and correct the direction, ask side questions with `/btw` without cluttering the conversation, or go back with `/rewind`.
 

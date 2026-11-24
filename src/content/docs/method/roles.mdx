@@ -6,6 +6,7 @@ sidebar:
   order: 3
 ---
 
+import Term from '~/components/Term.astro';
 import Role from '~/components/Role.astro';
 
 The general rule: **Claude executes, proposes and checks; you decide, authorise and accept**. The table turns the rule into concrete activities.
@@ -14,27 +15,27 @@ The general rule: **Claude executes, proposes and checks; you decide, authorise 
 |---|---|---|---|
 | Read code and documents, search, analyse | <Role as="claude" /> |  |  |
 | Propose plans, options and trade-offs | <Role as="claude" /> |  |  |
-| Write code and tests within the scope of the issue | <Role as="claude" /> after G5 | <Role as="gate" n={5} /> |  |
-| Run tests, type checks, lint and build locally | <Role as="claude" /> |  |  |
-| Commit on the phase branch, open the pull request | <Role as="claude" /> |  |  |
-| Update documentation, ADRs, `STATUS.md`, issue comments | <Role as="claude" /> |  |  |
+| Write code and tests within the scope of the <Term id="issue">issue</Term> | <Role as="claude" /> after G5 | <Role as="gate" n={5} /> |  |
+| Run tests, type checks, <Term id="lint">lint</Term> and build locally | <Role as="claude" /> |  |  |
+| <Term id="commit">Commit</Term> on the phase <Term id="branch">branch</Term>, open the <Term id="pull-request-pr">pull request</Term> | <Role as="claude" /> |  |  |
+| Update documentation, <Term id="adr">ADRs</Term>, `STATUS.md`, issue comments | <Role as="claude" /> |  |  |
 | Product decisions: scope, UX, pricing, key copy | proposes |  | <Role as="you" /> decide |
 | New dependencies, new services, any cost | proposes | <Role as="you" /> |  |
-| Production database migrations, deleting data | prepares | <Role as="you" /> |  |
-| Merge into `main` | prepares | <Role as="gate" n={6} /> |  |
+| Production database <Term id="migration">migrations</Term>, deleting data | prepares | <Role as="you" /> |  |
+| <Term id="merge">Merge</Term> into `main` | prepares | <Role as="gate" n={6} /> |  |
 | Production deploy and launch | prepares | <Role as="gate" n={7} /> |  |
-| Create accounts, enter cards, API keys and secrets, configure DNS | guides you step by step |  | <Role as="you" /> |
+| Create accounts, enter cards, <Term id="api">API</Term> keys and <Term id="secret">secrets</Term>, configure <Term id="dns">DNS</Term> | guides you step by step |  | <Role as="you" /> |
 | Final testing and acceptance | helps |  | <Role as="you" /> |
 | Legal terms, privacy policy, cookies | drafts |  | <Role as="you" /> (with a lawyer if needed) |
 
 ## Claude Code's permission modes
 
-Claude Code asks for permission before acting, based on the active *permission mode*[^4]. In the terminal, `Shift+Tab` cycles through the modes `default` → `acceptEdits` → `plan`; the `auto` mode appears only if your account meets the requirements.
+Claude Code asks for permission before acting, based on the active *<Term id="permission-mode">permission mode</Term>*[^4]. In the <Term id="cli-terminal">terminal</Term>, `Shift+Tab` cycles through the modes `default` → `acceptEdits` → `plan`; the `auto` mode appears only if your account meets the requirements.
 
 | Mode | What it does | When to use it in the playbook |
 |---|---|---|
-| `default` (asks first) | Asks for confirmation for file edits and commands that are not read-only. | First build phases, until you know how Claude behaves. |
-| `plan` (plan mode) | Claude reads, explores and writes a plan without changing the code. | Always at the start of every build phase (gate G5) and before wide-ranging changes. |
+| `default` (asks first) | Asks for confirmation for file edits and commands that are not read-only. | First <Term id="build-phase-bp">build phases</Term>, until you know how Claude behaves. |
+| `plan` (<Term id="plan-mode">plan mode</Term>) | Claude reads, explores and writes a plan without changing the code. | Always at the start of every build phase (gate G5) and before wide-ranging changes. |
 | `acceptEdits` | Automatically approves file edits and common filesystem commands. | After 3–5 phases that went well; then review the changes in the pull request. |
 | `auto` | Replaces confirmation prompts with a safety classifier. | Only once you have experience and solid tests; not required. |
 | `bypassPermissions` | Skips permission checks entirely. | Never, in this playbook. |
@@ -44,8 +45,8 @@ Claude Code asks for permission before acting, based on the active *permission m
 1. **Nothing reaches production without a gate.** You always authorise merges (G6) and the launch (G7).
 2. **Only you touch secrets.** API keys and passwords go in `.env.local` files or in the services' dashboards, never pasted into the chat. The project `.claude/settings.json` stops Claude from reading those files (Phase 0).
 3. **One build phase per branch and per session.** Mixing two phases is the fastest way to lose control and context.
-4. **If something goes wrong, go back.** `/rewind` (or pressing `Esc` twice) takes the conversation and the files back to a checkpoint[^5]; for everything else there is Git.
-5. **When you don't understand, ask for it again.** Write "explain it to me as you would to a non-technical person" or use the `/wait-what` skill: approving what you don't understand cancels out the value of the gates.
+4. **If something goes wrong, go back.** `/rewind` (or pressing `Esc` twice) takes the conversation and the files back to a checkpoint[^5]; for everything else there is <Term id="git-github">Git</Term>.
+5. **When you don't understand, ask for it again.** Write "explain it to me as you would to a non-technical person" or use the `/wait-what` <Term id="skill">skill</Term>: approving what you don't understand cancels out the value of the gates.
 
 [^4]: **Permission mode**: the setting that decides what Claude can do without asking you (read, edit files, run commands). In the terminal you change it with `Shift+Tab`, which cycles through `default`, `acceptEdits` and `plan`.
 

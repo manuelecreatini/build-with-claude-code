@@ -1,0 +1,44 @@
+---
+title: Plan mode and permissions
+description: How Claude Code decides what it may do without asking, what each permission mode allows, and why the playbook plans before it builds.
+lastVerified: 2026-11-24
+sidebar:
+  order: 2
+---
+
+**In one sentence:** a permission mode sets how much Claude may do on its own; plan mode is the mode where it can look at everything but change nothing, which is why the playbook starts every build phase there.
+
+## The modes
+
+| Mode | What Claude may do |
+| --- | --- |
+| `default` (shown as "Manual") | Reads freely; asks before editing files or running commands |
+| `acceptEdits` | Edits files without asking; still asks before other actions |
+| `plan` | Reads, explores and writes a plan; does not edit your source |
+| `auto` | Proceeds without asking for most actions, with built-in safeguards |
+| `dontAsk` | Runs only the tools you pre-approved; everything else is refused |
+| `bypassPermissions` | Never asks. Only for isolated containers or virtual machines |
+
+## Switching
+
+- **Shift+Tab** cycles `default` → `acceptEdits` → `plan`. From `auto`, the first press goes back to `default`.
+- `/plan` enters plan mode directly. When the plan is ready you approve it, and you can open it in your editor with **Ctrl+G** to change it first.
+- `claude --permission-mode plan` starts a session in a given mode.
+- `permissions.defaultMode` in `.claude/settings.json` sets the starting mode for the project. The playbook's [Phase 0](/phases/f0-setup/) sets it to `default`.
+
+:::note[Playbook vs current docs]
+The playbook text describes `auto` as a mode that only appears for eligible accounts. The current Claude Code docs say that **from version 2.1.283 `auto` is the built-in starting mode** for interactive terminal and VS Code sessions. If you follow Phase 0, the `defaultMode` setting makes your sessions start in `default` anyway, which is what you want while you are learning.
+:::
+
+## Permission rules
+
+Beyond the mode, `/permissions` and the `permissions` block in settings let you allow or deny specific tools and commands (for example, always allow running the tests, never allow `git push --force`). Rules in the project's `.claude/settings.json` are committed and shared; personal ones go in `.claude/settings.local.json`.
+
+## Why plan first
+
+In plan mode a wrong idea costs one sentence of correction. After the code is written, the same wrong idea costs a rewrite and a review. The playbook's [Step 1 of the build loop](/phases/f5/step-1/) makes the plan an explicit approval point.
+
+## Sources
+
+- [Choose a permission mode](https://code.claude.com/docs/en/permission-modes), Claude Code docs.
+- [Commands](https://code.claude.com/docs/en/commands), Claude Code docs (`/plan`, `/permissions`).

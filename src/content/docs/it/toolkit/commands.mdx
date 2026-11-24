@@ -6,16 +6,17 @@ sidebar:
   order: 3
 ---
 
+import Term from '~/components/Term.astro';
 import Role from '~/components/Role.astro';
 
 ## Quattro tipi di comandi: come riconoscerli
 
 | Tipo | Cos'è | Esempi | Come verificare che ci sia |
 |---|---|---|---|
-| <Role as="builtin" /> | Comando nativo con logica fissa nella CLI. | `/compact`, `/clear`, `/context`, `/rewind`, `/plan` | Digita `/`: compare nel menu. |
-| <Role as="bundled" /> | Skill inclusa in Claude Code: istruzioni che Claude esegue con i suoi strumenti. | `/code-review`, `/simplify`, `/run`, `/verify`, `/debug`, `/design` | Menu `/` e `/skills`; disattivabili da impostazioni. |
-| <Role as="pocock" /> | Skill del plugin `mattpocock-skills`, da installare. | `/wayfinder`, `/handoff`, `/to-spec`, `/tdd` | `/skills` e `/plugin`. |
-| <Role as="integration" /> | Strumento esterno: CLI, connettore MCP, servizio. | `gh`, connettori Supabase e Vercel, Claude in Chrome, Playwright | `gh --version`, `/mcp`, `/chrome`. |
+| <Role as="builtin" /> | Comando nativo con logica fissa nella <Term id="cli-terminale">CLI</Term>. | `/compact`, `/clear`, `/context`, `/rewind`, `/plan` | Digita `/`: compare nel menu. |
+| <Role as="bundled" /> | <Term id="skill">Skill</Term> inclusa in Claude Code: istruzioni che Claude esegue con i suoi strumenti. | `/code-review`, `/simplify`, `/run`, `/verify`, `/debug`, `/design` | Menu `/` e `/skills`; disattivabili da impostazioni. |
+| <Role as="pocock" /> | Skill del <Term id="plugin">plugin</Term> `mattpocock-skills`, da installare. | `/wayfinder`, `/handoff`, `/to-spec`, `/tdd` | `/skills` e `/plugin`. |
+| <Role as="integration" /> | Strumento esterno: CLI, connettore <Term id="mcp">MCP</Term>, servizio. | `gh`, connettori Supabase e Vercel, Claude in Chrome, Playwright | `gh --version`, `/mcp`, `/chrome`. |
 
 ## I comandi nativi e inclusi usati nel playbook
 
@@ -25,14 +26,14 @@ import Role from '~/components/Role.astro';
 | `/clear` (alias `/reset`, `/new`) | Nuova conversazione vuota; la precedente resta in `/resume`. | Tra lavori non collegati |
 | `/compact [istruzioni]` | Riassume la conversazione per liberare contesto, con un focus opzionale. | F5, passo 8 |
 | `/context` | Griglia del contesto usato, con suggerimenti. | Inizio e durante ogni sessione |
-| `/autocompact <token>\|auto` | Imposta la soglia di compattazione automatica (es. `200k`). | F0 |
+| `/autocompact <token>\|auto` | Imposta la soglia di <Term id="compattazione">compattazione</Term> automatica (es. `200k`). | F0 |
 | `/resume` (alias `/continue`) | Riapre una conversazione precedente. | Ripresa del lavoro |
 | `/rewind` (alias `/checkpoint`, `/undo`) | Riporta codice e conversazione a un checkpoint, o riassume una parte della conversazione. | Quando una strada è sbagliata |
 | `/branch`, `/fork` | Ramifica la conversazione; `/fork` la copia in una sessione in background. | Esplorare alternative |
 | `/btw <domanda>` | Domanda laterale che non entra nella cronologia. | Durante il lavoro |
 | `/recap`, `/rename`, `/export` | Riassunto di una riga, rinomina, esporta la conversazione. | A piacere |
 | **Pianificazione, modello, permessi** |  |  |
-| `/plan [descrizione]` e `Shift+Tab` | Plan mode: Claude pianifica senza modificare i file. `Shift+Tab` fa scorrere le modalità di permesso. | Ogni build phase (G5) |
+| `/plan [descrizione]` e `Shift+Tab` | <Term id="plan-mode">Plan mode</Term>: Claude pianifica senza modificare i file. `Shift+Tab` fa scorrere le modalità di permesso. | Ogni <Term id="build-phase-bp">build phase</Term> (G5) |
 | `/model`, `/effort` | Cambiano modello e livello di ragionamento. | Quando serve |
 | `/permissions`, `/fewer-permission-prompts` | Gestiscono le regole di permesso; la seconda propone un elenco di comandi di sola lettura da approvare. | F0 e dopo le prime fasi |
 | `/goal <condizione>` | Claude continua per più turni finché la condizione è soddisfatta. | Modalità avanzata |
@@ -45,13 +46,13 @@ import Role from '~/components/Role.astro';
 | `/usage` (alias `/cost`, `/stats`) | Costi della sessione e consumi rispetto ai limiti del piano. | Controllo dei limiti |
 | `/voice`, `/chrome` | Dettatura vocale; impostazioni di Claude in Chrome. | F1, test manuali |
 | **Qualità** |  |  |
-| `/diff` | Mostra le modifiche correnti, comprese quelle di Claude. | Prima della PR |
+| `/diff` | Mostra le modifiche correnti, comprese quelle di Claude. | Prima della <Term id="pull-request-pr">PR</Term> |
 | `/code-review [livello] [--fix]` (alias `/review`) | Cerca bug di correttezza nelle modifiche o in una PR; `ultra` = review multi-agente in cloud. | F5, F6 |
 | `/simplify` | Quattro agenti cercano semplificazioni e riuso (non bug). | F5 |
-| `/security-review` | Vulnerabilità nelle modifiche del branch rispetto al branch principale del remote. | F5, F6, F8 |
+| `/security-review` | Vulnerabilità nelle modifiche del <Term id="branch">branch</Term> rispetto al branch principale del remote. | F5, F6, F8 |
 | `/run`, `/verify`, `/run-skill-generator` | Avviano e usano l'app per verificare una modifica; il terzo registra la ricetta di avvio del progetto. | F5 |
 | `/debug` | Attiva il log di debug e analizza problemi di Claude Code. | Problemi tecnici |
-| **GitHub, cloud e altro** |  |  |
+| **<Term id="git-github">GitHub</Term>, cloud e altro** |  |  |
 | `/install-github-app` | Installa l'app GitHub di Claude e, se vuoi, i workflow di GitHub Actions (`@claude`). | F0, opzionale |
 | `/web-setup`, `/teleport`, `/remote-control` | Collegano GitHub alle sessioni cloud; portano una sessione cloud nel terminale; controllo da un altro dispositivo. | Lavoro in mobilità |
 | `/design`, `/batch`, `/loop`, `/schedule` | Mockup come artifact di design; modifiche massive in parallelo; prompt ripetuti; attività pianificate in cloud. | F3; avanzato |
@@ -75,11 +76,11 @@ import Role from '~/components/Role.astro';
 
 | Integrazione | A cosa serve | Come si attiva |
 |---|---|---|
-| GitHub CLI (`gh`) | Repository, issue, label, pull request, release: è il collegamento tra Claude Code e GitHub. | `winget install --id GitHub.cli -e`, poi `gh auth login`. |
+| GitHub CLI (`gh`) | <Term id="repository">Repository</Term>, <Term id="issue">issue</Term>, label, pull request, release: è il collegamento tra Claude Code e GitHub. | `winget install --id GitHub.cli -e`, poi `gh auth login`. |
 | App GitHub di Claude | Menzioni `@claude` in issue e pull request tramite GitHub Actions. | `/install-github-app` (solo repository su github.com). |
 | Connettori MCP Supabase e Vercel | Claude legge tabelle, log, avvisi, deploy e variabili d'ambiente. | Connettori su claude.ai con lo stesso account; verifica con `/mcp`. |
 | Claude in Chrome | Claude usa il tuo browser: apre l'app, clicca, legge la console. | `/chrome` o `claude --chrome`; estensione Chrome. |
-| Playwright | Test E2E automatici nel browser. | Installato in BP-01 come dipendenza di sviluppo. |
+| Playwright | Test <Term id="e2e-end-to-end">E2E</Term> automatici nel browser. | Installato in BP-01 come <Term id="dipendenza">dipendenza</Term> di sviluppo. |
 | Skill per agenti di Supabase | Linee guida di sviluppo e sicurezza Supabase per l'agente. | `npx skills add supabase/agent-skills` |
 
 :::caution[Limiti che dipendono dall'ambiente]

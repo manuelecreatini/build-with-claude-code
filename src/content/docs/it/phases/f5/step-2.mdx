@@ -5,17 +5,28 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import UnderTheHood from '~/components/UnderTheHood.astro';
 import Role from '~/components/Role.astro';
+
+<WhyThisStep>Un test che fallisce, scritto per primo, è una definizione precisa e verificabile di "fatto". Permette a Claude di controllare il proprio lavoro invece di chiederti di fidarti.</WhyThisStep>
+
+<UnderTheHood title={"Dietro le quinte: perché un branch per fase"}>
+
+Un branch è una linea separata di commit. Lavorare su `bp-07-…` invece che su `main` significa che `main` contiene sempre una versione che ha superato i controlli: se la fase va male cancelli il branch e nient'altro viene toccato. Approfondisci in [Git, branch e pull request](/it/concepts/git-branches-and-pull-requests/) e [Test e CI](/it/concepts/tests-and-ci/).
+
+</UnderTheHood>
 
 Dopo l'approvazione Claude:
 
-- crea il branch `bp-07-<slug>` da un `main` aggiornato;
+- crea il <Term id="branch">branch</Term> `bp-07-<slug>` da un `main` aggiornato;
 - per logica di business, permessi, pagamenti e trasformazioni di dati usa `/tdd` <Role as="pocock" />, che segue il ciclo red-green-refactor[^29] una fetta verticale alla volta;
 - esegue spesso il controllo dei tipi e i singoli file di test, l'intera suite alla fine;
-- fa commit piccoli con messaggi in formato Conventional Commits[^30];
-- non tocca nulla fuori dallo scope: ciò che nota lo elenca come «fuori scope» e diventerà una nuova issue.
+- fa <Term id="commit">commit</Term> piccoli con messaggi in formato <Term id="conventional-commits">Conventional Commits</Term>[^30];
+- non tocca nulla fuori dallo scope: ciò che nota lo elenca come «fuori scope» e diventerà una nuova <Term id="issue">issue</Term>.
 
-È esattamente la disciplina della skill `/implement` <Role as="pocock" />, che il prompt T8 riprende. Per fasi piccole e chiarissime puoi saltare il plan mode e scrivere direttamente `/implement #<numero>` su un branch già creato.
+È esattamente la disciplina della <Term id="skill">skill</Term> `/implement` <Role as="pocock" />, che il prompt T8 riprende. Per fasi piccole e chiarissime puoi saltare il <Term id="plan-mode">plan mode</Term> e scrivere direttamente `/implement #<numero>` su un branch già creato.
 
 **Mentre Claude lavora** puoi osservare, interrompere con `Esc` e correggere la direzione, fare domande laterali con `/btw` senza sporcare la conversazione, oppure tornare indietro con `/rewind`.
 

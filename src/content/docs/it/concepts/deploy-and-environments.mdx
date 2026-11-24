@@ -1,0 +1,37 @@
+---
+title: Deploy e ambienti
+description: Ambienti locale, preview e produzione, variabili d'ambiente e segreti, DNS e rollback, spiegati per il momento in cui il prodotto va online.
+lastVerified: 2026-11-24
+sidebar:
+  order: 7
+---
+
+**In una frase:** fare deploy significa mettere una versione dell'app su un server dove altri possono usarla; tenere ambienti separati e tenere i segreti fuori dal codice è ciò che rende sicuro ripeterlo.
+
+## Gli ambienti
+
+| Ambiente | Chi lo usa | A cosa serve |
+| --- | --- | --- |
+| Locale | Tu e Claude | Costruire ed eseguire i test sul tuo computer |
+| Preview (o staging) | Tu, i tester | Una copia online temporanea di un branch o di una pull request, da provare prima del merge |
+| Produzione | Gli utenti veri | L'app online, con dati reali |
+
+Molte piattaforme di hosting creano automaticamente una preview per ogni pull request e pubblicano in produzione quando cambia `main`. È la *CD* di CI/CD: continuous delivery.
+
+## Variabili d'ambiente e segreti
+
+Una chiave API, la password di un database o una chiave di pagamento sono **segreti**. I segreti non devono mai stare nel repository: chiunque veda il codice li vedrebbe, e Git li conserva nella storia anche dopo che li hai cancellati.
+
+Invece la piattaforma di hosting li conserva come **variabili d'ambiente** e li passa all'app quando parte. Lo stesso codice gira così in preview con chiavi di test e in produzione con quelle vere. In locale stanno in un file `.env` elencato in `.gitignore`. Vedi il [Passo 2 della Fase 7](/it/phases/f7-deploy/).
+
+## Dominio e DNS
+
+Un dominio (`esempio.it`) è un nome che prendi in affitto. I record **DNS** collegano quel nome al server che ospita l'app; il provider di hosting ti dice quali record aggiungere. Le modifiche possono impiegare da pochi minuti ad alcune ore per propagarsi.
+
+## Rollback
+
+Ogni deploy è una versione numerata. Un *rollback* riporta la produzione alla versione precedente. È rapido solo se l'hai provato prima di averne bisogno, e se anche le modifiche al database (migrazioni) si possono annullare o sono retrocompatibili. Per questo il playbook pianifica backup e un runbook di rollback prima del giorno del lancio.
+
+## Fonti
+
+- La documentazione del tuo provider di hosting su variabili d'ambiente, preview deployment e domini. La Fase 7 elenca i provider considerati dal playbook.

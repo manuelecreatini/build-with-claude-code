@@ -21,6 +21,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import GithubSlugger from 'github-slugger';
+import { anchorGlossary, linkTerms, parseGlossary } from './lib/glossary.mjs';
+import { applyInserts, QUIZ_PAGES } from './teaching-inserts.mjs';
 
 const [, , sourceArg, locale] = process.argv;
 if (!sourceArg || !['it', 'en'].includes(locale)) {
@@ -185,6 +187,14 @@ const footnotes = new Map();
 fs.mkdirSync(DOCS_DIR, { recursive: true });
 fs.rmSync(TPL_DIR, { recursive: true, force: true });
 fs.mkdirSync(TPL_DIR, { recursive: true });
+
+// Glossary data (Appendix A) for <Term> tooltips and auto-linking.
+const glossaryPage = pages.find((p) => p.rule.slug === 'reference/glossary');
+if (!glossaryPage) throw new Error('Glossary (Appendix A) not found in source');
+const glossary = parseGlossary(glossaryPage.body);
+fs.mkdirSync(path.join(ROOT, 'src/data/glossary'), { recursive: true });
+fs.writeFileSync(path.join(ROOT, 'src/data/glossary', `${locale}.json`), JSON.stringify(glossary, null, 2) + '\n');
+
 const manifest = [];
 const report = [];
 
@@ -204,8 +214,18 @@ for (const page of pages) {
   body = addMissingFootnotes(body);
   if (rule.slug === 'phases/f0-setup') body = addOsTabs(body);
 
+  // Teaching layer: glossary anchors / term tooltips, explanations, end-of-phase quiz.
+  if (rule.slug === 'reference/glossary') body = anchorGlossary(body, glossary);
+  else if (!rule.slug.startsWith('templates')) body = linkTerms(body, glossary, locale).lines;
+  const teach = applyInserts(body, rule.slug, locale, `${URL_PREFIX}concepts/`);
+  body = teach.lines;
+  if (QUIZ_PAGES[rule.slug]) body = beforeFootnotes(body, [`<QuizBlock phase="${QUIZ_PAGES[rule.slug]}" />`]);
+
   const used = new Set();
   const joined = body.join('\n');
+  if (joined.includes('<Term ')) used.add("import Term from '~/components/Term.astro';");
+  for (const c of teach.components) used.add(`import ${c} from '~/components/${c}.astro';`);
+  if (joined.includes('<QuizBlock ')) used.add("import QuizBlock from '~/components/QuizBlock.astro';");
   if (joined.includes('<Tabs ')) used.add("import { Tabs, TabItem } from '@astrojs/starlight/components';");
   if (joined.includes('<Role ')) used.add("import Role from '~/components/Role.astro';");
   if (joined.includes('<TemplateBlock ')) used.add("import TemplateBlock from '~/components/TemplateBlock.astro';");
@@ -498,6 +518,18 @@ function addMissingFootnotes(arr) {
   const missing = [...refs].filter((r) => !defined.has(r) && footnotes.has(r));
   if (!missing.length) return arr;
   return [...arr, '', ...missing.flatMap((r) => [transformText([footnotes.get(r)])[0], ''])].slice(0, -1);
+}
+
+/** Insert a block before the footnote definitions that close a page (or at the end). */
+function beforeFootnotes(arr, block) {
+  let at = arr.length;
+  for (let i = arr.length - 1; i >= 0; i--) {
+    if (/^\[\^[^\]]+\]: /.test(arr[i]) || !arr[i].trim()) at = /^\[\^/.test(arr[i]) ? i : at;
+    else break;
+  }
+  const head = trimTrailingBlank(arr.slice(0, at));
+  const tail = arr.slice(at);
+  return [...head, '', ...block, ...(tail.length ? ['', ...tail] : [])];
 }
 
 function stripInline(s) {

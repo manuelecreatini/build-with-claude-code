@@ -6,17 +6,19 @@ sidebar:
   order: 1
 ---
 
+import Term from '~/components/Term.astro';
+
 Lo strumento giusto per ogni funzione, con il ruolo nel playbook e i costi verificati a novembre 2026. In grassetto la scelta di default.
 
 | Funzione | Strumenti | Ruolo nel playbook | Costo e limiti |
 |---|---|---|---|
 | Dettatura e cattura delle idee | **Wispr Flow**; dettatura di Windows (`Win+H`); `/voice` in Claude Code; modalità vocale dell'app Claude; note di riunione via connettore | Brain dump della Fase 1; risposte rapide nelle interviste; trascrizioni di interviste con utenti. | Wispr Flow Basic gratis (2.000 parole a settimana su desktop), Pro 15 USD al mese (12 annuale). |
-| Discovery e specifica | **`/wayfinder`**, `/grill-me`, `/grill-with-docs`, `/prototype`, `/research`, `/to-spec`; Projects e ricerca di Claude Chat; `/design` | Fasi 1–3: decisioni, ricerche, prototipi, spec. | Inclusi nell'abbonamento Claude; le skill sono open source (MIT). |
-| Pianificazione e issue tracking | **GitHub Issues** (sub-issue, *blocked by*, label, milestone), GitHub Projects, `gh`, `/to-tickets`, `/triage`; alternativa: Linear | Mappa delle decisioni, build phase, triage post-lancio. | GitHub Free sufficiente. |
-| Sviluppo con AI | **Claude Code** (CLI, VS Code, app desktop, web), skill di Matt Pocock, skill incluse, subagent, plan mode | Tutto il build loop. | Pro 20 USD al mese (17 annuale); Max da 100 USD al mese. |
-| Controllo di versione | **Git** + **GitHub**; GitHub Desktop come interfaccia grafica opzionale | Storia del progetto, branch per fase, pull request. | Gratis. |
-| Database | **Supabase** (Postgres, Auth, Storage, RLS), Supabase CLI per le migrazioni, connettore MCP; alternativa: Neon | Dati, login, file; migrazioni versionate. | Free: 2 progetti attivi, pausa dopo una settimana di inattività. Pro da 25 USD al mese con backup giornalieri (7 giorni). |
+| Discovery e specifica | **`/wayfinder`**, `/grill-me`, `/grill-with-docs`, `/prototype`, `/research`, `/to-spec`; Projects e ricerca di Claude Chat; `/design` | Fasi 1–3: decisioni, ricerche, prototipi, spec. | Inclusi nell'abbonamento Claude; le <Term id="skill">skill</Term> sono open source (MIT). |
+| Pianificazione e <Term id="issue">issue</Term> tracking | **<Term id="git-github">GitHub</Term> Issues** (sub-issue, *blocked by*, label, milestone), GitHub Projects, `gh`, `/to-tickets`, `/triage`; alternativa: Linear | Mappa delle decisioni, <Term id="build-phase-bp">build phase</Term>, triage post-lancio. | GitHub Free sufficiente. |
+| Sviluppo con AI | **Claude Code** (<Term id="cli-terminale">CLI</Term>, VS Code, app desktop, web), skill di Matt Pocock, skill incluse, <Term id="subagent">subagent</Term>, <Term id="plan-mode">plan mode</Term> | Tutto il build loop. | Pro 20 USD al mese (17 annuale); Max da 100 USD al mese. |
+| Controllo di versione | **Git** + **GitHub**; GitHub Desktop come interfaccia grafica opzionale | Storia del progetto, <Term id="branch">branch</Term> per fase, <Term id="pull-request-pr">pull request</Term>. | Gratis. |
+| Database | **Supabase** (Postgres, Auth, Storage, <Term id="rls">RLS</Term>), Supabase CLI per le migrazioni, connettore <Term id="mcp">MCP</Term>; alternativa: Neon | Dati, login, file; migrazioni versionate. | Free: 2 progetti attivi, pausa dopo una settimana di inattività. Pro da 25 USD al mese con backup giornalieri (7 giorni). |
 | UI/UX e prototipi | **`/design`** (Claude Design), `/prototype`, shadcn/ui + Tailwind CSS; Figma opzionale | Mockup in Fase 3, varianti di interfaccia, sistema di componenti. | Inclusi o open source. |
 | Test e debug | **Vitest**, **Playwright**, Testing Library; Claude in Chrome; `/run`, `/verify`, `/debug`, `/diagnosing-bugs`; Lighthouse, axe DevTools | Piramide dei test, test manuale assistito, diagnosi dei bug, accessibilità. | Open source o inclusi. |
-| Deploy e hosting | **Vercel**, **GitHub Actions**, registrar (Cloudflare, Namecheap), Expo EAS per il mobile | Anteprime per pull request, produzione, CI/CD, dominio. | Vercel Hobby gratis solo non commerciale; Pro 20 USD per utente al mese. GitHub Actions: 2.000 minuti al mese sui repository privati (Free). |
-| Monitoring e analytics | **Sentry**, **PostHog**, Vercel Analytics e Speed Insights, UptimeRobot o Better Stack | Errori, funnel, registrazioni di sessione, feature flag, prestazioni, disponibilità. | Sentry Developer: 1 utente, 5.000 errori al mese. PostHog gratis ogni mese: 1 milione di eventi, 5.000 registrazioni, 1 milione di richieste di flag, 100.000 eccezioni. |
+| Deploy e hosting | **Vercel**, **GitHub Actions**, registrar (Cloudflare, Namecheap), Expo EAS per il mobile | Anteprime per pull request, produzione, <Term id="cicd">CI/CD</Term>, dominio. | Vercel Hobby gratis solo non commerciale; Pro 20 USD per utente al mese. GitHub Actions: 2.000 minuti al mese sui <Term id="repository">repository</Term> privati (Free). |
+| Monitoring e analytics | **Sentry**, **PostHog**, Vercel Analytics e Speed Insights, UptimeRobot o Better Stack | Errori, funnel, registrazioni di sessione, <Term id="feature-flag">feature flag</Term>, prestazioni, disponibilità. | Sentry Developer: 1 utente, 5.000 errori al mese. PostHog gratis ogni mese: 1 milione di eventi, 5.000 registrazioni, 1 milione di richieste di flag, 100.000 eccezioni. |

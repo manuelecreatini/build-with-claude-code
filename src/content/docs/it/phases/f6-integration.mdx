@@ -5,20 +5,26 @@ lastVerified: 2026-11-12
 phase: F6
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
 | Voce | Dettaglio |
 |---|---|
 | **Obiettivo** | Verificare che il prodotto funzioni come un tutto coerente e rispetti la spec: percorsi completi, integrazioni, sicurezza, qualità. |
-| **Input** | Tutte le build phase del traguardo chiuse; `main` verde; spec e architettura. |
-| **Output** | `docs/testing/traceability.md`, `docs/testing/integration-review.md`, issue per ogni problema grave, decisione Go/No-Go. |
-| **Strumenti** | Prompt T13, test E2E, `/security-review`, `/code-review`, Supabase advisors, collaudo con utenti reali. |
+| **Input** | Tutte le <Term id="build-phase-bp">build phase</Term> del traguardo chiuse; `main` verde; spec e architettura. |
+| **Output** | `docs/testing/traceability.md`, `docs/testing/integration-review.md`, <Term id="issue">issue</Term> per ogni problema grave, decisione Go/No-Go. |
+| **Strumenti** | Prompt T13, test <Term id="e2e-end-to-end">E2E</Term>, `/security-review`, `/code-review`, Supabase advisors, collaudo con utenti reali. |
 | **Gate** | <Role as="gate" n={7} /> Go/No-Go per il lancio. |
 | **Tempo tipico** | Da mezza giornata a due giorni. |
 
+<WhyThisStep>Ogni fase è stata testata da sola. Solo adesso puoi vedere se i pezzi formano il prodotto descritto dalla spec, prima che siano gli utenti veri a trovare le lacune.</WhyThisStep>
+
+
 ## Cosa verifichi e perché
 
-Ogni build phase è stata testata da sola. L'integrazione cerca i problemi che emergono solo mettendo insieme i pezzi: un percorso che attraversa cinque fasi, dati creati da un ruolo e letti da un altro, un servizio esterno che risponde lento, una migrazione che funziona sul tuo database ma non su uno vuoto.
+Ogni build phase è stata testata da sola. L'integrazione cerca i problemi che emergono solo mettendo insieme i pezzi: un percorso che attraversa cinque fasi, dati creati da un ruolo e letti da un altro, un servizio esterno che risponde lento, una <Term id="migrazione">migrazione</Term> che funziona sul tuo database ma non su uno vuoto.
 
 ## Passo 1 — Congela lo scope
 
@@ -32,7 +38,7 @@ Nessuna nuova funzionalità finché il gate G7 non è superato. `main` deve esse
 <incolla il prompt T13>
 ```
 
-Claude lavora prima in plan mode e ti mostra il piano di verifica; poi produce:
+Claude lavora prima in <Term id="plan-mode">plan mode</Term> e ti mostra il piano di verifica; poi produce:
 
 - una **matrice di tracciabilità**[^37] in `docs/testing/traceability.md`;
 - i test E2E mancanti per ogni percorso utente della spec;
@@ -48,16 +54,16 @@ Claude lavora prima in plan mode e ti mostra il piano di verifica; poi produce:
 
 ## Passo 3 — Sicurezza
 
-- [ ] `/security-review` sul branch di release (serve un remote `origin`).
-- [ ] Test di autorizzazione con due utenti e ruoli diversi: nessuno vede o modifica dati altrui.
-- [ ] Se usi Supabase: Row Level Security[^38] attiva su tutte le tabelle; controlla gli avvisi di sicurezza e prestazioni (*advisors*) dal pannello o tramite il connettore MCP.
-- [ ] `npm audit` per le vulnerabilità note delle dipendenze; nessun segreto nel codice o nella storia Git.
-- [ ] Le dieci categorie di rischio OWASP Top 10[^39] passate in rassegna con Claude.
+- [ ] `/security-review` sul <Term id="branch">branch</Term> di release (serve un remote `origin`).
+- [ ] Test di <Term id="autenticazione-autorizzazione">autorizzazione</Term> con due utenti e ruoli diversi: nessuno vede o modifica dati altrui.
+- [ ] Se usi Supabase: Row Level Security[^38] attiva su tutte le tabelle; controlla gli avvisi di sicurezza e prestazioni (*advisors*) dal pannello o tramite il connettore <Term id="mcp">MCP</Term>.
+- [ ] `npm audit` per le vulnerabilità note delle dipendenze; nessun <Term id="segreto">segreto</Term> nel codice o nella storia <Term id="git-github">Git</Term>.
+- [ ] Le dieci categorie di rischio <Term id="owasp-top-10">OWASP Top 10</Term>[^39] passate in rassegna con Claude.
 - [ ] Validazione degli input lato server, limiti di frequenza su login e form pubblici.
 
 ## Passo 4 — Review profonda (consigliata per i SaaS)
 
-`/code-review ultra` <Role as="bundled" /> avvia una review multi-agente in un ambiente cloud, su una pull request o un branch. Con Pro e Max include 3 esecuzioni gratuite, poi richiede crediti di utilizzo: usala una volta prima del lancio, sulla pull request di release.
+`/code-review ultra` <Role as="bundled" /> avvia una review multi-agente in un ambiente cloud, su una <Term id="pull-request-pr">pull request</Term> o un branch. Con Pro e Max include 3 esecuzioni gratuite, poi richiede crediti di utilizzo: usala una volta prima del lancio, sulla pull request di release.
 
 ## Passo 5 — Collaudo con utenti (UAT)
 
@@ -68,7 +74,7 @@ Claude lavora prima in plan mode e ti mostra il piano di verifica; poi produce:
 
 ## Checklist finale di test e validazione
 
-Ogni voce va spuntata prima del gate G7. Per l'accessibilità il riferimento è WCAG 2.2 livello AA[^40].
+Ogni voce va spuntata prima del gate G7. Per l'accessibilità il riferimento è <Term id="wcag">WCAG</Term> 2.2 livello AA[^40].
 
 #### Funzionale
 
@@ -80,14 +86,14 @@ Ogni voce va spuntata prima del gate G7. Per l'accessibilità il riferimento è 
 #### Dati e integrazioni
 
 - [ ] Migrazioni applicabili da un database vuoto; dati di esempio funzionanti.
-- [ ] API esterne: gestiti errori, timeout e limiti.
-- [ ] Webhook verificati, anche se ricevuti due volte.
+- [ ] <Term id="api">API</Term> esterne: gestiti errori, timeout e limiti.
+- [ ] <Term id="webhook">Webhook</Term> verificati, anche se ricevuti due volte.
 
 #### Sicurezza
 
 - [ ] `/security-review` senza rilievi aperti.
 - [ ] Autorizzazioni testate con due ruoli.
-- [ ] RLS attiva; segreti solo nei pannelli.
+- [ ] <Term id="rls">RLS</Term> attiva; segreti solo nei pannelli.
 
 #### Qualità
 
@@ -108,11 +114,13 @@ Ogni voce va spuntata prima del gate G7. Per l'accessibilità il riferimento è 
 :::
 
 :::tip[Definition of Done · Fase 6]
-- [ ] Matrice di tracciabilità e integration review nel repository.
+- [ ] Matrice di tracciabilità e integration review nel <Term id="repository">repository</Term>.
 - [ ] Tutte le issue S1/S2 chiuse o accettate esplicitamente.
 - [ ] Collaudo con utenti svolto e problemi registrati.
 - [ ] Gate G7 superato e decisione annotata in `STATUS.md`.
 :::
+
+<QuizBlock phase="F6" />
 
 [^37]: **Matrice di tracciabilità**: una tabella che collega ogni requisito (US-xxx, FR-xxx) al codice che lo implementa, al test che lo verifica e al suo stato. Mostra subito cosa manca.
 

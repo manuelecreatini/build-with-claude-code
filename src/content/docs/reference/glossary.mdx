@@ -8,67 +8,67 @@ sidebar:
 
 The playbook's technical terms in one line each. The numbered notes explain them in more depth the first time they appear.
 
-- **ADR** — Architecture Decision Record: a short document that records an important decision and its reasoning.
-- **AFK / HITL** — Work the agent does on its own / work that needs you present.
-- **API** — The set of "doors" through which two programs exchange data.
-- **Authentication / authorisation** — Who you are (sign-in) / what you can do (permissions by role).
-- **Branch** — A parallel line of development; it joins `main` through a pull request.
-- **Build phase (BP)** — A vertical slice of the product: one issue, one branch, one pull request.
-- **CI/CD** — Automated checks on every change and automated publishing.
-- **CLAUDE.md** — A file of permanent instructions that Claude Code loads at every session.
-- **CLI / terminal** — Programs you use by typing commands in a text window.
-- **Commit** — A described save of a set of changes in the Git history.
-- **Compaction** — Summarising the conversation to free up context (`/compact`).
-- **Context window** — How many tokens the model considers at once.
-- **Conventional Commits** — Commit messages with a prefix: `feat:`, `fix:`, `docs:`…
-- **Database** — The structured store of the application's data (here, Postgres).
-- **Decision ticket** — An issue on the `/wayfinder` map that holds a question to decide.
-- **Dependency** — An external library the project uses, installed with npm.
-- **Deploy** — Publishing a version of the app to a server.
-- **DNS** — The system that links a domain name to a server.
-- **E2E (end-to-end)** — A test that simulates a real user in the browser.
-- **Environment variable** — Configuration given to the app from outside the code.
-- **Feature flag** — A switch that turns a feature on only for some users.
-- **Framework** — A scaffold of code with ready-made rules and tools (e.g. Next.js).
-- **Frontend / backend** — What the user sees / the code that runs on the server.
-- **Gate** — A point where Claude stops and waits for your approval.
-- **Git / GitHub** — The history of changes / the online service that hosts Git projects.
-- **Handoff** — A document passed from one session to the next (`/handoff`).
-- **Integration test** — A test of several modules together (e.g. API and database).
-- **Issue** — A work card on GitHub with labels, an assignee and comments.
-- **Label** — A tag on an issue (e.g. `build-phase`, `ready-for-agent`).
-- **Lint** — An automated check for common mistakes and code style.
-- **Map** — The `wayfinder:map` issue that indexes a project's decisions.
-- **Markdown** — A text format with simple symbols for headings and lists (`.md`).
-- **MCP** — The standard Claude uses to connect to external tools and services.
-- **Merge** — Joining one branch into another, usually into `main`.
-- **Migration** — A versioned file that changes the database structure.
-- **Node.js / npm / npx** — JavaScript runtime / library manager / tool runner.
-- **OWASP Top 10** — The ten most common categories of web vulnerability.
-- **PATH** — The folders where the system looks for programs.
-- **Permission mode** — What Claude can do without asking (`default`, `acceptEdits`, `plan`…).
-- **Plan mode** — Claude plans without changing files until you approve.
-- **Plugin** — A package that distributes skills and other Claude Code extensions.
-- **Preview** — A preview URL created for every pull request.
-- **Pull request (PR)** — A request to merge a branch, with checks and review.
-- **Regression** — A defect in something that used to work.
-- **Repository** — A project folder with its whole Git history.
-- **RICE** — A priority score: Reach × Impact × Confidence ÷ Effort.
-- **RLS** — Row Level Security: database rules on who sees which rows.
-- **Seam** — A boundary from which a feature is tested from the outside.
-- **Secret** — A confidential value (key, password) that must never be published.
-- **SemVer** — Versions in the form MAJOR.MINOR.PATCH.
-- **Skill** — A package of instructions that teaches Claude a procedure (`/name`).
-- **Squash merge** — Merging a PR as a single commit on `main`.
-- **Subagent** — A Claude instance with a separate context, to which you delegate a task.
-- **TDD** — First the failing test, then the code, then the improvement.
-- **Technical debt** — Shortcuts that make future changes more expensive.
-- **Token** — The unit the model uses to measure text.
-- **Tracer bullet** — A minimal but complete slice that goes through every layer.
-- **TypeScript** — JavaScript with types, to catch errors before the code runs.
-- **Unit test** — A test of a single function or module in isolation.
-- **User story** — A requirement in the form "As a… I want… so that…".
-- **WCAG** — International guidelines for web accessibility.
-- **Webhook** — An automatic notification that a service sends to your app.
-- **winget** — The Windows package manager.
-- **Worktree** — A second working folder of the same repository, for working in parallel.
+- **<dfn id="adr">ADR</dfn>** — Architecture Decision Record: a short document that records an important decision and its reasoning.
+- **<dfn id="afk-hitl">AFK / HITL</dfn>** — Work the agent does on its own / work that needs you present.
+- **<dfn id="api">API</dfn>** — The set of "doors" through which two programs exchange data.
+- **<dfn id="authentication-authorisation">Authentication / authorisation</dfn>** — Who you are (sign-in) / what you can do (permissions by role).
+- **<dfn id="branch">Branch</dfn>** — A parallel line of development; it joins `main` through a pull request.
+- **<dfn id="build-phase-bp">Build phase (BP)</dfn>** — A vertical slice of the product: one issue, one branch, one pull request.
+- **<dfn id="cicd">CI/CD</dfn>** — Automated checks on every change and automated publishing.
+- **<dfn id="claudemd">CLAUDE.md</dfn>** — A file of permanent instructions that Claude Code loads at every session.
+- **<dfn id="cli-terminal">CLI / terminal</dfn>** — Programs you use by typing commands in a text window.
+- **<dfn id="commit">Commit</dfn>** — A described save of a set of changes in the Git history.
+- **<dfn id="compaction">Compaction</dfn>** — Summarising the conversation to free up context (`/compact`).
+- **<dfn id="context-window">Context window</dfn>** — How many tokens the model considers at once.
+- **<dfn id="conventional-commits">Conventional Commits</dfn>** — Commit messages with a prefix: `feat:`, `fix:`, `docs:`…
+- **<dfn id="database">Database</dfn>** — The structured store of the application's data (here, Postgres).
+- **<dfn id="decision-ticket">Decision ticket</dfn>** — An issue on the `/wayfinder` map that holds a question to decide.
+- **<dfn id="dependency">Dependency</dfn>** — An external library the project uses, installed with npm.
+- **<dfn id="deploy">Deploy</dfn>** — Publishing a version of the app to a server.
+- **<dfn id="dns">DNS</dfn>** — The system that links a domain name to a server.
+- **<dfn id="e2e-end-to-end">E2E (end-to-end)</dfn>** — A test that simulates a real user in the browser.
+- **<dfn id="environment-variable">Environment variable</dfn>** — Configuration given to the app from outside the code.
+- **<dfn id="feature-flag">Feature flag</dfn>** — A switch that turns a feature on only for some users.
+- **<dfn id="framework">Framework</dfn>** — A scaffold of code with ready-made rules and tools (e.g. Next.js).
+- **<dfn id="frontend-backend">Frontend / backend</dfn>** — What the user sees / the code that runs on the server.
+- **<dfn id="gate">Gate</dfn>** — A point where Claude stops and waits for your approval.
+- **<dfn id="git-github">Git / GitHub</dfn>** — The history of changes / the online service that hosts Git projects.
+- **<dfn id="handoff">Handoff</dfn>** — A document passed from one session to the next (`/handoff`).
+- **<dfn id="integration-test">Integration test</dfn>** — A test of several modules together (e.g. API and database).
+- **<dfn id="issue">Issue</dfn>** — A work card on GitHub with labels, an assignee and comments.
+- **<dfn id="label">Label</dfn>** — A tag on an issue (e.g. `build-phase`, `ready-for-agent`).
+- **<dfn id="lint">Lint</dfn>** — An automated check for common mistakes and code style.
+- **<dfn id="map">Map</dfn>** — The `wayfinder:map` issue that indexes a project's decisions.
+- **<dfn id="markdown">Markdown</dfn>** — A text format with simple symbols for headings and lists (`.md`).
+- **<dfn id="mcp">MCP</dfn>** — The standard Claude uses to connect to external tools and services.
+- **<dfn id="merge">Merge</dfn>** — Joining one branch into another, usually into `main`.
+- **<dfn id="migration">Migration</dfn>** — A versioned file that changes the database structure.
+- **<dfn id="nodejs-npm-npx">Node.js / npm / npx</dfn>** — JavaScript runtime / library manager / tool runner.
+- **<dfn id="owasp-top-10">OWASP Top 10</dfn>** — The ten most common categories of web vulnerability.
+- **<dfn id="path">PATH</dfn>** — The folders where the system looks for programs.
+- **<dfn id="permission-mode">Permission mode</dfn>** — What Claude can do without asking (`default`, `acceptEdits`, `plan`…).
+- **<dfn id="plan-mode">Plan mode</dfn>** — Claude plans without changing files until you approve.
+- **<dfn id="plugin">Plugin</dfn>** — A package that distributes skills and other Claude Code extensions.
+- **<dfn id="preview">Preview</dfn>** — A preview URL created for every pull request.
+- **<dfn id="pull-request-pr">Pull request (PR)</dfn>** — A request to merge a branch, with checks and review.
+- **<dfn id="regression">Regression</dfn>** — A defect in something that used to work.
+- **<dfn id="repository">Repository</dfn>** — A project folder with its whole Git history.
+- **<dfn id="rice">RICE</dfn>** — A priority score: Reach × Impact × Confidence ÷ Effort.
+- **<dfn id="rls">RLS</dfn>** — Row Level Security: database rules on who sees which rows.
+- **<dfn id="seam">Seam</dfn>** — A boundary from which a feature is tested from the outside.
+- **<dfn id="secret">Secret</dfn>** — A confidential value (key, password) that must never be published.
+- **<dfn id="semver">SemVer</dfn>** — Versions in the form MAJOR.MINOR.PATCH.
+- **<dfn id="skill">Skill</dfn>** — A package of instructions that teaches Claude a procedure (`/name`).
+- **<dfn id="squash-merge">Squash merge</dfn>** — Merging a PR as a single commit on `main`.
+- **<dfn id="subagent">Subagent</dfn>** — A Claude instance with a separate context, to which you delegate a task.
+- **<dfn id="tdd">TDD</dfn>** — First the failing test, then the code, then the improvement.
+- **<dfn id="technical-debt">Technical debt</dfn>** — Shortcuts that make future changes more expensive.
+- **<dfn id="token">Token</dfn>** — The unit the model uses to measure text.
+- **<dfn id="tracer-bullet">Tracer bullet</dfn>** — A minimal but complete slice that goes through every layer.
+- **<dfn id="typescript">TypeScript</dfn>** — JavaScript with types, to catch errors before the code runs.
+- **<dfn id="unit-test">Unit test</dfn>** — A test of a single function or module in isolation.
+- **<dfn id="user-story">User story</dfn>** — A requirement in the form "As a… I want… so that…".
+- **<dfn id="wcag">WCAG</dfn>** — International guidelines for web accessibility.
+- **<dfn id="webhook">Webhook</dfn>** — An automatic notification that a service sends to your app.
+- **<dfn id="winget">winget</dfn>** — The Windows package manager.
+- **<dfn id="worktree">Worktree</dfn>** — A second working folder of the same repository, for working in parallel.

@@ -1,0 +1,44 @@
+---
+title: CLAUDE.md e memoria
+description: Come Claude Code ricorda il progetto tra una sessione e l'altra, dove stanno i file CLAUDE.md e cosa rende buone le istruzioni.
+lastVerified: 2026-11-24
+sidebar:
+  order: 3
+---
+
+**In una frase:** Claude inizia ogni sessione senza sapere nulla del progetto, tranne ciò che è scritto nei suoi file di memoria, soprattutto `CLAUDE.md`, che Claude Code carica automaticamente nel contesto.
+
+## Dove stanno i file
+
+| Ambito | File | Condiviso con |
+| --- | --- | --- |
+| Organizzazione | File gestito dall'IT (su Windows `C:\Program Files\ClaudeCode\CLAUDE.md`) | Tutti sulla macchina |
+| Tu | `~/.claude/CLAUDE.md` | Solo tu, in ogni progetto |
+| Progetto | `./CLAUDE.md` oppure `./.claude/CLAUDE.md` | Tutti, tramite il repository |
+| Locale | `./CLAUDE.local.md` (aggiungilo a `.gitignore`) | Solo tu, in questo progetto |
+
+Claude Code carica i file dalla cima dell'albero delle cartelle fino alla cartella in cui hai avviato la sessione. I `CLAUDE.md` nelle sottocartelle si caricano solo quando Claude lavora in quelle cartelle. Un file può includerne un altro con `@percorso/del/file`.
+
+## È contesto, non un vincolo
+
+`CLAUDE.md` viene letto, non imposto: Claude lo segue perché è nel contesto, come un collega segue un briefing. Ciò che non deve succedere *mai* va nelle [regole di permesso](/it/concepts/plan-mode-and-permissions/) o negli hook, non solo in `CLAUDE.md`.
+
+Le buone istruzioni sono brevi e concrete: i comandi da eseguire, la struttura delle cartelle, le convenzioni che non si capiscono dal codice. La documentazione consiglia di restare sotto le 200 righe circa per file; i file più lunghi consumano contesto e vengono seguiti con meno affidabilità.
+
+## Comandi utili
+
+- `/init` crea un `CLAUDE.md` a partire dal codice, o migliora quello esistente.
+- `/memory` apre i file di memoria per modificarli.
+
+## Memoria automatica e regole
+
+- La **memoria automatica** è attiva per impostazione predefinita: Claude salva per sé note sul progetto (preferenze, correzioni) e a ogni sessione carica l'inizio del suo indice `MEMORY.md`.
+- Le **regole** in `.claude/rules/` dividono le istruzioni in file per argomento; una regola può dichiarare `paths:` per caricarsi solo quando Claude tocca i file corrispondenti.
+
+## Nel playbook
+
+La [Fase 0](/it/phases/f0-setup/) crea il `CLAUDE.md` del progetto dal template T0, e ogni fase lo aggiorna quando cambia una convenzione. Dopo una [compattazione](/it/concepts/context-window-and-tokens/) il `CLAUDE.md` della radice del progetto viene riletto dal disco: per questo le regole vanno lì e non solo in chat.
+
+## Fonti
+
+- [How Claude remembers your project](https://code.claude.com/docs/en/memory), documentazione di Claude Code.

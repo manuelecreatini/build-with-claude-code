@@ -5,20 +5,26 @@ lastVerified: 2026-11-12
 phase: F6
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
 | Item | Detail |
 |---|---|
 | **Goal** | Check that the product works as a coherent whole and meets the spec: complete journeys, integrations, security, quality. |
-| **Input** | All the milestone's build phases closed; `main` green; spec and architecture. |
-| **Output** | `docs/testing/traceability.md`, `docs/testing/integration-review.md`, an issue for every serious problem, a Go/No-Go decision. |
-| **Tools** | Prompt T13, E2E tests, `/security-review`, `/code-review`, Supabase advisors, acceptance testing with real users. |
+| **Input** | All the milestone's <Term id="build-phase-bp">build phases</Term> closed; `main` green; spec and architecture. |
+| **Output** | `docs/testing/traceability.md`, `docs/testing/integration-review.md`, an <Term id="issue">issue</Term> for every serious problem, a Go/No-Go decision. |
+| **Tools** | Prompt T13, <Term id="e2e-end-to-end">E2E</Term> tests, `/security-review`, `/code-review`, Supabase advisors, acceptance testing with real users. |
 | **Gate** | <Role as="gate" n={7} /> Go/No-Go for launch. |
 | **Typical time** | Half a day to two days. |
 
+<WhyThisStep>Each phase was tested on its own. Only now can you see whether the pieces form the product the spec describes, before real users find the gaps for you.</WhyThisStep>
+
+
 ## What you check and why
 
-Every build phase was tested on its own. Integration looks for the problems that only appear when the pieces come together: a journey that crosses five phases, data created by one role and read by another, an external service that responds slowly, a migration that works on your database but not on an empty one.
+Every build phase was tested on its own. Integration looks for the problems that only appear when the pieces come together: a journey that crosses five phases, data created by one role and read by another, an external service that responds slowly, a <Term id="migration">migration</Term> that works on your database but not on an empty one.
 
 ## Step 1 — Freeze the scope
 
@@ -32,7 +38,7 @@ No new features until gate G7 is passed. `main` must be green in CI. New ideas b
 <paste the T13 prompt>
 ```
 
-Claude works in plan mode first and shows you the verification plan; then it produces:
+Claude works in <Term id="plan-mode">plan mode</Term> first and shows you the verification plan; then it produces:
 
 - a **traceability matrix**[^37] in `docs/testing/traceability.md`;
 - the missing E2E tests for every user journey in the spec;
@@ -48,16 +54,16 @@ Claude works in plan mode first and shows you the verification plan; then it pro
 
 ## Step 3 — Security
 
-- [ ] `/security-review` on the release branch (an `origin` remote is needed).
-- [ ] Authorisation tests with two users and different roles: nobody sees or changes other people's data.
-- [ ] If you use Supabase: Row Level Security[^38] on for every table; check the security and performance warnings (*advisors*) from the dashboard or through the MCP connector.
-- [ ] `npm audit` for known vulnerabilities in dependencies; no secrets in the code or the Git history.
-- [ ] The ten OWASP Top 10[^39] risk categories reviewed with Claude.
+- [ ] `/security-review` on the release <Term id="branch">branch</Term> (an `origin` remote is needed).
+- [ ] <Term id="authentication-authorisation">Authorisation</Term> tests with two users and different roles: nobody sees or changes other people's data.
+- [ ] If you use Supabase: Row Level Security[^38] on for every table; check the security and performance warnings (*advisors*) from the dashboard or through the <Term id="mcp">MCP</Term> connector.
+- [ ] `npm audit` for known vulnerabilities in dependencies; no <Term id="secret">secrets</Term> in the code or the <Term id="git-github">Git</Term> history.
+- [ ] The ten <Term id="owasp-top-10">OWASP Top 10</Term>[^39] risk categories reviewed with Claude.
 - [ ] Server-side input validation, rate limits on login and public forms.
 
 ## Step 4 — Deep review (recommended for SaaS)
 
-`/code-review ultra` <Role as="bundled" /> starts a multi-agent review in a cloud environment, on a pull request or a branch. With Pro and Max it includes 3 free runs, then it requires usage credits: use it once before launch, on the release pull request.
+`/code-review ultra` <Role as="bundled" /> starts a multi-agent review in a cloud environment, on a <Term id="pull-request-pr">pull request</Term> or a branch. With Pro and Max it includes 3 free runs, then it requires usage credits: use it once before launch, on the release pull request.
 
 ## Step 5 — User acceptance testing (UAT)
 
@@ -68,7 +74,7 @@ Claude works in plan mode first and shows you the verification plan; then it pro
 
 ## Final test and validation checklist
 
-Every item must be ticked before gate G7. For accessibility the reference is WCAG 2.2 level AA[^40].
+Every item must be ticked before gate G7. For accessibility the reference is <Term id="wcag">WCAG</Term> 2.2 level AA[^40].
 
 #### Functional
 
@@ -80,14 +86,14 @@ Every item must be ticked before gate G7. For accessibility the reference is WCA
 #### Data and integrations
 
 - [ ] Migrations apply from an empty database; sample data works.
-- [ ] External APIs: errors, timeouts and limits handled.
-- [ ] Webhooks verified, even when received twice.
+- [ ] External <Term id="api">APIs</Term>: errors, timeouts and limits handled.
+- [ ] <Term id="webhook">Webhooks</Term> verified, even when received twice.
 
 #### Security
 
 - [ ] `/security-review` with no open findings.
 - [ ] Authorisation tested with two roles.
-- [ ] RLS on; secrets only in dashboards.
+- [ ] <Term id="rls">RLS</Term> on; secrets only in dashboards.
 
 #### Quality
 
@@ -108,11 +114,13 @@ Every item must be ticked before gate G7. For accessibility the reference is WCA
 :::
 
 :::tip[Definition of Done · Phase 6]
-- [ ] Traceability matrix and integration review in the repository.
+- [ ] Traceability matrix and integration review in the <Term id="repository">repository</Term>.
 - [ ] All S1/S2 issues closed or explicitly accepted.
 - [ ] User acceptance testing done and problems recorded.
 - [ ] Gate G7 passed and the decision noted in `STATUS.md`.
 :::
+
+<QuizBlock phase="F6" />
 
 [^37]: **Traceability matrix**: a table that links every requirement (US-xxx, FR-xxx) to the code that implements it, the test that verifies it and its status. It shows at once what is missing.
 

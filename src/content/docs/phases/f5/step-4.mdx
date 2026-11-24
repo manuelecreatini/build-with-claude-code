@@ -5,32 +5,36 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
 import Role from '~/components/Role.astro';
+
+<WhyThisStep>Tests and review catch what the plan missed while the change is still small and fresh. Green checks are what lets you merge without reading every line.</WhyThisStep>
 
 Tests are not optional for critical features. Every phase closes only with all checks green.
 
 | Level | What it checks | Tool | Typical command | When |
 |---|---|---|---|---|
-| Types | Data consistency in the code | TypeScript | `npm run typecheck` | Always, before every commit |
-| Lint | Common errors and style | ESLint | `npm run lint` | Always |
+| Types | Data consistency in the code | <Term id="typescript">TypeScript</Term> | `npm run typecheck` | Always, before every <Term id="commit">commit</Term> |
+| <Term id="lint">Lint</Term> | Common errors and style | ESLint | `npm run lint` | Always |
 | Unit | One isolated function or module | Vitest | `npm test` | Rules, calculations, transformations |
-| Integration | Modules working together: API and database | Vitest + test database | `npm test` | Every phase that touches data |
-| End-to-end | A real user journey in the browser | Playwright | `npm run test:e2e` | Critical journeys |
-| Build | That the app compiles for production | Next.js | `npm run build` | Before the pull request |
+| Integration | Modules working together: <Term id="api">API</Term> and database | Vitest + test database | `npm test` | Every phase that touches data |
+| <Term id="e2e-end-to-end">End-to-end</Term> | A real user journey in the browser | Playwright | `npm run test:e2e` | Critical journeys |
+| Build | That the app compiles for production | Next.js | `npm run build` | Before the <Term id="pull-request-pr">pull request</Term> |
 | Manual | Experience, copy, look, mobile | You, with Claude's help | `npm run dev`, preview URL | Every phase |
 
 The three main automated levels form the so-called test pyramid[^32]. BP-01 fixes the exact commands and they go into `CLAUDE.md`.
 
 ## Regressions
 
-A regression[^33] is found by running the *whole* suite, not just the new tests: Claude runs it at the end of every phase, and CI repeats it on every pull request. For every bug fixed, a test that reproduces it is added first.
+A <Term id="regression">regression</Term>[^33] is found by running the *whole* suite, not just the new tests: Claude runs it at the end of every phase, and CI repeats it on every pull request. For every bug fixed, a test that reproduces it is added first.
 
 ## Code review: complementary tools
 
-- `/mattpocock-skills:code-review` <Role as="pocock" />: a review on two axes, *standards* (the repository's rules and a classic list of code smells) and *spec* (does it faithfully implement the issue?), with two parallel subagents. It is the one `/implement` calls at the end of the work.
+- `/mattpocock-skills:code-review` <Role as="pocock" />: a review on two axes, *standards* (the <Term id="repository">repository</Term>'s rules and a classic list of code smells) and *spec* (does it faithfully implement the <Term id="issue">issue</Term>?), with two parallel <Term id="subagent">subagents</Term>. It is the one `/implement` calls at the end of the work.
 - `/code-review` <Role as="bundled" />: looks for correctness bugs in the current diff; it accepts an effort level and `--fix` to apply the fixes. The `ultra` level starts a multi-agent review in the cloud (3 free runs with Pro and Max, then credits).
 - `/simplify` <Role as="bundled" />: four agents in parallel look for simplifications and reuse; it doesn't look for bugs.
-- `/security-review` <Role as="builtin" />: analyses the branch's changes against the remote's main branch looking for vulnerabilities. Mandatory in phases that touch login, permissions, payments or personal data.
+- `/security-review` <Role as="builtin" />: analyses the <Term id="branch">branch</Term>'s changes against the remote's main branch looking for vulnerabilities. Mandatory in phases that touch login, permissions, payments or personal data.
 
 ## Manual testing
 
@@ -50,8 +54,8 @@ In the pull request Claude fills in the *criterion → evidence* table (test nam
 | Project type | Mandatory minimum | Recommended |
 |---|---|---|
 | Showcase site, landing page | Types, lint, build, basic E2E (home, contact form). | Lighthouse, link checking. |
-| Internal tool, dashboard | Plus: unit tests on calculations, integration tests on data access. | E2E on the main flows, tests with realistic data. |
-| SaaS with login and payments | TDD on authentication, permissions, payments and data integrity; integration on API and database; E2E from sign-up to payment to key action; `/security-review`. | `/code-review ultra` before launch. |
+| Internal tool, dashboard | Plus: <Term id="unit-test">unit tests</Term> on calculations, <Term id="integration-test">integration tests</Term> on data access. | E2E on the main flows, tests with realistic data. |
+| SaaS with login and payments | <Term id="tdd">TDD</Term> on <Term id="authentication-authorisation">authentication</Term>, permissions, payments and data integrity; integration on API and database; E2E from sign-up to payment to key action; `/security-review`. | `/code-review ultra` before launch. |
 | Mobile app (Expo) | Unit tests on the logic; E2E on the main flows with a mobile tool. | Tests on real iOS and Android devices. |
 | App with AI features | Tests with a mocked model; an evaluation set (*eval*) for the prompts. | `/claude-api build-eval` to build the evaluation set. |
 

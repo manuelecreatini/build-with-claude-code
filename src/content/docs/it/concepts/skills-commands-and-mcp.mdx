@@ -1,0 +1,44 @@
+---
+title: Skill, comandi e MCP
+description: I modi in cui si estende Claude Code — skill, comandi slash, server MCP, subagent e hook — e come ognuno usa la finestra di contesto.
+lastVerified: 2026-11-24
+sidebar:
+  order: 4
+---
+
+**In una frase:** Claude Code diventa più capace grazie alle *skill* (istruzioni confezionate), ai *server MCP* (collegamenti a strumenti esterni), ai *subagent* (aiutanti con un contesto proprio) e agli *hook* (script che partono in automatico), e il playbook li usa tutti e quattro.
+
+## Skill e comandi slash
+
+Una skill è una cartella con un file `SKILL.md`: una descrizione più le istruzioni. Le skill stanno in `~/.claude/skills/<nome>/` (tue, in ogni progetto) o in `.claude/skills/<nome>/` (questo progetto); le skill dei plugin si richiamano come `/plugin:skill`.
+
+- Nel contesto resta solo la **descrizione**. Le istruzioni complete si caricano quando la skill viene usata.
+- Una skill parte quando scrivi `/nome-skill`, oppure quando Claude decide che la sua descrizione corrisponde al compito.
+- I comandi slash personalizzati sono stati unificati con le skill; i vecchi file in `.claude/commands/` continuano a funzionare.
+
+Claude Code ha anche **comandi integrati** (`/init`, `/memory`, `/context`, `/compact`, `/clear`, `/plan`, `/permissions`, `/model`, `/mcp`, `/agents`, `/hooks`, `/rewind`, `/resume`, `/doctor`, `/help`) e **skill incluse** che arrivano con il programma, come `/code-review` (disponibile anche come `/review`), `/debug` e `/loop`. Il playbook aggiunge le skill di Matt Pocock (`/wayfinder`, `/tdd`, `/handoff`…), installate nella [Fase 0](/it/phases/f0-setup/).
+
+## Server MCP
+
+Il Model Context Protocol è uno standard aperto per collegare gli strumenti di AI ad altri sistemi: GitHub, database, browser, strumenti di design. Un server MCP espone *strumenti* che Claude può chiamare.
+
+```bash
+# un server remoto (HTTP è il trasporto consigliato)
+claude mcp add --transport http <nome> <url>
+# un server locale avviato come comando
+claude mcp add <nome> -- <comando>
+```
+
+I server si possono aggiungere solo per te in questo progetto (il valore predefinito), per tutto il team tramite `.mcp.json`, oppure per te in tutti i progetti. `claude mcp list` e `/mcp` mostrano cosa è collegato. Ogni server collegato aggiunge al contesto i nomi dei suoi strumenti, quindi collega ciò che usi.
+
+## Subagent
+
+Un subagent lavora nella **propria finestra di contesto**, con istruzioni, strumenti e permessi propri, e restituisce solo un riassunto. Così ricerche o review lunghe non riempiono la sessione principale. Si definiscono in `.claude/agents/` o `~/.claude/agents/`, oppure si gestiscono con `/agents`.
+
+## Hook
+
+Gli hook partono automaticamente in momenti precisi (prima che uno strumento venga eseguito, dopo la modifica di un file, quando Claude si ferma…). Possono essere comandi di shell, chiamate HTTP, strumenti MCP o prompt, configurati sotto `"hooks"` in un file di impostazioni. A differenza di `CLAUDE.md`, un hook parte sempre: usalo per ciò che deve succedere ogni volta, come formattare il codice dopo ogni modifica. `/hooks` li elenca.
+
+## Fonti
+
+- [Extend Claude with skills](https://code.claude.com/docs/en/skills), [Commands](https://code.claude.com/docs/en/commands), [Connect Claude Code to tools via MCP](https://code.claude.com/docs/en/mcp), [Subagents](https://code.claude.com/docs/en/sub-agents), [Hooks](https://code.claude.com/docs/en/hooks) — documentazione di Claude Code.

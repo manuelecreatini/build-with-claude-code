@@ -5,7 +5,18 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import UnderTheHood from '~/components/UnderTheHood.astro';
 import Role from '~/components/Role.astro';
+
+<WhyThisStep>The pull request is the one place where the change, its tests and its explanation meet. Approving it is your acceptance of the phase.</WhyThisStep>
+
+<UnderTheHood title={"Under the hood: what happens on push and merge"}>
+
+When the branch reaches GitHub, the CI workflow in `.github/workflows/` runs the same checks on a clean machine, so "works on my computer" is not enough. A squash merge turns all the phase's commits into one commit on `main`, which keeps the history readable: one phase, one commit. More in [Tests and CI](/concepts/tests-and-ci/).
+
+</UnderTheHood>
 
 **Claude Code (or PowerShell) · closing the phase**
 ```powershell
@@ -17,10 +28,10 @@ git switch main
 git pull
 ```
 
-1. Claude opens the pull request with template B3: what changes and why, evidence (tests, screenshots), criteria table, merge "risk" (reversible or not, how much impact) and `Closes #<number>` to close the issue automatically.
+1. Claude opens the <Term id="pull-request-pr">pull request</Term> with template B3: what changes and why, evidence (tests, screenshots), criteria table, <Term id="merge">merge</Term> "risk" (reversible or not, how much impact) and `Closes #<number>` to close the <Term id="issue">issue</Term> automatically.
 2. CI must be green; Vercel publishes a preview.
 3. <Role as="you" /> Read the summary (you don't need to read every line of code), try the preview, tick the issue's Definition of Done.
-4. Merge with *squash*[^34] and delete the branch.
+4. Merge with *squash*[^34] and delete the <Term id="branch">branch</Term>.
 5. Claude comments on the issue with a final summary: what was done, tests run, link to the pull request, any new issues.
 
 [^34]: **Squash merge**: combines all the pull request's commits into a single commit on `main`. The main history stays clean: one commit per build phase.

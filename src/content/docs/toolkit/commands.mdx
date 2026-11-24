@@ -6,16 +6,17 @@ sidebar:
   order: 3
 ---
 
+import Term from '~/components/Term.astro';
 import Role from '~/components/Role.astro';
 
 ## Four kinds of command: how to recognise them
 
 | Kind | What it is | Examples | How to check it is there |
 |---|---|---|---|
-| <Role as="builtin" /> | A native command with fixed logic in the CLI. | `/compact`, `/clear`, `/context`, `/rewind`, `/plan` | Type `/`: it appears in the menu. |
-| <Role as="bundled" /> | A skill included in Claude Code: instructions Claude carries out with its own tools. | `/code-review`, `/simplify`, `/run`, `/verify`, `/debug`, `/design` | The `/` menu and `/skills`; can be turned off in settings. |
-| <Role as="pocock" /> | A skill from the `mattpocock-skills` plugin, to install. | `/wayfinder`, `/handoff`, `/to-spec`, `/tdd` | `/skills` and `/plugin`. |
-| <Role as="integration" /> | An external tool: CLI, MCP connector, service. | `gh`, the Supabase and Vercel connectors, Claude in Chrome, Playwright | `gh --version`, `/mcp`, `/chrome`. |
+| <Role as="builtin" /> | A native command with fixed logic in the <Term id="cli-terminal">CLI</Term>. | `/compact`, `/clear`, `/context`, `/rewind`, `/plan` | Type `/`: it appears in the menu. |
+| <Role as="bundled" /> | A <Term id="skill">skill</Term> included in Claude Code: instructions Claude carries out with its own tools. | `/code-review`, `/simplify`, `/run`, `/verify`, `/debug`, `/design` | The `/` menu and `/skills`; can be turned off in settings. |
+| <Role as="pocock" /> | A skill from the `mattpocock-skills` <Term id="plugin">plugin</Term>, to install. | `/wayfinder`, `/handoff`, `/to-spec`, `/tdd` | `/skills` and `/plugin`. |
+| <Role as="integration" /> | An external tool: CLI, <Term id="mcp">MCP</Term> connector, service. | `gh`, the Supabase and Vercel connectors, Claude in Chrome, Playwright | `gh --version`, `/mcp`, `/chrome`. |
 
 ## The built-in and bundled commands used in the playbook
 
@@ -25,14 +26,14 @@ import Role from '~/components/Role.astro';
 | `/clear` (aliases `/reset`, `/new`) | A new, empty conversation; the previous one stays in `/resume`. | Between unrelated pieces of work |
 | `/compact [instructions]` | Summarises the conversation to free up context, with an optional focus. | F5, step 8 |
 | `/context` | A grid of the context in use, with suggestions. | Start of and during every session |
-| `/autocompact <tokens>\|auto` | Sets the automatic compaction threshold (e.g. `200k`). | F0 |
+| `/autocompact <tokens>\|auto` | Sets the automatic <Term id="compaction">compaction</Term> threshold (e.g. `200k`). | F0 |
 | `/resume` (alias `/continue`) | Reopens a previous conversation. | Resuming work |
 | `/rewind` (aliases `/checkpoint`, `/undo`) | Takes code and conversation back to a checkpoint, or summarises part of the conversation. | When a path turns out wrong |
-| `/branch`, `/fork` | Branches the conversation; `/fork` copies it into a background session. | Exploring alternatives |
+| `/branch`, `/fork` | <Term id="branch">Branches</Term> the conversation; `/fork` copies it into a background session. | Exploring alternatives |
 | `/btw <question>` | A side question that doesn't enter the history. | During the work |
 | `/recap`, `/rename`, `/export` | One-line summary, rename, export the conversation. | As you like |
 | **Planning, model, permissions** |  |  |
-| `/plan [description]` and `Shift+Tab` | Plan mode: Claude plans without changing files. `Shift+Tab` cycles through the permission modes. | Every build phase (G5) |
+| `/plan [description]` and `Shift+Tab` | <Term id="plan-mode">Plan mode</Term>: Claude plans without changing files. `Shift+Tab` cycles through the <Term id="permission-mode">permission modes</Term>. | Every <Term id="build-phase-bp">build phase</Term> (G5) |
 | `/model`, `/effort` | Change the model and the reasoning level. | When needed |
 | `/permissions`, `/fewer-permission-prompts` | Manage the permission rules; the second proposes a list of read-only commands to approve. | F0 and after the first phases |
 | `/goal <condition>` | Claude keeps going over several turns until the condition is met. | Advanced mode |
@@ -45,13 +46,13 @@ import Role from '~/components/Role.astro';
 | `/usage` (aliases `/cost`, `/stats`) | Session costs and usage against the plan's limits. | Keeping an eye on limits |
 | `/voice`, `/chrome` | Voice dictation; Claude in Chrome settings. | F1, manual tests |
 | **Quality** |  |  |
-| `/diff` | Shows the current changes, including Claude's. | Before the PR |
+| `/diff` | Shows the current changes, including Claude's. | Before the <Term id="pull-request-pr">PR</Term> |
 | `/code-review [level] [--fix]` (alias `/review`) | Looks for correctness bugs in the changes or in a PR; `ultra` = multi-agent review in the cloud. | F5, F6 |
 | `/simplify` | Four agents look for simplifications and reuse (not bugs). | F5 |
 | `/security-review` | Vulnerabilities in the branch's changes compared with the remote's main branch. | F5, F6, F8 |
 | `/run`, `/verify`, `/run-skill-generator` | Launch and use the app to verify a change; the third records the project's launch recipe. | F5 |
 | `/debug` | Turns on debug logging and analyses Claude Code problems. | Technical problems |
-| **GitHub, cloud and more** |  |  |
+| **<Term id="git-github">GitHub</Term>, cloud and more** |  |  |
 | `/install-github-app` | Installs Claude's GitHub app and, if you want, the GitHub Actions workflows (`@claude`). | F0, optional |
 | `/web-setup`, `/teleport`, `/remote-control` | Connect GitHub to cloud sessions; bring a cloud session into the terminal; control from another device. | Working on the move |
 | `/design`, `/batch`, `/loop`, `/schedule` | Mockups as design artifacts; large changes in parallel; repeated prompts; scheduled tasks in the cloud. | F3; advanced |
@@ -75,18 +76,18 @@ import Role from '~/components/Role.astro';
 
 | Integration | What it is for | How to turn it on |
 |---|---|---|
-| GitHub CLI (`gh`) | Repositories, issues, labels, pull requests, releases: it is the link between Claude Code and GitHub. | `winget install --id GitHub.cli -e`, then `gh auth login`. |
+| GitHub CLI (`gh`) | Repositories, <Term id="issue">issues</Term>, labels, pull requests, releases: it is the link between Claude Code and GitHub. | `winget install --id GitHub.cli -e`, then `gh auth login`. |
 | Claude's GitHub app | `@claude` mentions in issues and pull requests through GitHub Actions. | `/install-github-app` (repositories on github.com only). |
-| Supabase and Vercel MCP connectors | Claude reads tables, logs, advisories, deployments and environment variables. | Connectors on claude.ai with the same account; check with `/mcp`. |
+| Supabase and Vercel MCP connectors | Claude reads tables, logs, advisories, deployments and <Term id="environment-variable">environment variables</Term>. | Connectors on claude.ai with the same account; check with `/mcp`. |
 | Claude in Chrome | Claude uses your browser: opens the app, clicks, reads the console. | `/chrome` or `claude --chrome`; Chrome extension. |
-| Playwright | Automated E2E tests in the browser. | Installed in BP-01 as a development dependency. |
+| Playwright | Automated <Term id="e2e-end-to-end">E2E</Term> tests in the browser. | Installed in BP-01 as a development <Term id="dependency">dependency</Term>. |
 | Supabase agent skills | Supabase development and security guidelines for the agent. | `npx skills add supabase/agent-skills` |
 
 :::caution[Limits that depend on the environment]
 - Not every command shows up for everyone: it depends on platform, plan and environment. Examples: `/desktop` only on macOS and Windows x64 with a subscription; `/design` only where artifacts are available; `auto` mode only for eligible accounts; cloud sessions offer only some permission modes.
 - `/code-review ultra` runs in the cloud: 3 free runs with Pro and Max, then usage credits.
 - `/security-review` needs an `origin` remote.
-- Matt Pocock's skills need `/setup-matt-pocock-skills` in every repository; `/wizard` generates Bash scripts (on Windows you need Git Bash); `/handoff` writes to `%TEMP%`.
+- Matt Pocock's skills need `/setup-matt-pocock-skills` in every <Term id="repository">repository</Term>; `/wizard` generates Bash scripts (on Windows you need Git Bash); `/handoff` writes to `%TEMP%`.
 - Personal skills in `~/.claude/skills` are not available in cloud sessions: there you need repository skills or skills enabled on the claude.ai account.
 - Claude Code is updated often: `/release-notes` shows what is new in each version.
 :::

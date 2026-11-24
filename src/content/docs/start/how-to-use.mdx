@@ -6,6 +6,7 @@ sidebar:
   order: 1
 ---
 
+import Term from '~/components/Term.astro';
 import Role from '~/components/Role.astro';
 
 This playbook is an operating system for building digital products with Claude as your main development partner: websites, web apps, mobile apps, SaaS, internal tools, dashboards and applications with AI components. It does not build one specific application: it defines *how* to work every time, which tools to use, which commands to run, which documents to produce, and when it is your turn to decide.
@@ -16,8 +17,8 @@ It is written for people who are good with AI tools but do not have a software e
 
 - **Part I — The method.** Executive overview, visual workflow, who does what between you and Claude.
 - **Part II — The nine phases (F0–F8).** For each phase: a summary card (goal, input, output, tools, gate, typical time), step-by-step actions with the exact commands, expected outputs, the *Definition of Done* and the most common mistakes.
-- **Part III — Templates and SOPs.** The 15 core templates (T1–T15) plus the project `CLAUDE.md` (T0) and four bonus files (ADR, STATUS, pull request, bug report).
-- **Part IV — Toolkit and skills.** Tools by function, Matt Pocock's skills one by one, Claude Code's native commands and external integrations, with a clear line between what is included and what you need to install.
+- **Part III — Templates and SOPs.** The 15 core templates (T1–T15) plus the project `CLAUDE.md` (T0) and four bonus files (<Term id="adr">ADR</Term>, STATUS, <Term id="pull-request-pr">pull request</Term>, bug report).
+- **Part IV — Toolkit and <Term id="skill">skills</Term>.** Tools by function, Matt Pocock's skills one by one, Claude Code's native commands and external integrations, with a clear line between what is included and what you need to install.
 - **Part V — Checklist and quick reference.** The master checklist and the one-page quick reference.
 - **Appendices.** Minimal glossary and sources with their verification date.
 
@@ -30,25 +31,25 @@ It is written for people who are good with AI tools but do not have a software e
 | <Role as="gate" /> | Approval point: Claude stops and waits for your explicit yes before going on. |
 | <Role as="builtin" /> | Native Claude Code command (e.g. `/compact`, `/clear`, `/context`). |
 | <Role as="bundled" /> | Skill bundled with Claude Code, already available (e.g. `/code-review`, `/run`, `/verify`). |
-| <Role as="pocock" /> | Skill from the `mattpocock/skills` repository: you need to install it (Phase 0). |
-| <Role as="integration" /> | External tool: command line, MCP connector, cloud service. |
+| <Role as="pocock" /> | Skill from the `mattpocock/skills` <Term id="repository">repository</Term>: you need to install it (Phase 0). |
+| <Role as="integration" /> | External tool: command line, <Term id="mcp">MCP</Term> connector, cloud service. |
 | `<project-name>` | Placeholder: replace all the text between angle brackets. |
 | Blue (NOTE), orange (WARNING), green (TIP), red (CAUTION) callouts | Note, caution or limitation, Definition of Done, approval gate. |
 
 ## Language: why prompts and templates are in English
 
-Prompts, templates and repository files are in English, whatever language you speak, for three reasons. First: code, commits, issues and technical documentation live in the repository and will be read by developers, technical partners and automated tools. Second: Matt Pocock's skills and the Claude Code documentation are in English, so the terminology stays consistent end to end. Third: many technical terms are unambiguous in English and not in other languages.
+Prompts, templates and repository files are in English, whatever language you speak, for three reasons. First: code, <Term id="commit">commits</Term>, <Term id="issue">issues</Term> and technical documentation live in the repository and will be read by developers, technical partners and automated tools. Second: Matt Pocock's skills and the Claude Code documentation are in English, so the terminology stays consistent end to end. Third: many technical terms are unambiguous in English and not in other languages.
 
 You can still talk to Claude in your own language at any time. The project `CLAUDE.md` (template T0) asks Claude to reply to you in plain English and to write files in English: replace "English" in the reply rule with your language and Claude will answer you in it, while the files stay in English.
 
 ## Operating system and prerequisites
 
-The commands are written for Windows (PowerShell); where something differs you will find the macOS and Linux equivalent. Minimum prerequisites: a Claude Pro or Max subscription (Claude Code is not included in the free plan) and a GitHub account. Everything else is installed in Phase 0.
+The commands are written for Windows (PowerShell); where something differs you will find the macOS and Linux equivalent. Minimum prerequisites: a Claude Pro or Max subscription (Claude Code is not included in the free plan) and a <Term id="git-github">GitHub</Term> account. Everything else is installed in Phase 0.
 
 ## What was verified and what is a heuristic
 
 - **Verified on 11–12 November 2026.** Claude Code commands and behaviour, from the official documentation ([https://code.claude.com/docs](https://code.claude.com/docs)); names, purpose and behaviour of Matt Pocock's skills, from the README and the `SKILL.md` files of the `mattpocock/skills` repository (about 307,000 stars on GitHub at that date); prices and limits of the services mentioned, from the official pricing pages or the sources listed in the appendix.
-- **Heuristics of this playbook.** The context-usage zones, the number of build phases per project type, the indicative timings and the default stack. They are flagged as such: adapt them after your first projects.
+- **Heuristics of this playbook.** The context-usage zones, the number of <Term id="build-phase-bp">build phases</Term> per project type, the indicative timings and the default stack. They are flagged as such: adapt them after your first projects.
 
 :::caution[The tools change fast]
 Claude Code ships new versions very often, and Matt Pocock's skills changed several times in 2026. In older guides you will find `/to-prd`, `/to-issues`, `CONTEXT.md` and `decision-mapping`: in the current repository their role is played by `/to-spec`, `/to-tickets` (introduced with version 1.1 in July 2026), `GLOSSARY.md` (since 1.3 in October 2026) and `/wayfinder`. If a command does not respond: type `/` to see the available commands, `/release-notes` for what's new, `/doctor` to diagnose the installation.

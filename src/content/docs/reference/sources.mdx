@@ -6,13 +6,15 @@ sidebar:
   order: 4
 ---
 
+import Term from '~/components/Term.astro';
+
 All sources were consulted on 11–12 November 2026. Pricing pages and documentation change often: check again before buying, or if a command doesn't behave as described.
 
 | Source | Used for |
 |---|---|
-| **Matt Pocock's skills** |  |
-| `mattpocock/skills` README<br />[https://github.com/mattpocock/skills](https://github.com/mattpocock/skills) | List and classification of the 27 skills, installation (plugin and skills.sh), `/setup-matt-pocock-skills`, rationale. |
-| `skills/engineering/wayfinder/SKILL.md` (same repository) | Map, decision tickets, types, fog, frontier, session rules. |
+| **Matt Pocock's <Term id="skill">skills</Term>** |  |
+| `mattpocock/skills` README<br />[https://github.com/mattpocock/skills](https://github.com/mattpocock/skills) | List and classification of the 27 skills, installation (<Term id="plugin">plugin</Term> and skills.sh), `/setup-matt-pocock-skills`, rationale. |
+| `skills/engineering/wayfinder/SKILL.md` (same <Term id="repository">repository</Term>) | Map, <Term id="decision-ticket">decision tickets</Term>, types, fog, frontier, session rules. |
 | `skills/productivity/handoff/SKILL.md` | Content and location of the handoff document. |
 | `skills/engineering/to-spec/SKILL.md`, `to-tickets/SKILL.md`, `implement/SKILL.md`, `setup-matt-pocock-skills/SKILL.md` | Spec sections, vertical slices, approval before publishing, implementation discipline, triage labels. |
 | AI Hero, "The /wayfinder Skill" page<br />[https://www.aihero.dev/skills-wayfinder](https://www.aihero.dev/skills-wayfinder) | When to use `/wayfinder` rather than `/grill-with-docs`; known problems and mitigations. |
@@ -20,10 +22,10 @@ All sources were consulted on 11–12 November 2026. Pricing pages and documenta
 | **Claude Code (official documentation)** |  |
 | Quickstart<br />[https://code.claude.com/docs/en/quickstart](https://code.claude.com/docs/en/quickstart) | Installation on Windows, macOS and Linux; accounts; essential commands. |
 | Commands<br />[https://code.claude.com/docs/en/commands](https://code.claude.com/docs/en/commands) | Built-in commands and bundled skills, aliases, requirements. |
-| Context window<br />[https://code.claude.com/docs/en/context-window](https://code.claude.com/docs/en/context-window) | What survives compaction; `/context`; `/autocompact`; 1-million-token windows. |
+| <Term id="context-window">Context window</Term><br />[https://code.claude.com/docs/en/context-window](https://code.claude.com/docs/en/context-window) | What survives <Term id="compaction">compaction</Term>; `/context`; `/autocompact`; 1-million-token windows. |
 | Skills<br />[https://code.claude.com/docs/en/skills](https://code.claude.com/docs/en/skills) | Skill locations and names, plugin prefix, name conflicts, `disable-model-invocation`. |
-| Permission modes<br />[https://code.claude.com/docs/en/permission-modes](https://code.claude.com/docs/en/permission-modes) | Permission modes, plan mode, `Shift+Tab`, plan approval. |
-| Documentation map<br />[https://code.claude.com/docs/en/claude_code_docs_map.md](https://code.claude.com/docs/en/claude_code_docs_map.md) | Overall structure: GitHub Actions, MCP, memory, sessions. |
+| <Term id="permission-mode">Permission modes</Term><br />[https://code.claude.com/docs/en/permission-modes](https://code.claude.com/docs/en/permission-modes) | Permission modes, <Term id="plan-mode">plan mode</Term>, `Shift+Tab`, plan approval. |
+| Documentation map<br />[https://code.claude.com/docs/en/claude_code_docs_map.md](https://code.claude.com/docs/en/claude_code_docs_map.md) | Overall structure: <Term id="git-github">GitHub</Term> Actions, <Term id="mcp">MCP</Term>, memory, sessions. |
 | **Service pricing and limits** |  |
 | Claude [https://claude.com/pricing](https://claude.com/pricing) | Pro 20 USD a month (17 billed annually), Max from 100 USD; Claude Code included. |
 | GitHub [https://docs.github.com/en/get-started/learning-about-github/githubs-plans](https://docs.github.com/en/get-started/learning-about-github/githubs-plans) | 2,000 Actions minutes a month on private repositories (Free). |

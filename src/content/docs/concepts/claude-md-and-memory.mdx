@@ -1,0 +1,44 @@
+---
+title: CLAUDE.md and memory
+description: How Claude Code remembers your project between sessions, where CLAUDE.md files live, and what makes good instructions.
+lastVerified: 2026-11-24
+sidebar:
+  order: 3
+---
+
+**In one sentence:** Claude starts every session knowing nothing about your project except what is written in its memory files, above all `CLAUDE.md`, which Claude Code loads into the context automatically.
+
+## Where the files live
+
+| Scope | File | Shared with |
+| --- | --- | --- |
+| Organisation | Managed file set by IT (on Windows `C:\Program Files\ClaudeCode\CLAUDE.md`) | Everyone on the machine |
+| You | `~/.claude/CLAUDE.md` | Only you, in every project |
+| Project | `./CLAUDE.md` or `./.claude/CLAUDE.md` | Everyone, via the repository |
+| Local | `./CLAUDE.local.md` (add it to `.gitignore`) | Only you, in this project |
+
+Claude Code loads the files from the top of the folder tree down to the folder you started in. `CLAUDE.md` files in subfolders load only when Claude works in those folders. A file can pull in another with `@path/to/file`.
+
+## It is context, not a lock
+
+`CLAUDE.md` is read, not enforced: Claude follows it because it is in the context, the way a colleague follows a briefing. Things that must *never* happen belong in [permission rules](/concepts/plan-mode-and-permissions/) or hooks, not only in `CLAUDE.md`.
+
+Good instructions are short and concrete: the commands to run, the folder layout, the conventions that are not obvious from the code. The docs recommend keeping each file under about 200 lines; longer files cost context and are followed less reliably.
+
+## Useful commands
+
+- `/init` creates a `CLAUDE.md` from your codebase, or improves an existing one.
+- `/memory` opens your memory files for editing.
+
+## Auto memory and rules
+
+- **Auto memory** is on by default: Claude saves notes for itself about the project (preferences, corrections) and loads the start of its `MEMORY.md` index at each session.
+- **Rules** in `.claude/rules/` split instructions into topic files; a rule can declare `paths:` so it only loads when Claude touches matching files.
+
+## In the playbook
+
+[Phase 0](/phases/f0-setup/) creates the project's `CLAUDE.md` from template T0, and every phase updates it when a convention changes. After a [compaction](/concepts/context-window-and-tokens/) the project-root `CLAUDE.md` is re-read from disk, which is why rules belong there and not only in the chat.
+
+## Sources
+
+- [How Claude remembers your project](https://code.claude.com/docs/en/memory), Claude Code docs.

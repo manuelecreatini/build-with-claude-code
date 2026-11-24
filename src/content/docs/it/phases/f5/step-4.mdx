@@ -5,32 +5,36 @@ lastVerified: 2026-11-12
 phase: F5
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
 import Role from '~/components/Role.astro';
+
+<WhyThisStep>Test e review trovano ciò che il piano non aveva previsto, finché la modifica è ancora piccola e recente. I controlli verdi sono ciò che ti permette di fare merge senza leggere ogni riga.</WhyThisStep>
 
 I test non sono opzionali per le funzionalità critiche. Ogni fase si chiude solo con tutti i controlli verdi.
 
 | Livello | Cosa verifica | Strumento | Comando tipico | Quando |
 |---|---|---|---|---|
-| Tipi | Coerenza dei dati nel codice | TypeScript | `npm run typecheck` | Sempre, prima di ogni commit |
-| Lint | Errori comuni e stile | ESLint | `npm run lint` | Sempre |
+| Tipi | Coerenza dei dati nel codice | <Term id="typescript">TypeScript</Term> | `npm run typecheck` | Sempre, prima di ogni <Term id="commit">commit</Term> |
+| <Term id="lint">Lint</Term> | Errori comuni e stile | ESLint | `npm run lint` | Sempre |
 | Unit | Una funzione o un modulo isolato | Vitest | `npm test` | Regole, calcoli, trasformazioni |
-| Integrazione | Moduli che collaborano: API e database | Vitest + database di test | `npm test` | Ogni fase che tocca i dati |
-| End-to-end | Un percorso utente reale nel browser | Playwright | `npm run test:e2e` | Percorsi critici |
-| Build | Che l'app si compili per la produzione | Next.js | `npm run build` | Prima della pull request |
+| Integrazione | Moduli che collaborano: <Term id="api">API</Term> e database | Vitest + database di test | `npm test` | Ogni fase che tocca i dati |
+| <Term id="e2e-end-to-end">End-to-end</Term> | Un percorso utente reale nel browser | Playwright | `npm run test:e2e` | Percorsi critici |
+| Build | Che l'app si compili per la produzione | Next.js | `npm run build` | Prima della <Term id="pull-request-pr">pull request</Term> |
 | Manuale | Esperienza, testi, aspetto, mobile | Tu, con l'aiuto di Claude | `npm run dev`, URL di anteprima | Ogni fase |
 
 I tre livelli automatici principali formano la cosiddetta piramide dei test[^32]. I comandi esatti li fissa BP-01 e finiscono nel `CLAUDE.md`.
 
 ## Regressioni
 
-Una regressione[^33] si scopre eseguendo *tutta* la suite, non solo i test nuovi: Claude la esegue alla fine di ogni fase, e la CI la ripete su ogni pull request. Per ogni bug corretto si aggiunge prima un test che lo riproduce.
+Una <Term id="regressione">regressione</Term>[^33] si scopre eseguendo *tutta* la suite, non solo i test nuovi: Claude la esegue alla fine di ogni fase, e la CI la ripete su ogni pull request. Per ogni bug corretto si aggiunge prima un test che lo riproduce.
 
 ## Code review: due strumenti complementari
 
-- `/mattpocock-skills:code-review` <Role as="pocock" />: revisione su due assi, *standard* (regole del repository e un elenco classico di code smell) e *spec* (implementa fedelmente la issue?), con due subagent paralleli. È quella che `/implement` richiama a fine lavoro.
+- `/mattpocock-skills:code-review` <Role as="pocock" />: revisione su due assi, *standard* (regole del <Term id="repository">repository</Term> e un elenco classico di code smell) e *spec* (implementa fedelmente la <Term id="issue">issue</Term>?), con due <Term id="subagent">subagent</Term> paralleli. È quella che `/implement` richiama a fine lavoro.
 - `/code-review` <Role as="bundled" />: cerca bug di correttezza nelle differenze correnti; accetta un livello di effort e `--fix` per applicare le correzioni. Il livello `ultra` avvia una review multi-agente in cloud (3 esecuzioni gratuite con Pro e Max, poi a crediti).
 - `/simplify` <Role as="bundled" />: quattro agenti in parallelo cercano semplificazioni e riuso; non cerca bug.
-- `/security-review` <Role as="builtin" />: analizza le modifiche del branch rispetto al branch principale del remote alla ricerca di vulnerabilità. Obbligatoria nelle fasi che toccano login, permessi, pagamenti o dati personali.
+- `/security-review` <Role as="builtin" />: analizza le modifiche del <Term id="branch">branch</Term> rispetto al branch principale del remote alla ricerca di vulnerabilità. Obbligatoria nelle fasi che toccano login, permessi, pagamenti o dati personali.
 
 ## Test manuale
 
@@ -51,7 +55,7 @@ Claude compila nella pull request la tabella *criterio → evidenza* (nome del t
 |---|---|---|
 | Sito vetrina, landing | Tipi, lint, build, E2E di base (home, form di contatto). | Lighthouse, controllo dei link. |
 | Strumento interno, dashboard | Più: unit sui calcoli, integrazione sugli accessi ai dati. | E2E sui flussi principali, test con dati realistici. |
-| SaaS con login e pagamenti | TDD su autenticazione, permessi, pagamenti e integrità dei dati; integrazione su API e database; E2E da registrazione a pagamento ad azione chiave; `/security-review`. | `/code-review ultra` prima del lancio. |
+| SaaS con login e pagamenti | <Term id="tdd">TDD</Term> su <Term id="autenticazione-autorizzazione">autenticazione</Term>, permessi, pagamenti e integrità dei dati; integrazione su API e database; E2E da registrazione a pagamento ad azione chiave; `/security-review`. | `/code-review ultra` prima del lancio. |
 | App mobile (Expo) | Unit sulla logica; E2E sui flussi principali con uno strumento per mobile. | Test su dispositivi reali iOS e Android. |
 | App con funzioni AI | Test con il modello simulato; un set di valutazione (*eval*) per i prompt. | `/claude-api build-eval` per costruire il set di valutazione. |
 

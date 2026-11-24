@@ -1,0 +1,52 @@
+---
+title: Finestra di contesto e token
+description: Cosa "ha in mente" Claude durante una sessione, perché si riempie, e come compattazione, /compact e /clear la mantengono utile.
+lastVerified: 2026-11-24
+sidebar:
+  order: 1
+---
+
+**In una frase:** la finestra di contesto è tutto ciò che Claude vede contemporaneamente in una sessione (i tuoi messaggi, le sue risposte, i file letti, l'output dei comandi), misurato in token; quando si riempie, la qualità delle risposte cala.
+
+## I token
+
+I modelli non leggono parole ma *token*: pezzi di parole. In inglese un token vale circa tre quarti di parola; il codice e altre lingue, italiano compreso, usano più token per parola. Ogni modello ha un numero massimo di token che può considerare insieme: è la dimensione della finestra di contesto.
+
+## Cosa c'è nella finestra
+
+All'inizio di una sessione, prima che tu scriva qualcosa, Claude Code carica già:
+
+- i tuoi file `CLAUDE.md` e la memoria automatica (vedi [CLAUDE.md e memoria](/it/concepts/claude-md-and-memory/));
+- i nomi degli strumenti offerti dai server MCP collegati;
+- le brevi descrizioni delle skill installate (non le istruzioni complete).
+
+Poi, mentre lavori, si aggiungono ogni messaggio, ogni risposta, ogni file letto da Claude e ogni output di comando. Una sessione lunga che legge molti file riempie la finestra anche se hai scritto poco.
+
+## Tenerla d'occhio
+
+- `/context` mostra in tempo reale cosa occupa la finestra, per categoria.
+- Il [Passo 8 del build loop](/it/phases/f5/step-8/) del playbook dà soglie pratiche per capire quando intervenire.
+
+## Quando si riempie
+
+Claude Code **compatta automaticamente** quando ti avvicini al limite: sostituisce la conversazione con un riassunto e prosegue. Dopo la compattazione rilegge dal disco il `CLAUDE.md` della radice del progetto e i file modificati di recente: ciò che è scritto nel repository sopravvive, i dettagli che esistevano solo in chat forse no.
+
+Puoi anche intervenire tu:
+
+| Comando | Cosa fa | Quando usarlo |
+| --- | --- | --- |
+| `/compact focus on …` | Riassume subito, conservando ciò che indichi | A metà lavoro, quando la finestra è pesante ma non hai finito |
+| `/clear` | Apre una conversazione vuota nello stesso progetto | Quando passi a un lavoro non collegato |
+
+Alcuni modelli offrono una finestra molto più grande (fino a un milione di token). Una finestra più grande rimanda il problema, non lo elimina.
+
+## Cosa significa per te
+
+- Scrivi stato e decisioni nei file (`docs/STATUS.md`, ADR, issue) così una sessione nuova può ripartire da lì. Per questo il playbook chiude ogni fase con documentazione e passaggio di consegne.
+- Un compito per sessione funziona meglio di una sessione per tutto.
+- Se le risposte iniziano a ignorare istruzioni precedenti, controlla `/context` prima di dare la colpa al modello.
+
+## Fonti
+
+- [Explore the context window](https://code.claude.com/docs/en/context-window), documentazione di Claude Code.
+- [Commands](https://code.claude.com/docs/en/commands), documentazione di Claude Code (`/context`, `/compact`, `/clear`).

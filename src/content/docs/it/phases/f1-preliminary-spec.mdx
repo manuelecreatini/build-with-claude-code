@@ -5,6 +5,9 @@ lastVerified: 2026-11-12
 phase: F1
 ---
 
+import Term from '~/components/Term.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
 | Voce | Dettaglio |
@@ -15,6 +18,9 @@ import Role from '~/components/Role.astro';
 | **Strumenti** | Wispr Flow, dettatura di Windows o `/voice`; Claude Code; template T1 e T2. |
 | **Gate** | <Role as="gate" n={1} /> approvi la spec preliminare. |
 | **Tempo tipico** | 30–90 minuti. |
+
+<WhyThisStep>Un agente costruisce esattamente ciò che capisce. Tirare fuori tutta l'idea dalla testa prima di qualsiasi scelta tecnica è il momento più economico per scoprire cosa vuoi davvero.</WhyThisStep>
+
 
 ## Perché partire dalla voce
 
@@ -44,10 +50,10 @@ Salva il file, apri Claude Code nella cartella del progetto e incolla il prompt 
 
 ## Passo 4 — Rivedi, rispondi, approva
 
-Leggi la bozza (15 minuti). Rispondi alle domande aperte direttamente in chat, anche a voce; chiedi a Claude di aggiornare il documento. Due o tre giri bastano: non cercare la perfezione, la Fase 2 interrogherà a fondo ogni punto. Poi fai il commit: `docs: preliminary spec v0.1`.
+Leggi la bozza (15 minuti). Rispondi alle domande aperte direttamente in chat, anche a voce; chiedi a Claude di aggiornare il documento. Due o tre giri bastano: non cercare la perfezione, la Fase 2 interrogherà a fondo ogni punto. Poi fai il <Term id="commit">commit</Term>: `docs: preliminary spec v0.1`.
 
 :::note[Quando usare Claude Chat in questa fase]
-Per ricerca di mercato, analisi dei competitor, naming o una prima esplorazione dell'idea, usa un Project su claude.ai dedicato al prodotto. Salva le conclusioni utili in `docs/research/` (un file per tema) così entrano nel repository e Claude Code può usarle in Fase 2.
+Per ricerca di mercato, analisi dei competitor, naming o una prima esplorazione dell'idea, usa un Project su claude.ai dedicato al prodotto. Salva le conclusioni utili in `docs/research/` (un file per tema) così entrano nel <Term id="repository">repository</Term> e Claude Code può usarle in Fase 2.
 :::
 
 :::danger[GATE G1 · Approvi la spec preliminare]
@@ -67,3 +73,5 @@ Approva quando, rileggendo la bozza, riconosci la tua idea: problema, utenti, es
 - Dettare due minuti: senza storie e dettagli, la bozza sarà generica.
 - Accettare in silenzio le assunzioni marcate `[ASSUMPTION]`: sono proprio i punti da verificare.
 - Cercare di chiudere qui ogni decisione: è il lavoro della Fase 2.
+
+<QuizBlock phase="F1" />

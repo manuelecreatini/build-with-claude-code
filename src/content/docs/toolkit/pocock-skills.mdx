@@ -6,38 +6,40 @@ sidebar:
   order: 2
 ---
 
-**What they are.** The `mattpocock/skills` repository (MIT licence, about 307,000 stars on GitHub in November 2026) collects the skills that Matt Pocock, author of Total TypeScript and AI Hero, uses every day for "real engineering, not vibe coding". They are small, composable and adaptable, and they work with any model. They are not included in Claude Code: you have to install them (Phase 0, section 0.6).
+import Term from '~/components/Term.astro';
+
+**What they are.** The `mattpocock/skills` <Term id="repository">repository</Term> (MIT licence, about 307,000 stars on <Term id="git-github">GitHub</Term> in November 2026) collects the <Term id="skill">skills</Term> that Matt Pocock, author of Total <Term id="typescript">TypeScript</Term> and AI Hero, uses every day for "real engineering, not vibe coding". They are small, composable and adaptable, and they work with any model. They are not included in Claude Code: you have to install them (Phase 0, section 0.6).
 
 **Who invokes them.** The README splits them into two groups. *User-invoked* skills start only when you type them (`/name`) and orchestrate a workflow; *model-invoked* skills can be invoked by you, but Claude also uses them on its own when the task calls for it: they hold the reusable discipline.
 
 :::note[How names are written with the plugin]
-With the plugin every skill has the full name `/mattpocock-skills:<name>`; the short name `/<name>` works as long as no other command uses it. The only relevant collision: `code-review`, which in Claude Code is also a bundled skill. For Matt Pocock's version, type `/mattpocock-skills:code-review`.
+With the <Term id="plugin">plugin</Term> every skill has the full name `/mattpocock-skills:<name>`; the short name `/<name>` works as long as no other command uses it. The only relevant collision: `code-review`, which in Claude Code is also a bundled skill. For Matt Pocock's version, type `/mattpocock-skills:code-review`.
 :::
 
 | Skill | Who | What it is for | When in the playbook | Phase |
 |---|---|---|---|---|
 | **Engineering · invoked by you** |  |  |  |  |
-| `setup-matt-pocock-skills` ★ | You | Configures the repository's issue tracker, triage labels and the location of domain documents. | Once per repository, before the other engineering skills. | F0 |
+| `setup-matt-pocock-skills` ★ | You | Configures the repository's <Term id="issue">issue</Term> tracker, triage labels and the location of domain documents. | Once per repository, before the other engineering skills. | F0 |
 | `ask-matt` | You | Tells you which skill or workflow to use in your situation. | When you don't know where to start. | All |
-| `wayfinder` ★ | You | Plans work bigger than one session as a map of decision tickets on the tracker and resolves them one at a time. | Discovery of a new product; large features after launch. | F2, F8 |
-| `grill-with-docs` | You | An alignment interview that also builds the domain model: it updates `GLOSSARY.md` and the ADRs. | Planning in a single sitting, with existing code. | F2, F8 |
+| `wayfinder` ★ | You | Plans work bigger than one session as a map of <Term id="decision-ticket">decision tickets</Term> on the tracker and resolves them one at a time. | Discovery of a new product; large features after launch. | F2, F8 |
+| `grill-with-docs` | You | An alignment interview that also builds the domain model: it updates `GLOSSARY.md` and the <Term id="adr">ADRs</Term>. | Planning in a single sitting, with existing code. | F2, F8 |
 | `to-spec` ★ | You | Turns the conversation or the map into a spec published on the tracker, without an interview. | After the map. | F3 |
-| `to-tickets` ★ | You | Breaks a plan, spec or conversation into tracer-bullet tickets with dependencies, to approve before publishing. | Build phase plan. | F4 |
-| `implement` ★ | You | Implements a spec or ticket: `/tdd` at the agreed seams, frequent checks, review, commits. | Small, clear phases; its discipline is reused by prompt T8. | F5 |
-| `implement-spec` | You | Implements a whole spec on an integration branch, with parallel subagents on the frontier, and finishes with a review. | Advanced mode, with mature tests. | F5 |
+| `to-tickets` ★ | You | Breaks a plan, spec or conversation into tracer-bullet tickets with dependencies, to approve before publishing. | <Term id="build-phase-bp">Build phase</Term> plan. | F4 |
+| `implement` ★ | You | Implements a spec or ticket: `/tdd` at the agreed <Term id="seam">seams</Term>, frequent checks, review, <Term id="commit">commits</Term>. | Small, clear phases; its discipline is reused by prompt T8. | F5 |
+| `implement-spec` | You | Implements a whole spec on an integration <Term id="branch">branch</Term>, with parallel <Term id="subagent">subagents</Term> on the frontier, and finishes with a review. | Advanced mode, with mature tests. | F5 |
 | `triage` ★ | You | Moves issues through the state machine of triage roles. | Weekly review after launch. | F8 |
 | `improve-codebase-architecture` | You | Looks for opportunities to "deepen" modules, produces an HTML report and explores the chosen candidate with you. | Every few days in active development; every two weeks after launch. | F5, F8 |
 | `retro` | You | After a session, suggests improvements to the agent's environment: navigation, automated checks, standards, instruction files, tools. | After difficult sessions. | F5, F8 |
 | **Engineering · invoked by you or by Claude** |  |  |  |  |
 | `tdd` ★ | You or Claude | Test-driven development with a red-green-refactor cycle, one vertical slice at a time. | Logic, permissions, payments, data, bugs. | F5 |
 | `code-review` ★ | You or Claude | A review along two axes in parallel: repository standards and faithfulness to the spec. | End of every build phase (`/mattpocock-skills:code-review`). | F5 |
-| `diagnosing-bugs` ★ | You or Claude | A disciplined loop for hard bugs and performance regressions: reproduce, minimise, hypothesise, instrument, fix, regression test. | Every non-trivial bug. | F5, F8 |
+| `diagnosing-bugs` ★ | You or Claude | A disciplined loop for hard bugs and performance <Term id="regression">regressions</Term>: reproduce, minimise, hypothesise, instrument, fix, regression test. | Every non-trivial bug. | F5, F8 |
 | `prototype` | You or Claude | A throwaway prototype for a design question: an HTML file for state and logic, or switchable interface variants. | `prototype` tickets on the map; interface doubts. | F2, F3 |
-| `research` | You or Claude | Investigates a question against trustworthy primary sources and saves a Markdown file with citations, as a background agent. | `research` tickets on the map. | F2 |
+| `research` | You or Claude | Investigates a question against trustworthy primary sources and saves a <Term id="markdown">Markdown</Term> file with citations, as a background agent. | `research` tickets on the map. | F2 |
 | `domain-modeling` | You or Claude | Builds the domain model: checks terms, tries edge-case scenarios, updates the glossary and ADRs. | During grilling and discovery. | F2, F3 |
 | `codebase-design` | You or Claude | Vocabulary and discipline for designing deep modules behind small, testable interfaces. | Architecture; refactoring. | F3, F5 |
-| `pr` | You or Claude | The shape of a pull request body: visual summary, before-and-after evidence, merge danger. | Opening every pull request (template B3). | F5 |
-| `wizard` | You or Claude | Generates an interactive Bash procedure for the steps only a human can do: infrastructure, credentials, CI secrets, third-party dashboards, one-off migrations. | Long configurations; on Windows in Git Bash. | F5–F7 |
+| `pr` | You or Claude | The shape of a <Term id="pull-request-pr">pull request</Term> body: visual summary, before-and-after evidence, <Term id="merge">merge</Term> danger. | Opening every pull request (template B3). | F5 |
+| `wizard` | You or Claude | Generates an interactive Bash procedure for the steps only a human can do: infrastructure, credentials, CI <Term id="secret">secrets</Term>, third-party dashboards, one-off <Term id="migration">migrations</Term>. | Long configurations; on Windows in Git Bash. | F5–F7 |
 | **Productivity · invoked by you** |  |  |  |  |
 | `handoff` ★ | You | Compacts the conversation into a handoff document for another agent, in the temporary folder. | Session and phase boundaries (T11). | F5 |
 | `grill-me` | You | A relentless interview about a plan or an idea until every branch is resolved; for uses not tied to code. | Stress-testing an idea; business decisions. | F1, F2 |

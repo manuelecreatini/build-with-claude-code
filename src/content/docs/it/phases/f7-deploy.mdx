@@ -5,23 +5,30 @@ lastVerified: 2026-11-12
 phase: F7
 ---
 
+import Term from '~/components/Term.astro';
+import UnderTheHood from '~/components/UnderTheHood.astro';
+import WhyThisStep from '~/components/WhyThisStep.astro';
+import QuizBlock from '~/components/QuizBlock.astro';
 import Role from '~/components/Role.astro';
 
 | Voce | Dettaglio |
 |---|---|
 | **Obiettivo** | Portare il prodotto dall'ambiente locale alla produzione in modo sicuro, osservabile e reversibile. |
-| **Input** | Gate G7 superato; repository su GitHub; account dei servizi. |
-| **Output** | Applicazione online sul dominio; database di produzione con backup; CI/CD attiva; monitoring e alert; runbook di deploy e rollback. |
-| **Strumenti** | Vercel, Supabase, GitHub Actions, registrar del dominio, Sentry, PostHog, template T14, skill `/wizard`. |
+| **Input** | Gate G7 superato; <Term id="repository">repository</Term> su <Term id="git-github">GitHub</Term>; account dei servizi. |
+| **Output** | Applicazione online sul dominio; database di produzione con backup; <Term id="cicd">CI/CD</Term> attiva; monitoring e alert; runbook di deploy e rollback. |
+| **Strumenti** | Vercel, Supabase, GitHub Actions, registrar del dominio, Sentry, PostHog, template T14, <Term id="skill">skill</Term> `/wizard`. |
 | **Gate** | <Role as="gate" n={7} /> (già superato) più la tua conferma del passaggio in produzione. |
 | **Tempo tipico** | Da mezza giornata a una giornata. |
+
+<WhyThisStep>Andare online è reversibile solo se l'hai pianificato così. Ambienti separati, segreti fuori dal codice e un rollback provato trasformano il giorno del lancio in una routine.</WhyThisStep>
+
 
 ## Gli ambienti
 
 | Ambiente | Dove | A cosa serve | Dati |
 |---|---|---|---|
 | Locale | Il tuo PC (`npm run dev`) | Sviluppo e test di Claude. | Finti o di esempio. |
-| Anteprima (*preview*) | Un URL Vercel per ogni pull request | Provare ogni build phase prima del merge. | Di esempio, database di sviluppo. |
+| Anteprima (*preview*) | Un URL Vercel per ogni <Term id="pull-request-pr">pull request</Term> | Provare ogni <Term id="build-phase-bp">build phase</Term> prima del <Term id="merge">merge</Term>. | Di esempio, database di sviluppo. |
 | Staging (opzionale) | Un ambiente fisso identico alla produzione | Prove finali con configurazione reale. | Copia anonimizzata. |
 | Produzione | Il dominio pubblico | Gli utenti veri. | Reali, con backup. |
 
@@ -32,9 +39,9 @@ Per un MVP bastano locale, anteprima e produzione. Con Supabase usa **due proget
 | Servizio | Ideale per | Piano gratuito | Attenzione |
 |---|---|---|---|
 | Vercel | App Next.js e funzioni serverless; anteprime automatiche per ogni pull request. | Hobby: gratis ma solo per uso personale e non commerciale. | Un prodotto commerciale richiede Pro: 20 USD per utente al mese. |
-| Supabase | Postgres gestito con Auth, Storage, RLS. | Free: 2 progetti attivi; il progetto si mette in pausa dopo una settimana di inattività. | Pro da 25 USD al mese: niente pausa, backup giornalieri con 7 giorni di conservazione. |
+| Supabase | Postgres gestito con Auth, Storage, <Term id="rls">RLS</Term>. | Free: 2 progetti attivi; il progetto si mette in pausa dopo una settimana di inattività. | Pro da 25 USD al mese: niente pausa, backup giornalieri con 7 giorni di conservazione. |
 | Netlify, Cloudflare | Siti statici e app web leggere. | Disponibili. | Verifica limiti e uso commerciale. |
-| Railway, Render, Fly.io | Server sempre attivi, container, backend Python, lavori in background. | Variabili. | Costi legati alle risorse sempre accese. |
+| Railway, Render, Fly.io | Server sempre attivi, container, <Term id="frontend-backend">backend</Term> Python, lavori in background. | Variabili. | Costi legati alle risorse sempre accese. |
 | Expo EAS | Build e pubblicazione delle app mobile negli store. | Disponibile. | Servono gli account sviluppatore Apple e Google. |
 
 **Regola del playbook**: in sviluppo, piani gratuiti; al lancio di un prodotto commerciale, Vercel Pro e Supabase Pro (circa 45 USD al mese di base, più l'uso). Prezzi verificati a novembre 2026.
@@ -58,11 +65,17 @@ Le variabili d'ambiente[^41] separano la configurazione dal codice.
 | Vercel, Environment Variables | Valori separati per Development, Preview e Production. | Tu. |
 | GitHub, Settings, Secrets and variables, Actions | Segreti usati dalla CI. | Tu. |
 
-Regole: le variabili con prefisso `NEXT_PUBLIC_` finiscono nel browser, quindi mai segreti con quel prefisso; la chiave di servizio di Supabase (accesso completo al database) solo lato server; se un segreto finisce per errore in un commit o in chat, va ruotato subito, cioè revocato e sostituito.
+Regole: le variabili con prefisso `NEXT_PUBLIC_` finiscono nel browser, quindi mai segreti con quel prefisso; la chiave di servizio di Supabase (accesso completo al database) solo lato server; se un <Term id="segreto">segreto</Term> finisce per errore in un <Term id="commit">commit</Term> o in chat, va ruotato subito, cioè revocato e sostituito.
+
+<UnderTheHood title={"Dietro le quinte: dove vivono i segreti"}>
+
+Le variabili d'ambiente sono valori che la piattaforma di hosting passa alla tua app quando parte. Dato che le chiavi stanno lì e non nel repository, lo stesso codice può girare in preview con chiavi di test e in produzione con quelle vere, e un repository esposto non espone le tue chiavi. Approfondisci in [Deploy e ambienti](/it/concepts/deploy-and-environments/).
+
+</UnderTheHood>
 
 ## Passo 3 — Database di produzione
 
-**PowerShell · migrazioni con la Supabase CLI (esempio)**
+**PowerShell · migrazioni con la Supabase <Term id="cli-terminale">CLI</Term> (esempio)**
 ```powershell
 npx supabase login
 npx supabase link --project-ref <id-progetto-produzione>
@@ -70,7 +83,7 @@ npx supabase db push        # applica le migrazioni della cartella supabase/migr
 ```
 
 - Lo schema cambia solo tramite migrazioni[^42] versionate, mai a mano dal pannello.
-- Prima di ogni migrazione rischiosa (cancellare o rinominare colonne) verifica di avere un backup recente: è un'azione che approvi tu.
+- Prima di ogni <Term id="migrazione">migrazione</Term> rischiosa (cancellare o rinominare colonne) verifica di avere un backup recente: è un'azione che approvi tu.
 - Il piano Pro di Supabase include backup giornalieri conservati 7 giorni; il ripristino a un istante preciso è un componente aggiuntivo. Prova almeno una volta un ripristino.
 
 ## Passo 4 — CI/CD
@@ -100,12 +113,12 @@ jobs:
       - run: npm run build
 ```
 
-Chiedi a Claude di usare le versioni correnti delle action e di aggiungere i test E2E quando sono stabili. Poi <Role as="you" /> proteggi `main` da GitHub (Settings, Rules): merge solo tramite pull request e solo con CI verde. Il flusso diventa: pull request → CI e anteprima → tua revisione → merge → deploy in produzione automatico.
+Chiedi a Claude di usare le versioni correnti delle action e di aggiungere i test <Term id="e2e-end-to-end">E2E</Term> quando sono stabili. Poi <Role as="you" /> proteggi `main` da GitHub (Settings, Rules): merge solo tramite pull request e solo con CI verde. Il flusso diventa: pull request → CI e anteprima → tua revisione → merge → deploy in produzione automatico.
 
 ## Passo 5 — Dominio e DNS
 
 1. <Role as="you" /> Compra il dominio da un registrar (per esempio Cloudflare Registrar o Namecheap) o direttamente da Vercel.
-2. Aggiungi il dominio al progetto Vercel e imposta i record DNS[^44] che Vercel indica; il certificato HTTPS è automatico.
+2. Aggiungi il dominio al progetto Vercel e imposta i record <Term id="dns">DNS</Term>[^44] che Vercel indica; il certificato HTTPS è automatico.
 3. Reindirizza `www` sul dominio principale (o viceversa).
 4. Se l'app invia email, configura SPF, DKIM e DMARC con il provider di email: senza, i messaggi finiscono nello spam.
 
@@ -113,7 +126,7 @@ Chiedi a Claude di usare le versioni correnti delle action e di aggiungere i tes
 
 - [ ] Tutti i punti di sicurezza della Fase 6 chiusi.
 - [ ] Intestazioni di sicurezza HTTP e CORS configurate; limiti di frequenza su login e form.
-- [ ] Conferma email e politiche di accesso del servizio di autenticazione attive.
+- [ ] Conferma email e politiche di accesso del servizio di <Term id="autenticazione-autorizzazione">autenticazione</Term> attive.
 - [ ] Privacy policy, termini d'uso e, se usi cookie non essenziali o analytics che li richiedono, banner di consenso. Accordi sul trattamento dei dati (DPA) con i fornitori (Vercel, Supabase, Sentry, PostHog). Claude può preparare le bozze; per la versione finale rivolgiti a un legale.
 
 ## Passo 7 — Monitoring, analytics e uptime
@@ -121,7 +134,7 @@ Chiedi a Claude di usare le versioni correnti delle action e di aggiungere i tes
 | Strumento | Cosa fa | Piano gratuito | Imposta |
 |---|---|---|---|
 | Sentry | Cattura errori di frontend e backend con il contesto. | Developer: 1 utente, 5.000 errori al mese (verificato da fonte terza il 3/11/2026). | Alert email per ogni nuovo errore. |
-| PostHog | Analytics di prodotto, registrazioni di sessione, feature flag, tracciamento errori. | 1 milione di eventi, 5.000 registrazioni, 1 milione di richieste di feature flag, 100.000 eccezioni al mese; senza carta di credito. | Funnel del percorso principale. |
+| PostHog | Analytics di prodotto, registrazioni di sessione, <Term id="feature-flag">feature flag</Term>, tracciamento errori. | 1 milione di eventi, 5.000 registrazioni, 1 milione di richieste di feature flag, 100.000 eccezioni al mese; senza carta di credito. | Funnel del percorso principale. |
 | Vercel Analytics, Speed Insights | Traffico e prestazioni reali (Core Web Vitals). | Inclusi con limiti per piano. | Obiettivo LCP sotto 2,5 s. |
 | Uptime monitor | Controlla ogni pochi minuti che il sito risponda. | Disponibili (UptimeRobot, Better Stack). | Avviso su email e telefono. |
 
@@ -143,6 +156,8 @@ Segui la checklist T14. In sintesi: ultimo merge su `main`, deploy automatico, t
 - [ ] Runbook di deploy, rollback e incidenti nel repository; rollback provato.
 - [ ] Pagine legali online; checklist T14 completata; versione `v1.0.0` taggata.
 :::
+
+<QuizBlock phase="F7" />
 
 [^41]: **Variabile d'ambiente**: un valore di configurazione (indirizzo del database, chiave di un servizio) fornito all'app dall'esterno invece che scritto nel codice. Il file `.env.local` le contiene sul tuo PC; i pannelli di Vercel o GitHub le contengono online. Un **segreto** è una variabile che non deve mai essere pubblica.
 
