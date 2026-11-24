@@ -59,13 +59,16 @@ for (const theme of ['light', 'dark'] as const) {
       await page.addInitScript((t) => localStorage.setItem('starlight-theme', t), theme);
       await page.goto(path);
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-      // Expressive Code makes code blocks that scroll sideways focusable (tabindex, role) in an
-      // idle callback after load. Wait for it, or axe can run first and flag them.
+      // Let the page settle first, or axe can flag a passing state: Expressive Code makes code
+      // blocks that scroll sideways focusable in an idle callback, and Mermaid swaps its raw
+      // source <pre> for the diagram (marking it data-processed) after load.
       await page.evaluate(() => document.fonts.ready);
-      await page.waitForFunction(() =>
-        [...document.querySelectorAll('.expressive-code pre')].every(
-          (pre) => pre.scrollWidth <= pre.clientWidth || pre.hasAttribute('tabindex'),
-        ),
+      await page.waitForFunction(
+        () =>
+          [...document.querySelectorAll('.expressive-code pre')].every(
+            (pre) => pre.scrollWidth <= pre.clientWidth || pre.hasAttribute('tabindex'),
+          ) &&
+          [...document.querySelectorAll('pre.mermaid')].every((pre) => pre.hasAttribute('data-processed')),
       );
       // Only colour depends on the theme, so the dark pass checks contrast alone.
       const axe = new AxeBuilder({ page });

@@ -815,3 +815,10 @@ dfn:target {
 .bcc-why > p {
   margin: 0;
 }
+
+/* Mermaid's dark theme draws edge labels as #ccc on #585858 (4.4:1, under WCAG AA's 4.5:1).
+   Its styles sit inside the SVG behind an id selector, hence !important. */
+:root[data-theme='dark'] .mermaid .edgeLabel,
+:root[data-theme='dark'] .mermaid .edgeLabel p {
+  color: #e8e8e8 !important;
+}

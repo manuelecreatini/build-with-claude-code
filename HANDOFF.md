@@ -264,6 +264,11 @@ Decisions taken after step 8 (2026-11-24):
   without resizing and stays unreachable by keyboard. `src/scripts/code-scroll-focus.ts`
   (loaded from the Head override) re-runs the check after `document.fonts.ready`. An e2e test
   delays the fonts to cover it. CI showed this first as flaky axe failures.
+- **Fixed:** Mermaid's dark theme draws edge labels at 4.4:1 contrast. `custom.css` lightens
+  them (needs `!important`: Mermaid's styles sit in the SVG behind an id selector). All 12
+  diagram pages pass contrast in both themes.
+- The axe tests wait for fonts, Expressive Code and Mermaid (`pre.mermaid[data-processed]`)
+  before analysing; otherwise results depend on timing.
 - Axe catches roughly a third of real issues. A keyboard and screen-reader pass is still
   worth doing by hand.
 
