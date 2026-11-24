@@ -19,7 +19,7 @@ import { findRule } from './lib/page-map.mjs';
 const ROOT = process.cwd();
 const LOCALES = {
   en: { source: 'content-source/playbook.en.md', docs: 'src/content/docs' },
-  it: { source: 'indicative-playbook/AI-Assisted-Build-Playbook_IT.md', docs: 'src/content/docs/it' },
+  it: { source: 'content-source/playbook.it.md', docs: 'src/content/docs/it' },
 };
 const METRICS = ['headings', 'checkboxes', 'callouts', 'code', 'glossary'];
 

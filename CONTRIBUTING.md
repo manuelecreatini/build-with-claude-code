@@ -34,7 +34,7 @@ rewritten by the next run of the split script, so an edit made directly to it wi
 | You want to change | Edit | Then |
 | --- | --- | --- |
 | English playbook text (phases, method, templates, reference, toolkit) | `content-source/playbook.en.md` | `node scripts/split-playbook.mjs content-source/playbook.en.md en` |
-| Italian playbook text | See [The Italian original](#the-italian-original) below | |
+| Italian playbook text | `content-source/playbook.it.md` (not `indicative-playbook/`, see [below](#the-italian-original)) | `node scripts/split-playbook.mjs content-source/playbook.it.md it` |
 | How pages are generated (asides, role badges, anchors) | `scripts/split-playbook.mjs` | Re-run the script for **both** locales |
 | Which source section becomes which page | `scripts/lib/page-map.mjs` | Re-run the script for both locales |
 | Glossary entries | Appendix A in both playbook sources | Re-run the script. Terms that should not be linked automatically go in `NO_AUTOLINK` in `scripts/lib/glossary.mjs` |
@@ -52,9 +52,13 @@ committed pages differ from its output.
 ### The Italian original
 
 `indicative-playbook/AI-Assisted-Build-Playbook_IT.md` is the original playbook the site was built
-from, and it is kept unchanged as the reference text. To fix something in the Italian pages,
-open an issue (or a pull request that describes the fix) and the maintainer will decide how to
-apply it. Rendering problems in the Italian pages are fixed in the scripts, not in the source.
+from. It is kept unchanged as a record of the original text, and nothing reads it at build time.
+
+The Italian pages are generated from `content-source/playbook.it.md`, a working copy that started
+identical to the original. Fix Italian text there, exactly as you would fix English text in
+`playbook.en.md`. If the fix changes meaning (not just wording), make the same fix in the English
+source, or write "translation needed" in the pull request. Rendering problems are fixed in the
+scripts, not in either source.
 
 ## Rules
 

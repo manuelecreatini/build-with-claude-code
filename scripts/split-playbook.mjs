@@ -4,7 +4,7 @@
  *
  *   node scripts/split-playbook.mjs <source.md> <locale>     (locale: it | en)
  *
- * IT source: indicative-playbook/AI-Assisted-Build-Playbook_IT.md (canonical, never edited)
+ * IT source: content-source/playbook.it.md (working copy of indicative-playbook/, which stays unchanged)
  * EN source: content-source/playbook.en.md (translation of the IT source, same structure)
  *
  * What it does:

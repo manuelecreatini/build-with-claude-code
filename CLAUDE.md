@@ -20,7 +20,8 @@ An open-source, bilingual (English default, Italian) interactive playbook that g
 
 ## Layout
 
-- `indicative-playbook/` — the original Italian playbook. Canonical source; do not edit it to fix the site.
+- `indicative-playbook/` — the original Italian playbook, kept unchanged for reference. Never edit it; nothing reads it at build time.
+- `content-source/` — the sources the pages are generated from: `playbook.en.md` and `playbook.it.md` (the Italian working copy, where Italian fixes go). Re-run `scripts/split-playbook.mjs` after editing.
 - `src/content/docs/` — pages (MDX). Every page has `title`, `description` and `lastVerified` frontmatter.
 - `src/data/` — templates, glossary, checklist, quizzes (typed TS modules, one export per locale).
 - `src/components/` — Astro components used inside MDX (`Role`, `GateCard`, `UnderTheHood`, `WhyThisStep`, `Term`, `LastVerified`).

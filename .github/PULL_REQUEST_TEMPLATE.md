@@ -5,7 +5,7 @@
 ## Checklist
 
 - [ ] **Both languages:** the change is mirrored in English and Italian, or this PR says "translation needed".
-- [ ] **Generated pages:** I edited the source (`content-source/playbook.en.md`, `scripts/split-playbook.mjs`, `scripts/teaching-inserts.mjs`…) and re-ran the split script, not the generated `.mdx` files.
+- [ ] **Generated pages:** I edited the source (`content-source/playbook.en.md` or `playbook.it.md`, `scripts/split-playbook.mjs`, `scripts/teaching-inserts.mjs`…) and re-ran the split script, not the generated `.mdx` files.
 - [ ] **Facts:** claims about Claude Code, skills or prices link a primary source below, and `lastVerified` was bumped only on pages I re-checked.
 - [ ] **Interface text** is in `src/lib/i18n.ts` in both `en` and `it`.
 - [ ] **No tracking:** no analytics, trackers or externally loaded scripts or fonts.

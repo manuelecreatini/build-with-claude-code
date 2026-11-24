@@ -69,7 +69,10 @@ Most pages are **generated** from two Markdown sources by `scripts/split-playboo
 | Locale | Source | Output |
 | --- | --- | --- |
 | English | `content-source/playbook.en.md` | `src/content/docs/*` |
-| Italian (the original) | `indicative-playbook/AI-Assisted-Build-Playbook_IT.md` | `src/content/docs/it/*` |
+| Italian | `content-source/playbook.it.md` | `src/content/docs/it/*` |
+
+The Italian text is the original. `indicative-playbook/` keeps it exactly as first written;
+`content-source/playbook.it.md` is the working copy that receives fixes.
 
 Generated pages start with a `# Generated from …` comment in their frontmatter: edit the
 source, not the page. The homepages, the concept pages (`concepts/`) and the tools pages
@@ -77,8 +80,8 @@ source, not the page. The homepages, the concept pages (`concepts/`) and the too
 change goes.
 
 ```
-content-source/       English playbook source
-indicative-playbook/  Italian original (kept unchanged)
+content-source/       playbook sources (English and Italian)
+indicative-playbook/  Italian original, kept unchanged for reference
 scripts/              split script, teaching inserts, MDX checker
 src/content/docs/     pages (English at the root, Italian under it/)
 src/components/       Astro components used in pages (Role, GateCard, Term, ...)

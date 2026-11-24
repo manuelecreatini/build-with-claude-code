@@ -24,7 +24,7 @@ jobs:
       - name: Generated pages match their sources
         run: |
           node scripts/split-playbook.mjs content-source/playbook.en.md en
-          node scripts/split-playbook.mjs indicative-playbook/AI-Assisted-Build-Playbook_IT.md it
+          node scripts/split-playbook.mjs content-source/playbook.it.md it
           git diff --exit-code -- src/content/docs src/data \
             || { echo "::error::Generated files differ from the split script's output. Edit the source and re-run the split script, then commit both."; exit 1; }
 
