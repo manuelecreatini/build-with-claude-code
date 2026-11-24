@@ -34,12 +34,39 @@ const isKnownException = (v: Violation) =>
 // Axe on a long page takes a while, more so with other tests running beside it.
 test.describe.configure({ timeout: 60_000 });
 
+test('code blocks that scroll sideways stay focusable when fonts load late', async ({ page }) => {
+  await page.route(/\.woff2?$/, async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 2500));
+    await route.continue();
+  });
+  await page.goto('/it/phases/f0-setup/');
+  await page.evaluate(() => document.fonts.ready);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          [...document.querySelectorAll('.expressive-code pre')].filter(
+            (pre) => pre.scrollWidth > pre.clientWidth && !pre.hasAttribute('tabindex'),
+          ).length,
+      ),
+    )
+    .toBe(0);
+});
+
 for (const theme of ['light', 'dark'] as const) {
   for (const path of PAGES) {
     test(`${path} has no axe violations (${theme})`, async ({ page }) => {
       await page.addInitScript((t) => localStorage.setItem('starlight-theme', t), theme);
       await page.goto(path);
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      // Expressive Code makes code blocks that scroll sideways focusable (tabindex, role) in an
+      // idle callback after load. Wait for it, or axe can run first and flag them.
+      await page.evaluate(() => document.fonts.ready);
+      await page.waitForFunction(() =>
+        [...document.querySelectorAll('.expressive-code pre')].every(
+          (pre) => pre.scrollWidth <= pre.clientWidth || pre.hasAttribute('tabindex'),
+        ),
+      );
       // Only colour depends on the theme, so the dark pass checks contrast alone.
       const axe = new AxeBuilder({ page });
       if (theme === 'light') axe.withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']);

@@ -259,6 +259,11 @@ Decisions taken after step 8 (2026-11-24):
 - **Accepted:** Starlight's search button fails axe's label-in-name rule (name "Search",
   visible "Search" + "Ctrl K"). The label is the start of the name and the shortcut is in
   `aria-keyshortcuts`, so the test excludes only that rule on only that element.
+- **Fixed:** Expressive Code makes sideways-scrolling code blocks focusable, but only re-checks
+  when a block's box resizes. When web fonts arrive late, a block can start overflowing
+  without resizing and stays unreachable by keyboard. `src/scripts/code-scroll-focus.ts`
+  (loaded from the Head override) re-runs the check after `document.fonts.ready`. An e2e test
+  delays the fonts to cover it. CI showed this first as flaky axe failures.
 - Axe catches roughly a third of real issues. A keyboard and screen-reader pass is still
   worth doing by hand.
 
