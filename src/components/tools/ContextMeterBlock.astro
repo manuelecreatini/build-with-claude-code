@@ -1,0 +1,9 @@
+---
+/** Server wrapper for the context meter: zones and lists extracted from template T12. */
+import ContextMeter from '~/islands/ContextMeter';
+import { pathFor, toolsData } from '~/data/tools';
+import { localeFrom } from '~/lib/i18n';
+
+const locale = localeFrom(Astro.currentLocale);
+---
+<ContextMeter client:visible locale={locale} context={toolsData[locale].context} t12Href={pathFor(locale, 'templates/t12')} />

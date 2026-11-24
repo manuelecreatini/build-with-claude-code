@@ -1,0 +1,26 @@
+---
+title: "AI coach"
+description: "Ask questions about the playbook and your project. Claude answers using the site's pages, with your own Anthropic API key: the key goes from your browser straight to Anthropic."
+lastVerified: 2026-11-24
+sidebar:
+  order: 6
+---
+
+import CoachBlock from '~/components/tools/CoachBlock.astro';
+
+The coach is Claude, primed with a map of this site and, if you want, the text of one page and the project details you entered in the [start wizard](/tools/start-wizard/) and the [build loop companion](/tools/build-loop/). Ask it what a step means, what to do next, or how a phase applies to your idea.
+
+It is optional and it costs money: it uses **your own Anthropic API key**, and what you use is billed to your Anthropic account at the [standard API prices](https://platform.claude.com/docs/en/about-claude/pricing). You create a key in the [Claude Console](https://console.anthropic.com/). A Claude Pro or Max subscription does not include API usage.
+
+:::note[Your key stays yours]
+This site has no server. The key and your questions go from this browser directly to `api.anthropic.com`, and nowhere else. By default the key is forgotten when you close the tab; tick "Remember the key on this device" to keep it in this browser's storage. Anyone who uses this browser profile could then use it, so don't tick it on a shared computer. You can remove it at any time, and revoke it in the Console.
+:::
+
+<CoachBlock />
+
+## Good to know
+
+- **Each conversation is fixed.** The model, the page and the project details you choose are sent with the first question and stay the same until you start a new conversation. A conversation holds up to 30 questions.
+- **The coach can be wrong.** It is told to stick to the playbook and to say when something is not covered, but check important steps against the pages it links to. For exact Claude Code commands, the [official documentation](https://code.claude.com/docs) is the reference.
+- **Fallback models.** With Claude Opus and Claude Sonnet, server-side fallback is on: if the model declines a question for policy reasons, Anthropic retries it on a substitute model, and the answer says so.
+- **Don't paste secrets.** Never put passwords, API keys or customer data in a question.

@@ -1,0 +1,26 @@
+---
+title: "Coach AI"
+description: "Fai domande sul playbook e sul tuo progetto. Claude risponde usando le pagine del sito, con la tua chiave API Anthropic: la chiave va dal tuo browser direttamente ad Anthropic."
+lastVerified: 2026-11-24
+sidebar:
+  order: 6
+---
+
+import CoachBlock from '~/components/tools/CoachBlock.astro';
+
+Il coach è Claude, preparato con una mappa di questo sito e, se vuoi, con il testo di una pagina e i dati del progetto che hai inserito nel [wizard di partenza](/it/tools/start-wizard/) e nel [compagno del build loop](/it/tools/build-loop/). Chiedigli cosa significa un passo, cosa fare dopo, o come una fase si applica alla tua idea.
+
+È facoltativo e ha un costo: usa **la tua chiave API Anthropic**, e quello che usi viene addebitato sul tuo account Anthropic ai [prezzi standard delle API](https://platform.claude.com/docs/en/about-claude/pricing). La chiave si crea nella [Claude Console](https://console.anthropic.com/). Un abbonamento Claude Pro o Max non include l'uso delle API.
+
+:::note[La chiave resta tua]
+Questo sito non ha un server. La chiave e le tue domande vanno da questo browser direttamente a `api.anthropic.com`, e da nessun'altra parte. Di default la chiave viene dimenticata quando chiudi la scheda; spunta "Ricorda la chiave su questo dispositivo" per tenerla nello storage di questo browser. Chiunque usi questo profilo del browser potrebbe allora usarla, quindi non spuntarlo su un computer condiviso. Puoi rimuoverla in qualsiasi momento, e revocarla nella Console.
+:::
+
+<CoachBlock />
+
+## Buono a sapersi
+
+- **Ogni conversazione è fissa.** Il modello, la pagina e i dati del progetto che scegli vengono inviati con la prima domanda e restano gli stessi finché non inizi una nuova conversazione. Una conversazione contiene fino a 30 domande.
+- **Il coach può sbagliare.** Gli viene chiesto di attenersi al playbook e di dire quando qualcosa non è coperto, ma verifica i passi importanti sulle pagine che ti indica. Per i comandi esatti di Claude Code, il riferimento è la [documentazione ufficiale](https://code.claude.com/docs).
+- **Modelli di fallback.** Con Claude Opus e Claude Sonnet il fallback lato server è attivo: se il modello rifiuta una domanda per motivi di policy, Anthropic la riprova su un modello sostitutivo, e la risposta lo segnala.
+- **Non incollare segreti.** Non mettere mai password, chiavi API o dati dei clienti in una domanda.

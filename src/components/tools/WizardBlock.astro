@@ -1,0 +1,14 @@
+---
+/** Server wrapper for the start-your-build wizard. */
+import Wizard from '~/islands/Wizard';
+import { pathFor } from '~/data/tools';
+import { localeFrom } from '~/lib/i18n';
+
+const locale = localeFrom(Astro.currentLocale);
+const links = {
+  f0: pathFor(locale, 'phases/f0-setup'),
+  templates: pathFor(locale, 'tools/template-builder'),
+  tracker: pathFor(locale, 'tools/tracker'),
+};
+---
+<Wizard client:visible locale={locale} links={links} />

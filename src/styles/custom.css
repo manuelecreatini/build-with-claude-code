@@ -143,3 +143,506 @@ dfn:target {
   color: var(--sl-color-text-accent);
   cursor: pointer;
 }
+
+/* Interactive tools (src/islands). They sit inside Starlight's content styles. */
+:root {
+  --bcc-ok: #15803d;
+  --bcc-warn: #a16207;
+  --bcc-hot: #c2410c;
+}
+:root[data-theme='dark'] {
+  --bcc-ok: #4ade80;
+  --bcc-warn: #facc15;
+  --bcc-hot: #fb923c;
+}
+.bcc-tool {
+  margin-block-start: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.75rem;
+}
+.bcc-tool .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.bcc-muted {
+  color: var(--sl-color-gray-3);
+  font-size: var(--sl-text-sm);
+}
+.bcc-error {
+  color: var(--bcc-gate);
+  font-weight: 600;
+}
+.bcc-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.bcc-btn {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sl-color-white);
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  cursor: pointer;
+}
+.bcc-btn:hover:not(:disabled) {
+  border-color: var(--sl-color-accent);
+}
+.bcc-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.bcc-btn--primary {
+  border-color: var(--sl-color-accent);
+  background: var(--sl-color-accent);
+  color: var(--sl-color-black);
+}
+.bcc-btn--danger {
+  border-color: var(--bcc-gate);
+  color: var(--bcc-gate);
+}
+.bcc-btn--small {
+  padding: 0.15rem 0.7rem;
+}
+.bcc-btn code {
+  font-size: 0.85em;
+}
+
+/* Form fields. */
+.bcc-field-group {
+  display: grid;
+  gap: 0.75rem;
+}
+.bcc-field-group--row {
+  grid-template-columns: 9rem 1fr;
+}
+@media (max-width: 30rem) {
+  .bcc-field-group--row {
+    grid-template-columns: 1fr;
+  }
+}
+.bcc-field {
+  display: grid;
+  gap: 0.25rem;
+}
+.bcc-field > span {
+  font-weight: 600;
+  font-size: var(--sl-text-sm);
+}
+.bcc-tool input[type='text'],
+.bcc-tool input[type='number'],
+.bcc-tool input[type='password'],
+.bcc-tool textarea,
+.bcc-tool select {
+  width: 100%;
+  min-width: 0;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 0.4rem;
+  background: var(--sl-color-black);
+  color: var(--sl-color-white);
+  font: inherit;
+}
+.bcc-tool input[type='checkbox'],
+.bcc-tool input[type='radio'] {
+  accent-color: var(--sl-color-accent);
+  inline-size: 1.05em;
+  block-size: 1.05em;
+  flex: none;
+}
+.bcc-choices {
+  border: 0;
+  padding: 0;
+  margin-inline: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.bcc-choices--inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+}
+.bcc-choices legend {
+  font-weight: 600;
+  font-size: var(--sl-text-sm);
+  margin-block-end: 0.25rem;
+}
+.bcc-choice {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.bcc-choice:has(input:checked) {
+  border-color: var(--sl-color-accent);
+  background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+}
+.bcc-choice > input {
+  margin-block-start: 0.25rem;
+}
+.bcc-choice small {
+  display: block;
+  color: var(--sl-color-gray-3);
+}
+
+/* Persistent checklists. */
+.bcc-tool ul.bcc-checks {
+  list-style: none;
+  padding-inline-start: 0;
+}
+.bcc-checks li + li {
+  margin-block-start: 0.35rem;
+}
+.bcc-checks label {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  cursor: pointer;
+}
+.bcc-checks input {
+  margin-block-start: 0.3rem;
+}
+.bcc-checks input:checked + span {
+  color: var(--sl-color-gray-3);
+  text-decoration: line-through;
+  text-decoration-color: var(--sl-color-gray-4);
+}
+
+/* Progress bar (tracker). */
+.bcc-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.bcc-progress progress {
+  flex: 1;
+  height: 0.6rem;
+  accent-color: var(--bcc-ok);
+}
+
+/* Data controls (export / import / reset). */
+.bcc-data {
+  margin-block-start: 1.5rem;
+  padding-block-start: 1rem;
+  border-block-start: 1px solid var(--sl-color-gray-5);
+}
+
+/* Tracker. */
+.bcc-phase {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.9rem;
+}
+.bcc-phase > summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.bcc-phase__count {
+  font-weight: 400;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+  white-space: nowrap;
+}
+.bcc-phase[data-complete] {
+  border-color: var(--bcc-ok);
+}
+.bcc-phase[data-complete] .bcc-phase__count {
+  color: var(--bcc-ok);
+}
+.bcc-phase h3 {
+  font-size: var(--sl-text-base);
+}
+
+/* Wizard. */
+.bcc-wizard__step {
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.bcc-wizard h2:focus {
+  outline: none;
+}
+.bcc-plan__big {
+  font-size: var(--sl-text-2xl);
+  margin-inline-end: 0.25rem;
+}
+.bcc-plan__src {
+  font-size: var(--sl-text-sm);
+  white-space: nowrap;
+}
+.bcc-plan__stack > div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 14rem) 1fr;
+  gap: 0.75rem;
+  padding-block: 0.3rem;
+  border-block-end: 1px solid var(--sl-color-gray-6);
+}
+@media (max-width: 30rem) {
+  .bcc-plan__stack > div {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+.bcc-plan__stack dt {
+  font-weight: 600;
+}
+.bcc-plan__stack dd {
+  margin: 0;
+}
+.bcc-plan__tests p + p {
+  margin-block-start: 0.15rem;
+}
+
+/* Template builder. */
+.bcc-tpl__out {
+  max-height: 32rem;
+  overflow: auto;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  white-space: pre-wrap;
+  font-size: var(--sl-text-sm);
+}
+.bcc-tpl__out mark {
+  background: color-mix(in srgb, var(--bcc-warn) 30%, transparent);
+  color: inherit;
+  border-radius: 0.2rem;
+}
+
+/* Build loop. */
+.bcc-tool ol.bcc-steps {
+  list-style: none;
+  padding-inline-start: 0;
+}
+.bcc-step {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+}
+.bcc-step + .bcc-step {
+  margin-block-start: 0.3rem;
+}
+.bcc-step__mark {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 1.6rem;
+  block-size: 1.6rem;
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 50%;
+  font-size: var(--sl-text-xs);
+  font-weight: 600;
+}
+.bcc-step--done .bcc-step__mark {
+  border-color: var(--bcc-ok);
+  color: var(--bcc-ok);
+}
+.bcc-step--current .bcc-step__mark {
+  border-color: var(--sl-color-accent);
+  background: var(--sl-color-accent);
+  color: var(--sl-color-black);
+}
+.bcc-step--done a {
+  color: var(--sl-color-gray-3);
+}
+.bcc-step__here {
+  font-weight: 600;
+}
+.bcc-loop__now {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--sl-color-accent) 8%, transparent);
+}
+.bcc-loop__gate {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.5rem 0.75rem;
+  border-inline-start: 4px solid var(--bcc-gate);
+  background: color-mix(in srgb, var(--bcc-gate) 8%, transparent);
+  font-weight: 600;
+  cursor: pointer;
+}
+.bcc-loop__gate input {
+  margin-block-start: 0.3rem;
+}
+
+/* Context meter: zone 0 ok, 1 warn, 2 hot, 3 over budget. */
+.bcc-ctx__inputs {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  gap: 0.75rem;
+  align-items: center;
+}
+.bcc-ctx__inputs input[type='range'] {
+  accent-color: var(--sl-color-accent);
+}
+.bcc-ctx__bar {
+  position: relative;
+  height: 0.6rem;
+  border-radius: 999px;
+  background: var(--sl-color-gray-6);
+  overflow: hidden;
+}
+.bcc-ctx__fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  background: var(--bcc-ok);
+}
+.bcc-ctx[data-zone='1'] .bcc-ctx__fill { background: var(--bcc-warn); }
+.bcc-ctx[data-zone='2'] .bcc-ctx__fill { background: var(--bcc-hot); }
+.bcc-ctx[data-zone='3'] .bcc-ctx__fill { background: var(--bcc-gate); }
+.bcc-ctx__tick {
+  position: absolute;
+  inset-block: 0;
+  inline-size: 2px;
+  background: var(--sl-color-gray-3);
+  z-index: 1;
+}
+.bcc-tool ol.bcc-zones {
+  list-style: none;
+  padding-inline-start: 0;
+}
+.bcc-zone {
+  padding: 0.4rem 0.75rem;
+  border-inline-start: 4px solid transparent;
+  border-radius: 0 0.4rem 0.4rem 0;
+  color: var(--sl-color-gray-3);
+}
+.bcc-zone + .bcc-zone {
+  margin-block-start: 0.25rem;
+}
+.bcc-zone--0 { border-color: var(--bcc-ok); }
+.bcc-zone--1 { border-color: var(--bcc-warn); }
+.bcc-zone--2 { border-color: var(--bcc-hot); }
+.bcc-zone--3 { border-color: var(--bcc-gate); }
+.bcc-zone[aria-current] {
+  color: var(--sl-color-white);
+  font-weight: 600;
+  background: var(--sl-color-gray-6);
+}
+
+/* AI coach */
+.bcc-coach {
+  display: grid;
+  gap: 0.75rem;
+}
+.bcc-coach > * {
+  margin-block: 0;
+}
+.bcc-coach .bcc-field > label {
+  font-weight: 600;
+  font-size: var(--sl-text-sm);
+}
+.bcc-coach .bcc-row input {
+  flex: 1 1 14rem;
+  inline-size: auto;
+}
+.bcc-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: var(--sl-text-sm);
+}
+.bcc-check input {
+  margin-block-start: 0.2em;
+}
+.bcc-coach__settings {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+}
+.bcc-coach__settings > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.bcc-coach__settings[open] {
+  display: grid;
+  gap: 0.75rem;
+}
+.bcc-coach__settings > * {
+  margin-block: 0;
+}
+.bcc-coach__privacy {
+  padding: 0.5rem 0.75rem;
+  border-inline-start: 4px solid var(--bcc-ok);
+  background: var(--sl-color-gray-6);
+  font-size: var(--sl-text-sm);
+}
+.bcc-coach__log {
+  display: grid;
+  gap: 0.75rem;
+}
+.bcc-coach__log:empty {
+  display: none;
+}
+.bcc-coach__turn {
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.5rem;
+  border-inline-start: 4px solid var(--bcc-claude);
+  background: var(--sl-color-gray-7, var(--sl-color-gray-6));
+}
+.bcc-coach__turn--user {
+  border-color: var(--bcc-you);
+}
+.bcc-coach__who {
+  font-size: var(--sl-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--sl-color-gray-3);
+}
+.bcc-coach__q {
+  white-space: pre-wrap;
+  margin-block: 0.25rem 0;
+}
+.bcc-coach__a > :first-child {
+  margin-block-start: 0.25rem;
+}
+.bcc-coach__a h3,
+.bcc-coach__a h4 {
+  font-size: var(--sl-text-base);
+}
+.bcc-coach__code {
+  overflow-x: auto;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.4rem;
+  background: var(--sl-color-black);
+  font-size: var(--sl-text-sm);
+}
+.bcc-coach__thinking {
+  color: var(--sl-color-gray-3);
+  font-style: italic;
+}
+.bcc-coach__note {
+  font-size: var(--sl-text-sm);
+  color: var(--bcc-warn);
+}
+.bcc-coach__meta {
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3);
+}
+.bcc-coach__ask {
+  display: grid;
+  gap: 0.4rem;
+}
+.bcc-coach__ask > label {
+  font-weight: 600;
+  font-size: var(--sl-text-sm);
+}

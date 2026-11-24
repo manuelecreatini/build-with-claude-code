@@ -94,27 +94,58 @@ The `group()` helper in `astro.config.mjs` already does this.
     https://build-with-claude-code-playbook.vercel.app. It auto-deploys on every push to `main`.
   - Commit trailer: `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
 
+- Step 5, interactive tools (not yet committed):
+  - State: `src/lib/store.ts` (one localStorage key `bcc:v1`, `normalize()` validates every
+    load and import, export/import as JSON, cross-tab sync) and `src/lib/useStore.ts`.
+  - Data: `scripts/lib/tools-data.mjs` (called by the split script) writes
+    `src/data/tools/{en,it}.json`: the master checklist, the DoD of each phase and the T12 lists.
+    Item ids are positional and shared across locales, so ticks survive a language switch.
+    The wizard heuristics are in `src/data/wizard.ts`, copied from the playbook tables, with
+    links to their source headings.
+  - Islands: `Wizard`, `Tracker`, `TemplateBuilder`, `BuildLoop`, `ContextMeter` (plus shared
+    parts in `src/islands/parts/`). Each has an Astro wrapper in `src/components/tools/` that
+    computes the props at build time.
+  - Pages: `src/content/docs/{,it/}tools/` (overview plus five tools), sidebar group "Tools" /
+    "Strumenti" after "Start here". CSS at the end of `src/styles/custom.css`.
+  - Tests: Vitest 58 (store, tools data parity, wizard anchors and `planFor`, `fill`,
+    `advance`, `zoneOf`); Playwright 14 (adds the five tools and the overview). 125 pages built.
+  - Not done (optional): linking to the tools from the generated checklist, T12 and F5 pages.
+- **AI coach** (step 6, 2026-11-24, uncommitted). Each visitor brings their own Anthropic key.
+  - `src/lib/coach.ts` (pure logic):
+    - Model list: Opus 5.5 is the default; Sonnet 5.5 and Haiku 5.5 are the alternatives.
+    - `buildRequest`: adaptive thinking and `max_tokens` 16000. Opus and Sonnet also get
+      server-side fallback (`server-side-fallback-2026-07-01` with `fallbacks: 'default'`);
+      Haiku does not support it.
+    - The system prompt is built in `basePrompt`, a cached base block plus a site map, then
+      `systemBlocks`, which adds the optional project and page blocks.
+    - `echoContent`: preserved thinking. It drops the non-text blocks that come before the last
+      `fallback` block.
+    - Also: `errorKind` and `pageTextFromHtml`.
+  - `src/lib/coachKey.ts`:
+    - The key lives in `bcc:coach-key`, in sessionStorage by default, or localStorage if the
+      visitor chooses "remember". It is never stored in the tools state and never exported.
+    - Settings live in `bcc:coach-settings`.
+  - `src/islands/Coach.tsx` and `parts/Markdown.tsx`:
+    - `parts/Markdown.tsx` is a safe Markdown renderer with no raw HTML. Links are limited to
+      site paths and `https`.
+    - Model, page and project details are locked for the whole conversation, because the
+      system prompt is frozen per conversation.
+    - Limit: 30 questions per conversation.
+    - The page context is fetched same-origin from `?page=<slug>`.
+  - Build-time wrapper: `src/components/tools/CoachBlock.astro`.
+  - Pages: `src/content/docs/{,it/}tools/coach.mdx`. The tools overview now lists six tools.
+  - Strings: 42 `coach.*` strings in i18n.
+  - The SDK (1.12) sends the key as `Authorization: Bearer …`, not `x-api-key`.
+  - Tests:
+    - Vitest: 75 in total, 17 for the coach.
+    - Playwright: 16 in total. `coach.spec.ts` mocks api.anthropic.com and covers: no request
+      goes out without a key; the key goes only to api.anthropic.com; streaming; refusal; 401.
+    - 127 pages built.
+
 ## Next steps (in order)
 
-1–4. Done (CI, English translation + OS tabs, homepages, teaching layer). See above.
-5. **Interactive tools** (`src/islands/`), with state in `src/lib/store.ts` (localStorage plus
-   JSON export/import):
-   - start-your-build Wizard
-   - Tracker with the master checklist and Definition of Done for each phase
-   - TemplateBuilder, which reads `src/data/templates/<locale>/manifest.json`
-   - BuildLoop companion (the 8 steps plus gates G5/G6)
-   - ContextMeter, based on T12's context zones
-6. **AI coach** (bring your own key). Use `@anthropic-ai/sdk` with
-   `dangerouslyAllowBrowser: true`.
-   - Model: default `claude-opus-5-5`; offer `claude-sonnet-5-5` and `claude-haiku-5-5` in
-     Settings.
-   - Request: stream and call `finalMessage()`; use `thinking: {type:"adaptive"}`. Do not set
-     budget_tokens or temperature.
-   - Errors and refusals: handle errors in this order: Authentication, RateLimit, BadRequest,
-     APIError. Also handle `stop_reason === "refusal"`.
-   - Key handling: the key stays only in localStorage (with a session-only option), goes only
-     to api.anthropic.com, and is never logged.
-   - Re-load the `claude-api` skill before writing this code.
+1–6. Done (CI, English translation + OS tabs, homepages, teaching layer, interactive tools,
+   AI coach). See above.
 7. **Open source:** README, CONTRIBUTING, code of conduct, issue and PR templates. (The repo and
    the Vercel project already exist.)
 8. **Verification:** build, check, link validator, `npm run audit:content` (script still to be

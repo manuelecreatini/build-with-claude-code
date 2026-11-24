@@ -1,0 +1,14 @@
+---
+/** Server wrapper for the build loop companion: step titles and links from the F5 pages. */
+import BuildLoop from '~/islands/BuildLoop';
+import { pathFor } from '~/data/tools';
+import { localeFrom } from '~/lib/i18n';
+import { pageTitle } from './pages';
+
+const locale = localeFrom(Astro.currentLocale);
+const slugs = ['phases/f5/preflight', ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => `phases/f5/step-${n}`)];
+const steps = await Promise.all(
+  slugs.map(async (slug, n) => ({ n, title: await pageTitle(locale, slug), href: pathFor(locale, slug) })),
+);
+---
+<BuildLoop client:visible locale={locale} steps={steps} contextHref={pathFor(locale, 'tools/context-meter')} />

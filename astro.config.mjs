@@ -38,6 +38,7 @@ export default defineConfig({
       plugins: [starlightLinksValidator({ errorOnLocalLinks: false })],
       sidebar: [
         group('Start here', 'Inizia qui', 'start'),
+        group('Tools', 'Strumenti', 'tools'),
         group('The method', 'Il metodo', 'method'),
         {
           label: 'The nine phases',

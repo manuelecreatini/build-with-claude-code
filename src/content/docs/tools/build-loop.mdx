@@ -1,0 +1,15 @@
+---
+title: "Build loop companion"
+description: "Keep track of where you are in the 8 steps of the current build phase. Gates G5 and G6 must be ticked before you can move on."
+lastVerified: 2026-11-24
+sidebar:
+  order: 4
+---
+
+import BuildLoopBlock from '~/components/tools/BuildLoopBlock.astro';
+
+Phase 5 repeats the same [8-step loop](/phases/f5-build-loop/) for every build phase. Keep this page open in a tab next to your Claude Code session: it shows the current step and links to the page that explains it.
+
+The two gates are where Claude stops and waits for you: **G5** before writing code (you approve the plan) and **G6** before closing the build phase (the Definition of Done is met and the pull request is merged). You cannot move past a gate until you tick it.
+
+<BuildLoopBlock />

@@ -1,0 +1,27 @@
+---
+title: "Strumenti interattivi"
+description: "Sei strumenti che trasformano il playbook in qualcosa da usare mentre costruisci: un wizard di partenza, un tracker dei progressi, un costruttore di template, un compagno per il build loop, un misuratore di contesto e un coach AI."
+lastVerified: 2026-11-24
+sidebar:
+  order: 0
+  label: "Panoramica"
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Il playbook ti dice cosa fare. Questi strumenti ti aiutano a tenere il filo mentre lo fai. Ognuno usa il testo del playbook (checklist, tabelle e template), quindi i due sono sempre allineati.
+
+<CardGrid>
+  <LinkCard title="Inizia il tuo progetto" href="/it/tools/start-wizard/" description="Tre domande, poi un piano di partenza: quante build phase, quale stack, quali test, come fare la discovery." />
+  <LinkCard title="Tracker dei progressi" href="/it/tools/tracker/" description="La checklist di progetto e la Definition of Done di ogni fase, da spuntare man mano." />
+  <LinkCard title="Costruttore di template" href="/it/tools/template-builder/" description="Compila ogni segnaposto una volta sola e copia CLAUDE.md, i prompt e gli altri template pronti all'uso." />
+  <LinkCard title="Compagno del build loop" href="/it/tools/build-loop/" description="A che punto sei negli 8 passi della build phase in corso, con i gate G5 e G6." />
+  <LinkCard title="Misuratore di contesto" href="/it/tools/context-meter/" description="Inserisci i token in uso e scopri la tua zona secondo T12: vai avanti, compatta, oppure fai handoff e clear." />
+  <LinkCard title="Coach AI" href="/it/tools/coach/" description="Chiedi a Claude del playbook e del tuo progetto, con la tua chiave API Anthropic." />
+</CardGrid>
+
+## Dove restano i tuoi dati
+
+Tutto quello che scrivi o spunti è salvato nel `localStorage` di questo browser e da nessun'altra parte: niente account, niente server, niente analytics. Per passare a un altro computer, o per avere un backup, usa **Esporta i progressi** nel tracker e **Importa i progressi** sull'altra macchina. **Azzera tutto** cancella ogni cosa.
+
+L'unica eccezione è il coach AI: quando gli fai una domanda, questa va da questo browser a `api.anthropic.com` con la tua chiave API. La sua chiave è salvata a parte e non finisce mai in un export.

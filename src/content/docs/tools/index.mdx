@@ -1,0 +1,27 @@
+---
+title: "Interactive tools"
+description: "Six tools that turn the playbook into something you use while you build: a start wizard, a progress tracker, a template builder, a build-loop companion, a context meter and an AI coach."
+lastVerified: 2026-11-24
+sidebar:
+  order: 0
+  label: "Overview"
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+The playbook tells you what to do. These tools help you keep track while you do it. Each one uses the playbook's own text (checklists, tables and templates), so the two always agree.
+
+<CardGrid>
+  <LinkCard title="Start your build" href="/tools/start-wizard/" description="Three questions, then a starting plan: how many build phases, which stack, which tests, how to run discovery." />
+  <LinkCard title="Progress tracker" href="/tools/tracker/" description="The master checklist and the Definition of Done of every phase, ticked off as you go." />
+  <LinkCard title="Template builder" href="/tools/template-builder/" description="Fill in each placeholder once and copy CLAUDE.md, prompts and the other templates ready to use." />
+  <LinkCard title="Build loop companion" href="/tools/build-loop/" description="Where you are in the 8 steps of the current build phase, with gates G5 and G6." />
+  <LinkCard title="Context meter" href="/tools/context-meter/" description="Enter the tokens in use and see your zone from T12: keep going, compact, or hand off and clear." />
+  <LinkCard title="AI coach" href="/tools/coach/" description="Ask Claude about the playbook and your project, with your own Anthropic API key." />
+</CardGrid>
+
+## Where your data lives
+
+Everything you type or tick is saved in this browser's `localStorage` and nowhere else: there is no account, no server, and no analytics. To move to another computer, or to keep a backup, use **Export progress** in the tracker and **Import progress** on the other machine. **Reset everything** erases it.
+
+The AI coach is the one exception: when you ask it something, your question goes from this browser to `api.anthropic.com` with your own API key. Its key is stored separately and is never part of an export.

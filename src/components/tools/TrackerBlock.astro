@@ -1,0 +1,14 @@
+---
+/** Server wrapper for the Tracker island: checklist and DoD data plus phase titles and links. */
+import Tracker from '~/islands/Tracker';
+import { PHASES, PHASE_SLUGS, pathFor, toolsData } from '~/data/tools';
+import { localeFrom } from '~/lib/i18n';
+import { pageTitle } from './pages';
+
+const locale = localeFrom(Astro.currentLocale);
+const data = toolsData[locale];
+const phases = await Promise.all(
+  PHASES.map(async (id) => ({ id, title: await pageTitle(locale, PHASE_SLUGS[id]), href: pathFor(locale, PHASE_SLUGS[id]) })),
+);
+---
+<Tracker client:visible locale={locale} phases={phases} checklist={data.checklist} dod={data.dod} />

@@ -1,0 +1,594 @@
+{
+  "checklist": [
+    {
+      "id": "s0",
+      "phase": "F0",
+      "title": "Setup (una volta per PC)",
+      "items": [
+        {
+          "id": "s0-0",
+          "text": "Claude Pro o Max attivo; account GitHub."
+        },
+        {
+          "id": "s0-1",
+          "text": "Git, GitHub CLI, Node.js LTS, VS Code, Claude Code installati e verificati."
+        },
+        {
+          "id": "s0-2",
+          "text": "`gh auth login` completato."
+        },
+        {
+          "id": "s0-3",
+          "text": "Plugin `mattpocock-skills` installato; `/skills` lo mostra."
+        },
+        {
+          "id": "s0-4",
+          "text": "Riga di stato con contesto; `/autocompact 200k`."
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "phase": "F0",
+      "title": "Setup (ogni progetto)",
+      "items": [
+        {
+          "id": "s1-0",
+          "text": "Cartella fuori da OneDrive; `git init`."
+        },
+        {
+          "id": "s1-1",
+          "text": "Scaffolding: `CLAUDE.md` (T0), `docs/`, template GitHub, `.gitignore`, `.env.example`, `.claude/settings.json`."
+        },
+        {
+          "id": "s1-2",
+          "text": "Repository privato creato e pubblicato."
+        },
+        {
+          "id": "s1-3",
+          "text": "`/setup-matt-pocock-skills`: GitHub, label di default, single-context."
+        },
+        {
+          "id": "s1-4",
+          "text": "Label `build-phase` e `tech-debt`."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "phase": "F1",
+      "title": "Spec preliminare",
+      "items": [
+        {
+          "id": "s2-0",
+          "text": "10–20 minuti di dettatura con il copione T1-A."
+        },
+        {
+          "id": "s2-1",
+          "text": "`docs/00-brain-dump.md` salvato."
+        },
+        {
+          "id": "s2-2",
+          "text": "Prompt T1-B eseguito; `docs/01-preliminary-spec.md` creato."
+        },
+        {
+          "id": "s2-3",
+          "text": "Assunzioni e contraddizioni riviste; 5 domande principali chiarite o rimandate."
+        },
+        {
+          "id": "s2-4",
+          "text": "**G1** spec preliminare approvata; commit."
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "phase": "F2",
+      "title": "Discovery",
+      "items": [
+        {
+          "id": "s3-0",
+          "text": "Sessione 1: `/wayfinder` + T3; destinazione chiara e delimitata."
+        },
+        {
+          "id": "s3-1",
+          "text": "Mappa e decision ticket controllati su GitHub (sono domande, non compiti)."
+        },
+        {
+          "id": "s3-2",
+          "text": "Un ticket per sessione: `/clear` → `/wayfinder <mappa>`."
+        },
+        {
+          "id": "s3-3",
+          "text": "Scelte tra prototipi fatte da te."
+        },
+        {
+          "id": "s3-4",
+          "text": "ADR per stack, hosting, autenticazione, dati, pagamenti; `GLOSSARY.md`."
+        },
+        {
+          "id": "s3-5",
+          "text": "Verifica finale: «Map clear»."
+        },
+        {
+          "id": "s3-6",
+          "text": "**G2** nessuna decisione aperta."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "phase": "F3",
+      "title": "Spec finale e architettura",
+      "items": [
+        {
+          "id": "s4-0",
+          "text": "`/to-spec <mappa>`; seam di test confermati."
+        },
+        {
+          "id": "s4-1",
+          "text": "T4: `docs/02-product-spec.md` con ID US/FR/NFR e criteri Given/When/Then."
+        },
+        {
+          "id": "s4-2",
+          "text": "T5: `docs/03-architecture.md` con diagrammi e costi."
+        },
+        {
+          "id": "s4-3",
+          "text": "Mockup o prototipi per le schermate incerte."
+        },
+        {
+          "id": "s4-4",
+          "text": "Revisione critica con subagent; problemi critici risolti."
+        },
+        {
+          "id": "s4-5",
+          "text": "**G3** spec v1.0 approvata; commit."
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "phase": "F4",
+      "title": "Build phase",
+      "items": [
+        {
+          "id": "s5-0",
+          "text": "`/to-tickets` con i vincoli T6."
+        },
+        {
+          "id": "s5-1",
+          "text": "Proposta rivista: dimensioni, ordine, dipendenze, azioni umane."
+        },
+        {
+          "id": "s5-2",
+          "text": "Tabella di copertura US/FR → BP senza buchi."
+        },
+        {
+          "id": "s5-3",
+          "text": "**G4** approvazione; issue pubblicate."
+        },
+        {
+          "id": "s5-4",
+          "text": "`docs/04-build-plan.md` e `STATUS.md` aggiornati."
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "phase": "F5",
+      "title": "Per ogni build phase",
+      "items": [
+        {
+          "id": "s6-0",
+          "text": "Preflight: `main` aggiornato, `/context`."
+        },
+        {
+          "id": "s6-1",
+          "text": "Plan mode + T8; **G5** piano approvato."
+        },
+        {
+          "id": "s6-2",
+          "text": "Branch `bp-NN-slug`; TDD ai seam; commit piccoli."
+        },
+        {
+          "id": "s6-3",
+          "text": "Azioni umane gestite con T9; nessun segreto in chat."
+        },
+        {
+          "id": "s6-4",
+          "text": "Tipi, lint, test, E2E, build verdi; review fatta; `/security-review` se serve."
+        },
+        {
+          "id": "s6-5",
+          "text": "Anteprima provata da te; T10 compilato nella PR."
+        },
+        {
+          "id": "s6-6",
+          "text": "Documentazione aggiornata."
+        },
+        {
+          "id": "s6-7",
+          "text": "**G6** merge squash; issue chiusa con riepilogo."
+        },
+        {
+          "id": "s6-8",
+          "text": "Handoff (T11) e `/clear` prima della fase successiva."
+        }
+      ]
+    },
+    {
+      "id": "s7",
+      "phase": "F6",
+      "title": "Integrazione",
+      "items": [
+        {
+          "id": "s7-0",
+          "text": "Scope congelato; `main` verde."
+        },
+        {
+          "id": "s7-1",
+          "text": "T13: tracciabilità e integration review."
+        },
+        {
+          "id": "s7-2",
+          "text": "Sicurezza: `/security-review`, autorizzazioni, RLS, `npm audit`."
+        },
+        {
+          "id": "s7-3",
+          "text": "`/code-review ultra` sulla PR di release (SaaS)."
+        },
+        {
+          "id": "s7-4",
+          "text": "Collaudo con 2–3 utenti reali; bug bash."
+        },
+        {
+          "id": "s7-5",
+          "text": "**G7** Go: zero S1, S2 chiusi o accettati."
+        }
+      ]
+    },
+    {
+      "id": "s8",
+      "phase": "F7",
+      "title": "Deploy e lancio",
+      "items": [
+        {
+          "id": "s8-0",
+          "text": "Vercel e Supabase di produzione (piani commerciali); regione UE."
+        },
+        {
+          "id": "s8-1",
+          "text": "Variabili e segreti nei pannelli; `.env.example` completo."
+        },
+        {
+          "id": "s8-2",
+          "text": "Migrazioni applicate; RLS; backup e ripristino provati."
+        },
+        {
+          "id": "s8-3",
+          "text": "CI e protezione di `main`; deploy automatico."
+        },
+        {
+          "id": "s8-4",
+          "text": "Dominio, HTTPS, DNS per le email."
+        },
+        {
+          "id": "s8-5",
+          "text": "Sentry, PostHog, uptime monitor con alert."
+        },
+        {
+          "id": "s8-6",
+          "text": "Runbook di rollback e incidenti; rollback provato."
+        },
+        {
+          "id": "s8-7",
+          "text": "Pagine legali; checklist T14; tag `v1.0.0`."
+        }
+      ]
+    },
+    {
+      "id": "s9",
+      "phase": "F8",
+      "title": "Post-lancio (ogni settimana)",
+      "items": [
+        {
+          "id": "s9-0",
+          "text": "`/triage` delle nuove issue; gravità ai bug."
+        },
+        {
+          "id": "s9-1",
+          "text": "Review operativa T15 in `docs/ops/`."
+        },
+        {
+          "id": "s9-2",
+          "text": "Priorità RICE; scelta del percorso per dimensione della modifica."
+        },
+        {
+          "id": "s9-3",
+          "text": "Ogni modifica passa dal build loop (G5, G6)."
+        },
+        {
+          "id": "s9-4",
+          "text": "Release taggata, CHANGELOG e note."
+        },
+        {
+          "id": "s9-5",
+          "text": "Ogni due settimane: `/improve-codebase-architecture`; ogni mese: dipendenze e sicurezza."
+        }
+      ]
+    }
+  ],
+  "dod": {
+    "F0": {
+      "title": "Definition of Done · Fase 0",
+      "items": [
+        {
+          "id": "dod-F0-0",
+          "text": "Da un terminale nuovo, `claude` si avvia nella cartella del progetto, `/skills` mostra le skill di Matt Pocock, `gh repo view --web` apre il repository privato con la struttura standard e il `CLAUDE.md` contiene la sezione `Agent skills`."
+        }
+      ]
+    },
+    "F1": {
+      "title": "Definition of Done · Fase 1",
+      "items": [
+        {
+          "id": "dod-F1-0",
+          "text": "`docs/00-brain-dump.md` contiene la trascrizione grezza."
+        },
+        {
+          "id": "dod-F1-1",
+          "text": "`docs/01-preliminary-spec.md` segue il template T2, con sezioni *Assumptions*, *Contradictions* e *Open questions* compilate."
+        },
+        {
+          "id": "dod-F1-2",
+          "text": "Le cinque domande aperte più importanti hanno una risposta o sono esplicitamente rimandate alla Fase 2."
+        },
+        {
+          "id": "dod-F1-3",
+          "text": "Commit eseguito e gate G1 superato."
+        }
+      ]
+    },
+    "F2": {
+      "title": "Definition of Done · Fase 2",
+      "items": [
+        {
+          "id": "dod-F2-0",
+          "text": "Mappa con destinazione approvata e tutti i decision ticket chiusi con commento di risoluzione."
+        },
+        {
+          "id": "dod-F2-1",
+          "text": "ADR per stack, hosting, autenticazione, modello dati principale e pagamenti (se previsti)."
+        },
+        {
+          "id": "dod-F2-2",
+          "text": "`GLOSSARY.md` con i termini di dominio principali."
+        },
+        {
+          "id": "dod-F2-3",
+          "text": "Prototipi e ricerche collegati ai rispettivi ticket."
+        },
+        {
+          "id": "dod-F2-4",
+          "text": "Nessuna riga di codice di prodotto scritta."
+        }
+      ]
+    },
+    "F3": {
+      "title": "Definition of Done · Fase 3",
+      "items": [
+        {
+          "id": "dod-F3-0",
+          "text": "Spec issue pubblicata da `/to-spec`, con link al file."
+        },
+        {
+          "id": "dod-F3-1",
+          "text": "`docs/02-product-spec.md` completo secondo T4, stato `APPROVED v1.0`."
+        },
+        {
+          "id": "dod-F3-2",
+          "text": "`docs/03-architecture.md` completo secondo T5, con diagrammi Mermaid."
+        },
+        {
+          "id": "dod-F3-3",
+          "text": "Un ADR per ogni scelta di stack, hosting, autenticazione, dati e pagamenti."
+        },
+        {
+          "id": "dod-F3-4",
+          "text": "Revisione critica eseguita e problemi critici risolti; commit fatto."
+        }
+      ]
+    },
+    "F4": {
+      "title": "Definition of Done · Fase 4",
+      "items": [
+        {
+          "id": "dod-F4-0",
+          "text": "10–50 issue `BP-NN` pubblicate con template T7 completo."
+        },
+        {
+          "id": "dod-F4-1",
+          "text": "Collegamenti *blocked by* nativi impostati; frontiera iniziale = BP-01."
+        },
+        {
+          "id": "dod-F4-2",
+          "text": "`docs/04-build-plan.md` con tabella e grafo; `docs/STATUS.md` aggiornato."
+        },
+        {
+          "id": "dod-F4-3",
+          "text": "Tabella di copertura senza buchi; azioni umane etichettate."
+        }
+      ]
+    },
+    "F5": {
+      "title": "Definition of Done · ogni build phase",
+      "items": [
+        {
+          "id": "dod-F5-0",
+          "text": "Tutti i criteri di accettazione verificati, con evidenza nella pull request."
+        },
+        {
+          "id": "dod-F5-1",
+          "text": "Test scritti e verdi in locale e in CI; nessuna regressione."
+        },
+        {
+          "id": "dod-F5-2",
+          "text": "Controllo dei tipi e lint puliti; la build di produzione riesce."
+        },
+        {
+          "id": "dod-F5-3",
+          "text": "Review eseguita (standard e spec); rilievi risolti; `/security-review` se la fase tocca dati sensibili."
+        },
+        {
+          "id": "dod-F5-4",
+          "text": "Anteprima provata da te."
+        },
+        {
+          "id": "dod-F5-5",
+          "text": "Documentazione aggiornata: `STATUS.md`, ADR, glossario, README, CHANGELOG, `.env.example`."
+        },
+        {
+          "id": "dod-F5-6",
+          "text": "Pull request unita in `main`, branch eliminato, issue chiusa con commento di riepilogo."
+        }
+      ]
+    },
+    "F6": {
+      "title": "Definition of Done · Fase 6",
+      "items": [
+        {
+          "id": "dod-F6-0",
+          "text": "Matrice di tracciabilità e integration review nel repository."
+        },
+        {
+          "id": "dod-F6-1",
+          "text": "Tutte le issue S1/S2 chiuse o accettate esplicitamente."
+        },
+        {
+          "id": "dod-F6-2",
+          "text": "Collaudo con utenti svolto e problemi registrati."
+        },
+        {
+          "id": "dod-F6-3",
+          "text": "Gate G7 superato e decisione annotata in `STATUS.md`."
+        }
+      ]
+    },
+    "F7": {
+      "title": "Definition of Done · Fase 7",
+      "items": [
+        {
+          "id": "dod-F7-0",
+          "text": "App online sul dominio con HTTPS; anteprime e deploy automatici attivi."
+        },
+        {
+          "id": "dod-F7-1",
+          "text": "Database di produzione separato, RLS attiva, backup verificati."
+        },
+        {
+          "id": "dod-F7-2",
+          "text": "Segreti solo nei pannelli; `.env.example` completo."
+        },
+        {
+          "id": "dod-F7-3",
+          "text": "Sentry, PostHog e uptime monitor attivi con alert."
+        },
+        {
+          "id": "dod-F7-4",
+          "text": "Runbook di deploy, rollback e incidenti nel repository; rollback provato."
+        },
+        {
+          "id": "dod-F7-5",
+          "text": "Pagine legali online; checklist T14 completata; versione `v1.0.0` taggata."
+        }
+      ]
+    },
+    "F8": {
+      "title": "Definition of Done · Fase 8 (ogni ciclo)",
+      "items": [
+        {
+          "id": "dod-F8-0",
+          "text": "Nessuna issue in `needs-triage` più vecchia di una settimana."
+        },
+        {
+          "id": "dod-F8-1",
+          "text": "Ogni modifica è passata dal build loop con i gate G5 e G6."
+        },
+        {
+          "id": "dod-F8-2",
+          "text": "Release taggata, CHANGELOG aggiornato, note pubblicate."
+        },
+        {
+          "id": "dod-F8-3",
+          "text": "Review operativa settimanale salvata in `docs/ops/`."
+        }
+      ]
+    }
+  },
+  "context": {
+    "start": {
+      "title": "Inizio sessione",
+      "items": [
+        {
+          "id": "ctx-0-0",
+          "text": "Un solo obiettivo per la sessione (una build phase, un ticket della mappa)."
+        },
+        {
+          "id": "ctx-0-1",
+          "text": "Riga di stato visibile; `/context` per il punto di partenza."
+        },
+        {
+          "id": "ctx-0-2",
+          "text": "Claude ha letto `docs/STATUS.md` (o il documento di handoff)."
+        }
+      ]
+    },
+    "during": {
+      "title": "Durante (euristica a zone, budget 200.000 token)",
+      "items": [
+        {
+          "id": "ctx-1-0",
+          "text": "**Sotto 100.000**: lavora normalmente."
+        },
+        {
+          "id": "ctx-1-1",
+          "text": "**100.000–150.000**: finisci il passo; niente lavori nuovi grandi; se continui sulla stessa fase, `/compact focus on <fase, decisioni, test, prossimi passi>`."
+        },
+        {
+          "id": "ctx-1-2",
+          "text": "**150.000–200.000**: al primo punto stabile esegui T11 (handoff) e `/clear`."
+        },
+        {
+          "id": "ctx-1-3",
+          "text": "**Oltre 200.000**: interviene `/autocompact 200k`; verifica che lo stato sia nei file."
+        },
+        {
+          "id": "ctx-1-4",
+          "text": "Domande laterali con `/btw`; ricerche ampie a un subagent; errori incollati con 20 righe di contesto, non log interi."
+        }
+      ]
+    },
+    "end": {
+      "title": "Prima di /clear o di chiudere la sessione",
+      "items": [
+        {
+          "id": "ctx-2-0",
+          "text": "Le decisioni prese sono in un ADR, in un commento di issue o nella spec."
+        },
+        {
+          "id": "ctx-2-1",
+          "text": "Il lavoro è committato e pubblicato; `STATUS.md` è aggiornato."
+        },
+        {
+          "id": "ctx-2-2",
+          "text": "Se il lavoro continua: handoff fatto e percorso del file annotato."
+        },
+        {
+          "id": "ctx-2-3",
+          "text": "Se il lavoro non è collegato al precedente: basta `/clear`."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+---
+title: "Compagno del build loop"
+description: "Tieni traccia di dove sei negli 8 passi della build phase in corso. I gate G5 e G6 vanno spuntati prima di poter andare avanti."
+lastVerified: 2026-11-24
+sidebar:
+  order: 4
+---
+
+import BuildLoopBlock from '~/components/tools/BuildLoopBlock.astro';
+
+La Fase 5 ripete lo stesso [loop in 8 passi](/it/phases/f5-build-loop/) per ogni build phase. Tieni questa pagina aperta in una scheda accanto alla sessione di Claude Code: mostra il passo in corso e rimanda alla pagina che lo spiega.
+
+I due gate sono i punti in cui Claude si ferma e aspetta te: **G5** prima di scrivere codice (approvi il piano) e **G6** prima di chiudere la build phase (la Definition of Done è rispettata e la pull request è in main). Non puoi superare un gate finché non lo spunti.
+
+<BuildLoopBlock />

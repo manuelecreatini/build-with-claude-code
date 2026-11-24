@@ -23,6 +23,7 @@ import path from 'node:path';
 import GithubSlugger from 'github-slugger';
 import { anchorGlossary, linkTerms, parseGlossary } from './lib/glossary.mjs';
 import { applyInserts, QUIZ_PAGES } from './teaching-inserts.mjs';
+import { parseChecklist, parseContextLists, parseDod } from './lib/tools-data.mjs';
 
 const [, , sourceArg, locale] = process.argv;
 if (!sourceArg || !['it', 'en'].includes(locale)) {
@@ -197,6 +198,7 @@ fs.writeFileSync(path.join(ROOT, 'src/data/glossary', `${locale}.json`), JSON.st
 
 const manifest = [];
 const report = [];
+const tools = { checklist: [], dod: {}, context: null };
 
 for (const page of pages) {
   const { rule } = page;
@@ -220,6 +222,15 @@ for (const page of pages) {
   const teach = applyInserts(body, rule.slug, locale, `${URL_PREFIX}concepts/`);
   body = teach.lines;
   if (QUIZ_PAGES[rule.slug]) body = beforeFootnotes(body, [`<QuizBlock phase="${QUIZ_PAGES[rule.slug]}" />`]);
+
+  // Data for the interactive tools (Tracker, Context meter), taken from the final page text.
+  if (rule.slug === 'reference/checklist') tools.checklist = parseChecklist(body);
+  if (rule.slug === 'templates/t12') tools.context = parseContextLists(body);
+  const phaseOf = /^phases\/f(\d)/.exec(rule.slug);
+  if (phaseOf) {
+    const dod = parseDod(body, `F${phaseOf[1]}`);
+    if (dod) tools.dod[`F${phaseOf[1]}`] = dod;
+  }
 
   const used = new Set();
   const joined = body.join('\n');
@@ -249,6 +260,9 @@ for (const page of pages) {
 }
 
 fs.writeFileSync(path.join(TPL_DIR, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
+tools.dod = Object.fromEntries(Object.entries(tools.dod).sort(([a], [b]) => a.localeCompare(b)));
+fs.mkdirSync(path.join(ROOT, 'src/data/tools'), { recursive: true });
+fs.writeFileSync(path.join(ROOT, 'src/data/tools', `${locale}.json`), JSON.stringify(tools, null, 2) + '\n');
 console.log(report.join('\n'));
 console.log(`\n${pages.length} pages written to ${path.relative(ROOT, DOCS_DIR) || '.'}; ${manifest.length} template blocks.`);
 const unresolved = [...unresolvedLinks];

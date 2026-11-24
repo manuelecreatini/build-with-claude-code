@@ -1,0 +1,32 @@
+---
+/** Server wrapper for the template builder: the same raw templates the template pages render. */
+import TemplateBuilder from '~/islands/TemplateBuilder';
+import { pathFor } from '~/data/tools';
+import { localeFrom } from '~/lib/i18n';
+import { pageTitle } from './pages';
+import manifestEn from '~/data/templates/en/manifest.json';
+import manifestIt from '~/data/templates/it/manifest.json';
+
+const locale = localeFrom(Astro.currentLocale);
+const manifest = locale === 'it' ? manifestIt : manifestEn;
+const raw = {
+  en: import.meta.glob<string>('/src/data/templates/en/*.txt', { query: '?raw', import: 'default', eager: true }),
+  it: import.meta.glob<string>('/src/data/templates/it/*.txt', { query: '?raw', import: 'default', eager: true }),
+}[locale];
+const templates = await Promise.all(
+  manifest.map(async (m) => {
+    const text = raw[`/src/data/templates/${locale}/${m.file}`];
+    if (text === undefined) throw new Error(`Template file missing: ${locale}/${m.file}`);
+    return {
+      id: m.id,
+      title: m.title,
+      lang: m.lang,
+      group: await pageTitle(locale, m.page),
+      href: pathFor(locale, m.page),
+      placeholders: m.placeholders,
+      text: text.replace(/\n$/, ''),
+    };
+  }),
+);
+---
+<TemplateBuilder client:visible locale={locale} templates={templates} />

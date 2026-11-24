@@ -1,0 +1,24 @@
+---
+/**
+ * Builds the coach's fixed system prompt and page list at build time, from the docs collection,
+ * so the island ships with a map of the site in the visitor's language.
+ */
+import { getCollection } from 'astro:content';
+import Coach from '~/islands/Coach';
+import { basePrompt, type PageInfo } from '~/lib/coach';
+import { localeFrom } from '~/lib/i18n';
+import { pathFor } from '~/lib/paths';
+
+const locale = localeFrom(Astro.currentLocale);
+const prefix = locale === 'en' ? '' : `${locale}/`;
+const docs = await getCollection('docs');
+const pages: PageInfo[] = docs
+  .filter((d) => (locale === 'en' ? !/^[a-z]{2}\//.test(d.id) : d.id.startsWith(prefix)))
+  .map((d) => ({ slug: locale === 'en' ? d.id : d.id.slice(prefix.length), title: d.data.title, description: d.data.description ?? '' }))
+  .filter((p) => p.slug !== '404' && p.slug !== 'index' && p.slug !== '')
+  .sort((a, b) => a.slug.localeCompare(b.slug));
+const base = basePrompt(locale, pages, (slug) => pathFor(locale, slug));
+const options = pages.map((p) => ({ slug: p.slug, title: p.title, path: pathFor(locale, p.slug) }));
+---
+
+<Coach client:visible locale={locale} base={base} pages={options} />

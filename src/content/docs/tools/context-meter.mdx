@@ -1,0 +1,15 @@
+---
+title: "Context meter"
+description: "Enter the tokens in use in your Claude Code session and see your zone from template T12: work normally, compact, or hand off and clear."
+lastVerified: 2026-11-24
+sidebar:
+  order: 5
+---
+
+import ContextMeterBlock from '~/components/tools/ContextMeterBlock.astro';
+
+Claude works best when its [context window](/concepts/context-window-and-tokens/) is not crowded. Read the number of tokens in use from the status line or from `/context`, enter it here, and see which zone you are in and what to do about it.
+
+The thresholds and the checklists come from [template T12](/templates/t12/).
+
+<ContextMeterBlock />
